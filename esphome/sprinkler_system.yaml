@@ -1,0 +1,17 @@
+substitutions:
+  devicename: sprinkler_system
+  upper_devicename: Sprinkler 
+
+esphome:
+  name: $devicename
+  platform: ESP8266
+  board: nodemcuv2
+
+packages:
+  wifi: !include common_substitutions/wifi.yaml
+  device_base: !include common_substitutions/device_base.yaml
+
+status_led:
+    pin: 16
+    
+#Need to still add config for relays - not sure how many yet

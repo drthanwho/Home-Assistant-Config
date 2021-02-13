@@ -1,0 +1,2245 @@
+- id: letsencrypt-renewal
+  alias: Let's Encrypt Renewal
+  trigger:
+  - platform: time
+    at: 00:00:00
+  action:
+  - service: hassio.addon_restart
+    data:
+      addon: core_letsencrypt
+- id: Hass Startup Notification
+  alias: Home Assistant Startup
+  trigger:
+  - event: start
+    platform: homeassistant
+  action:
+  - data: {}
+    service: script.1585512199381
+  - data:
+      message: Home Assistant back online! It took {{ states('sensor.restart_time')}}s
+    service: notify.thanasis_tel
+  - data:
+      data:
+        method: speak
+        type: announce
+      message: Home Assistant Now <emphasis level="medium">Online!</emphasis>. {{
+        states('sensor.restart_time')}} seconds this time!
+    service: notify.alexa_media_office
+  mode: single
+- alias: Mark person as just arrived
+  trigger:
+  - platform: state
+    entity_id: device_tracker.makis
+    from: not_home
+    to: home
+  - platform: state
+    entity_id: device_tracker.pavlina
+    from: not_home
+    to: home
+  action:
+  - service: input_select.select_option
+    data_template:
+      entity_id: "{% if trigger.entity_id == 'device_tracker.makis' %}\n  input_select.makis_status_dropdown\n\
+        {% else %}\n  input_select.pavlina_status_dropdown\n{% endif %}\n"
+      option: "{% if trigger.entity_id == 'device_tracker.makis' %}\n  {% if states.input_select.makis_status_dropdown.state\
+        \ == 'Just Left' %}\n    Home\n  {% else %}\n    Just Arrived\n  {% endif\
+        \ %}\n{% else %}\n  {% if states.input_select.pavlina_status_dropdown.state\
+        \ == 'Just Left' %}\n    Home\n  {% else %}\n    Just Arrived\n  {% endif\
+        \ %}\n{% endif %}\n"
+  id: 5c84630f189c42a9aaa6508f19fc58ac
+- alias: Mark person as home
+  trigger:
+  - platform: state
+    entity_id: input_select.makis_status_dropdown
+    to: Just Arrived
+    for:
+      minutes: 10
+  - platform: state
+    entity_id: input_select.pavlina_status_dropdown
+    to: Just Arrived
+    for:
+      minutes: 10
+  - platform: state
+    entity_id: input_select.makis_status_dropdown
+    from: Just Left
+    to: Just Arrived
+  - platform: state
+    entity_id: input_select.pavlina_status_dropdown
+    from: Just Left
+    to: Just Arrived
+  action:
+  - service: input_select.select_option
+    data_template:
+      entity_id: "{% if trigger.entity_id == 'input_select.makis_status_dropdown'\
+        \ %}\n  input_select.makis_status_dropdown\n{% else %}\n  input_select.pavlina_status_dropdown\n\
+        {% endif %}\n"
+      option: Home
+  id: 3c8a45540f4744baa70b9830aff14248
+- alias: Mark person as just left
+  trigger:
+  - platform: state
+    entity_id: device_tracker.makis
+    from: home
+    to: not_home
+  - platform: state
+    entity_id: device_tracker.pavlina
+    from: home
+    to: not_home
+  action:
+  - service: input_select.select_option
+    data_template:
+      entity_id: "{% if trigger.entity_id == 'device_tracker.makis' %}\n  input_select.makis_status_dropdown\n\
+        {% else %}\n  input_select.pavlina_status_dropdown\n{% endif %}\n"
+      option: Just Left
+  id: 226ad26483884189a06fb4f45c5b8d64
+- alias: Mark person as away
+  trigger:
+  - platform: state
+    entity_id: input_select.makis_status_dropdown
+    to: Just Left
+    for:
+      minutes: 10
+  - platform: state
+    entity_id: input_select.pavlina_status_dropdown
+    to: Just Left
+    for:
+      minutes: 10
+  action:
+  - service: input_select.select_option
+    data_template:
+      entity_id: "{% if trigger.entity_id == 'input_select.makis_status_dropdown'\
+        \ %}\n  input_select.makis_status_dropdown\n{% else %}\n  input_select.pavlina_status_dropdown\n\
+        {% endif %}\n"
+      option: Away
+  id: 52253da03a2f4791a94d2006612bdd3c
+- alias: Mark person as extended away
+  trigger:
+  - platform: state
+    entity_id: input_select.makis_status_dropdown
+    to: Away
+    for:
+      hours: 24
+  - platform: state
+    entity_id: input_select.pavlina_status_dropdown
+    to: Away
+    for:
+      hours: 24
+  action:
+  - service: input_select.select_option
+    data_template:
+      entity_id: "{% if trigger.entity_id == 'input_select.makis_status_dropdown'\
+        \ %}\n  input_select.makis_status_dropdown\n{% else %}\n  input_select.pavlina_status_dropdown\n\
+        {% endif %}\n"
+      option: Extended Away
+  id: d39e855dc76b443f8db2f8a6d9404266
+- alias: Mark person as just arrived
+  trigger:
+  - platform: state
+    entity_id: device_tracker.sofia
+    from: not_home
+    to: home
+  - platform: state
+    entity_id: device_tracker.thanasis
+    from: not_home
+    to: home
+  action:
+  - service: input_select.select_option
+    data_template:
+      entity_id: "{% if trigger.entity_id == 'device_tracker.sofia' %}\n  input_select.sofia_status_dropdown\n\
+        {% else %}\n  input_select.thanasis_status_dropdown\n{% endif %}\n"
+      option: "{% if trigger.entity_id == 'device_tracker.sofia' %}\n  {% if states.input_select.sofia_status_dropdown.state\
+        \ == 'Just Left' %}\n    Home\n  {% else %}\n    Just Arrived\n  {% endif\
+        \ %}\n{% else %}\n  {% if states.input_select.thanasis_status_dropdown.state\
+        \ == 'Just Left' %}\n    Home\n  {% else %}\n    Just Arrived\n  {% endif\
+        \ %}\n{% endif %}\n"
+  id: fd45e728b15241bd807e8701ba9dcd83
+- alias: Mark person as home
+  trigger:
+  - platform: state
+    entity_id: input_select.sofia_status_dropdown
+    to: Just Arrived
+    for:
+      minutes: 10
+  - platform: state
+    entity_id: input_select.thanasis_status_dropdown
+    to: Just Arrived
+    for:
+      minutes: 10
+  - platform: state
+    entity_id: input_select.sofia_status_dropdown
+    from: Just Left
+    to: Just Arrived
+  - platform: state
+    entity_id: input_select.thanasis_status_dropdown
+    from: Just Left
+    to: Just Arrived
+  action:
+  - service: input_select.select_option
+    data_template:
+      entity_id: "{% if trigger.entity_id == 'input_select.sofia_status_dropdown'\
+        \ %}\n  input_select.sofia_status_dropdown\n{% else %}\n  input_select.thanasis_status_dropdown\n\
+        {% endif %}\n"
+      option: Home
+  id: f6191280b00549e6a785275c1779f99f
+- alias: Mark person as just left
+  trigger:
+  - platform: state
+    entity_id: device_tracker.sofia
+    from: home
+    to: not_home
+  - platform: state
+    entity_id: device_tracker.thanasis
+    from: home
+    to: not_home
+  action:
+  - service: input_select.select_option
+    data_template:
+      entity_id: "{% if trigger.entity_id == 'device_tracker.sofia' %}\n  input_select.sofia_status_dropdown\n\
+        {% else %}\n  input_select.thanasis_status_dropdown\n{% endif %}\n"
+      option: Just Left
+  id: 37630c73083b4e5995f79cb28312f254
+- alias: Mark person as away
+  trigger:
+  - platform: state
+    entity_id: input_select.sofia_status_dropdown
+    to: Just Left
+    for:
+      minutes: 10
+  - platform: state
+    entity_id: input_select.thanasis_status_dropdown
+    to: Just Left
+    for:
+      minutes: 10
+  action:
+  - service: input_select.select_option
+    data_template:
+      entity_id: "{% if trigger.entity_id == 'input_select.sofia_status_dropdown'\
+        \ %}\n  input_select.sofia_status_dropdown\n{% else %}\n  input_select.thanasis_status_dropdown\n\
+        {% endif %}\n"
+      option: Away
+  id: 907f91e782f041b8b6df2603e011ab8b
+- alias: Mark person as extended away
+  trigger:
+  - platform: state
+    entity_id: input_select.sofia_status_dropdown
+    to: Away
+    for:
+      hours: 24
+  - platform: state
+    entity_id: input_select.thanasis_status_dropdown
+    to: Away
+    for:
+      hours: 24
+  action:
+  - service: input_select.select_option
+    data_template:
+      entity_id: "{% if trigger.entity_id == 'input_select.sofia_status_dropdown'\
+        \ %}\n  input_select.sofia_status_dropdown\n{% else %}\n  input_select.thanasis_status_dropdown\n\
+        {% endif %}\n"
+      option: Extended Away
+  id: 8d369f77a7d94e2e89f2fd25fb3d9a71
+- id: '1568302203385'
+  alias: Kitchen Light after 12AM OFF
+  trigger:
+  - entity_id: binary_sensor.kouzina_pir
+    for: '120'
+    from: 'on'
+    platform: state
+    to: 'off'
+  condition:
+  - after: 00:01:00
+    before: 06:30:00
+    condition: time
+  action:
+  - data:
+      entity_id: light.kouzina
+      transition: 20
+    service: light.turn_off
+    entity_id: light.kouzina
+  mode: single
+- id: 5c5c3714c9cc4485817bb7430767c342
+  alias: Couch Lamp On DarkSky
+  trigger:
+  - event: sunset
+    offset: -00:50:00
+    platform: sun
+  - event: sunset
+    offset: -00:20:00
+    platform: sun
+  condition:
+  - condition: template
+    value_template: "{{ trigger.offset.total_seconds()/60 == -20 or\n   state_attr('weather.dark_sky',\
+      \ 'forecast')[1].condition\n   in ('cloudy', 'partlycloudy', 'rainy') }}\n"
+  - condition: state
+    entity_id: light.saloni
+    state: 'off'
+  action:
+  - data:
+      brightness_pct: 60
+      entity_id: light.saloni
+      hs_color:
+      - 180
+      - 61
+      transition: 600
+    service: light.turn_on
+- id: 30a39663e360493689ba715c36e4a138
+  alias: Couch Lamp Off
+  trigger:
+  - type: motion
+    platform: device
+    device_id: 6f17588026674fe6916114df4fdb7d1b
+    entity_id: binary_sensor.saloni_pir
+    domain: binary_sensor
+  condition:
+  - condition: and
+    conditions:
+    - condition: time
+      after: 05:00:00
+      before: 09:00:00
+    - type: is_illuminance
+      condition: device
+      device_id: 91b241e6a78f4ff0a6d4ee61854f3bd4
+      entity_id: sensor.lightlevel
+      domain: sensor
+      above: 130
+    - condition: device
+      type: is_on
+      device_id: 333b79774fe544778453de2b7c3e8874
+      entity_id: light.saloni
+      domain: light
+  action:
+  - delay: 00:05:00
+  - data:
+      entity_id: light.saloni
+      transition: 300
+    service: light.turn_off
+  mode: single
+- id: 995b4b2be95a4f3081b3db5c0cbe115e
+  alias: Couch Lamp Overnight
+  trigger:
+  - at: '23:00:00'
+    platform: time
+  condition:
+  - condition: state
+    entity_id: light.saloni
+    state: 'on'
+  action:
+  - data:
+      brightness_pct: 5
+      color_temp: 320
+      transition: 120
+    service: light.turn_on
+    entity_id: light.saloni
+  mode: single
+- alias: TelegramTEST
+  trigger:
+  - platform: state
+    entity_id: light.aristera
+    to: 'on'
+  action:
+  - service: camera.snapshot
+    data:
+      entity_id: camera.eisodos
+      filename: /tmp/eisodos_snap.jpg
+  - delay: 5
+  - service: telegram_bot.send_photo
+    data_template:
+      file: /tmp/eisodos_snap.jpg
+      caption: Κουδούνι!
+      target:
+      - 627190871
+      message: Κάποιος είναι στην πόρτα
+  id: fb66664d79ad4a108c0638eec89632e0
+- id: '1569095965846'
+  alias: Κουδούνι Ήχος Hassio Επαναφορά
+  description: Turns doorbell chime off otherwise rings forever
+  trigger:
+  - device_id: 01eefe5c733649abbac1a16d1fbfd7cc
+    domain: switch
+    entity_id: switch.koudouni_sound
+    platform: device
+    type: turned_on
+  condition: []
+  action:
+  - delay: '1'
+  - device_id: 01eefe5c733649abbac1a16d1fbfd7cc
+    domain: switch
+    entity_id: switch.koudouni_sound
+    type: turn_off
+- id: '1569667797410'
+  alias: RFID Tag Light
+  trigger:
+  - entity_id: sensor.rfid_user
+    platform: state
+    to: ATH.ENA TICKET
+  condition: []
+  action:
+  - device_id: c1c3312965a6496591f337d8566b03db
+    domain: light
+    entity_id: light.ypnodomatio
+    type: toggle
+- id: '1569705125294'
+  alias: 'RFID Tag '
+  trigger:
+  - entity_id: sensor.rfid_user
+    platform: state
+    to: Pavlina
+  condition: []
+  action:
+  - device_id: a6eda4e0bc814a6f83f3f057edf0a150
+    domain: switch
+    entity_id: switch.sprinkler_zone_5
+    type: toggle
+- id: '1570127086658'
+  alias: Eksoporta switch to off
+  trigger:
+  - entity_id: switch.exoporta
+    from: 'off'
+    platform: state
+    to: 'on'
+  condition: []
+  action:
+  - delay: '1'
+  - alias: ''
+    data:
+      entity_id: switch.exoporta
+    service: switch.turn_off
+- id: '1570816592068'
+  alias: Couch Lamp Brightness before 12AM
+  trigger:
+  - entity_id: binary_sensor.saloni_pir
+    from: 'off'
+    platform: state
+    to: 'on'
+  condition:
+  - condition: time
+    before: '23:00:00'
+  - condition: state
+    entity_id: light.saloni
+    state: 'on'
+  action:
+  - data:
+      brightness_pct: 100
+      color_temp: 320
+      entity_id: light.saloni
+      transition: 5
+    service: light.turn_on
+  - delay: '600'
+  - data:
+      brightness_pct: 50
+      color_temp: 320
+      entity_id: light.saloni
+      transition: 60
+    service: light.turn_on
+  mode: restart
+- id: '1570820685328'
+  alias: 'Couch Lamp Brightness after 12AM '
+  trigger:
+  - entity_id: binary_sensor.saloni_pir
+    from: 'off'
+    platform: state
+    to: 'on'
+  condition:
+  - after: '22:00:00'
+    condition: time
+  - condition: state
+    entity_id: light.saloni
+    state: 'on'
+  - before: sunrise
+    condition: sun
+  action:
+  - data:
+      brightness_pct: 30
+      entity_id: light.saloni
+      color_temp: 320
+      transition: 5
+    service: light.turn_on
+  - delay: '120'
+  - data:
+      brightness_pct: 5
+      entity_id: light.saloni
+      color_temp: 320
+      transition: 60
+    service: light.turn_on
+  mode: restart
+- id: '1571083900537'
+  alias: Kitchen Light before 12AM ON
+  description: ''
+  trigger:
+  - entity_id: binary_sensor.kouzina_pir
+    from: 'off'
+    platform: state
+    to: 'on'
+  condition:
+  - after: '16:00:00'
+    before: '23:59:59'
+    condition: time
+  action:
+  - alias: ''
+    data:
+      brightness_pct: 100
+      color_temp: 285
+      entity_id: light.kouzina
+      transition: 5
+    service: light.turn_on
+- id: '1571084690672'
+  alias: Kitchen Light after 12AM ON
+  description: ''
+  trigger:
+  - entity_id: binary_sensor.kouzina_pir
+    from: 'off'
+    platform: state
+    to: 'on'
+  condition:
+  - after: 00:01:00
+    condition: time
+    before: 06:30:00
+  action:
+  - data:
+      brightness_pct: 5
+      transition: 5
+    service: light.turn_on
+    entity_id: light.kouzina
+  mode: restart
+- id: '1571153150471'
+  alias: Kitchen Light before 12AM OFF
+  description: ''
+  trigger:
+  - entity_id: binary_sensor.kouzina_pir
+    for: '480'
+    from: 'on'
+    platform: state
+    to: 'off'
+  condition:
+  - condition: state
+    entity_id: light.kouzina
+    state: 'on'
+  - after: '16:00:00'
+    before: '23:59:59'
+    condition: time
+  action:
+  - data:
+      brightness_pct: 50
+      color_temp: 285
+      entity_id: light.kouzina
+      transition: 30
+    service: light.turn_on
+- id: '1571175269778'
+  alias: Υπόγειο Κίνηση
+  description: ''
+  trigger:
+  - entity_id: binary_sensor.koudoni_ttgocam_pir
+    from: 'off'
+    platform: state
+    to: 'on'
+  condition: []
+  action:
+  - delay: 00:00:05
+  - data:
+      data:
+        actions:
+        - action: URI
+          title: Δες ζωντανα
+          uri: /lovelace/basement
+        color: red
+        image: /api/camera_proxy/camera.koudoni_ttgocam_camera
+        tag: basement
+      message: Κίνηση στο υπόγειο 🚶
+      title: Υπόγειο
+    service: notify.mobile_app_thanasis
+- id: '1571595278101'
+  alias: Doorbell Light Flash
+  description: ''
+  trigger:
+  - entity_id: binary_sensor.inside_button
+    from: 'off'
+    platform: state
+    to: 'on'
+  - entity_id: binary_sensor.outside_button
+    from: 'off'
+    platform: state
+    to: 'on'
+  condition: []
+  action:
+  - data:
+      brightness: 100
+      cycles: 1
+      entity_id:
+      - light.ypnodomatio
+      - light.saloni
+      mode: breathe
+    service: lifx.effect_pulse
+  - entity_id: switch.tp_link
+    service: switch.toggle
+  - entity_id: switch.tp_link
+    service: switch.toggle
+  - data:
+      media_content_id: amzn_sfx_doorbell_chime_02
+      media_content_type: sound
+    entity_id: media_player.office
+    service: media_player.play_media
+  - data:
+      media_content_id: amzn_sfx_doorbell_chime_02
+      media_content_type: sound
+    entity_id: media_player.home_echo
+    service: media_player.play_media
+  - type: flash
+    device_id: 270563f49c8e4495ac344958479f3da6
+    entity_id: light.kouzina
+    domain: light
+  mode: single
+- id: '1572015675277'
+  alias: Camera Eisodos Snap
+  description: ''
+  trigger:
+  - entity_id: binary_sensor.koudoni_ttgocam_button
+    from: 'off'
+    platform: state
+    to: 'on'
+  condition: []
+  action:
+  - data:
+      entity_id: camera.eisodos_hd_mjpeg
+      filename: /tmp/eisodos_outside_{{ now ().year }}_{{ now ().month }}_{{ now ().day
+        }}_{{ now ().hour }}_{{ now ().minute }}.jpg
+    service: camera.snapshot
+  - delay: 00:00:03
+  - data:
+      caption: Κουδούνι!
+      file: /tmp/eisodos_outside_{{ now ().year }}_{{ now ().month }}_{{ now ().day
+        }}_{{ now ().hour }}_{{ now ().minute }}.jpg
+      target:
+      - 627190871
+    service: telegram_bot.send_photo
+  mode: single
+- id: '1572868845179'
+  alias: Κουδούνι Eisodos Cam
+  description: ''
+  trigger:
+  - entity_id: binary_sensor.outside_button
+    from: 'off'
+    platform: state
+    to: 'on'
+  condition: []
+  action:
+  - data:
+      data:
+        actions:
+        - action: URI
+          title: Δες ζωντανα
+          uri: /lovelace/eisodos-cam
+        color: red
+        image: /api/camera_proxy/camera.eisodos_hd_mjpeg
+        tag: motion
+      message: 🔔 Κουδούνι 🔔
+      title: Κίνηση στην πόρτα 🚪🚶
+    service: notify.modile_app_family
+  - service: camera.snapshot
+    data:
+      filename: /tmp/eisodos.jpg
+    entity_id: camera.eisodos_hd_mjpeg
+  - service: media_player.play_media
+    data:
+      media_content_id: http://192.168.1.249:8889/
+      media_content_type: image/jpg
+    entity_id: media_player.kouzina_display
+  - delay: 00:02:00
+  - service: media_player.turn_off
+    data: {}
+    entity_id: media_player.kouzina_display
+  mode: single
+- id: '1577292394407'
+  alias: Lights ON No One Home
+  description: ''
+  trigger:
+  - entity_id: group.family_status
+    for: 00:45:00
+    from: home
+    platform: state
+    to: not_home
+  - below: '250'
+    entity_id: sensor.lightlevel
+    platform: numeric_state
+  condition:
+  - below: '250'
+    condition: numeric_state
+    entity_id: sensor.lightlevel
+  - before: '22:00:00'
+    condition: time
+    after: '15:00:00'
+  - condition: state
+    entity_id: group.family_status
+    state: not_home
+  action:
+  - type: turn_on
+    device_id: 333b79774fe544778453de2b7c3e8874
+    entity_id: light.saloni
+    domain: light
+    brightness_pct: 25
+  - type: turn_on
+    device_id: 270563f49c8e4495ac344958479f3da6
+    entity_id: light.kouzina
+    domain: light
+    brightness_pct: 50
+  mode: single
+- id: '1578773460358'
+  alias: Humidity below 56%
+  description: 'Turn dehumidifier off if humidity is below 56% for more than 10mins '
+  trigger:
+  - below: '56'
+    entity_id: sensor.dehumidifier_current_humidity
+    for: 00:10:00
+    platform: numeric_state
+  condition: []
+  action:
+  - choose:
+    - conditions:
+      - condition: state
+        entity_id: humidifier.midea_dehumidifier_18691697727728
+        state: Dryer
+        attribute: mode
+      sequence:
+      - delay: 01:00:00
+      - service: midea_dehumidifier.set_mode
+        data:
+          mode: Smart
+        entity_id: humidifier.midea_dehumidifier_18691697727728
+      - service: humidifier.turn_off
+        data: {}
+        entity_id: humidifier.midea_dehumidifier_18691697727728
+    default:
+    - service: humidifier.turn_off
+      data: {}
+      entity_id: humidifier.midea_dehumidifier_18691697727728
+  mode: single
+- id: '1578393488643'
+  alias: Humidity above 72%
+  description: Turn on dehumidifier if humidity is above 72% for more than 5 mins
+  trigger:
+  - above: '72'
+    entity_id: sensor.dehumidifier_current_humidity
+    for: 00:05:00
+    platform: numeric_state
+  condition: []
+  action:
+  - service: humidifier.turn_on
+    data: {}
+    entity_id: humidifier.midea_dehumidifier_18691697727728
+  - service: midea_dehumidifier.set_mode
+    data:
+      mode: Smart
+      entity_id: humidifier.midea_dehumidifier_18691697727728
+  mode: single
+- id: telegram-start
+  alias: Telegram Start Command
+  initial_state: 'on'
+  trigger:
+    platform: event
+    event_type: telegram_command
+    event_data:
+      command: /start
+  action:
+  - service: telegram_bot.send_message
+    data_template:
+      target: '{{ trigger.event.data.user_id }}'
+      message: "{{ [ \"Γεια σας\", \"Χαίρετε\", \"Μάλιστα!\", \"Α, πάλι εδώ; Ξανά!\"\
+        \ ] | random }}       \n"
+      keyboard:
+      - /start, /epiloges
+- id: telegram-control-pannel-start
+  alias: Telegram - Control Pannel
+  initial_state: 'on'
+  trigger:
+    platform: event
+    event_type: telegram_command
+    event_data:
+      command: /epiloges
+  action:
+  - service: telegram_bot.send_message
+    data_template:
+      target: '{{ trigger.event.data.user_id }}'
+      message: "{{ [ \"Επέλεξε ένα\", \"Πίνακας Ελέγχου\", \"Μάλιστα!\", \"Τι θες\
+        \ να κάνω;\", \"Ώρα να επιλέξεις\" ] | random }}       \n"
+      inline_keyboard:
+      - Αφυγραντήρας ON:/dehumi_on, Αφυγραντήρας OFF:/dehumi_off
+      - Όλα τα φώτα OFF:/all_lights_off, Όλα τα φώτα ON:/all_lights_on
+      - Τοποθεσία Mom:/pavlina_status
+- alias: Telegram - Device Tracker
+  trigger:
+    platform: event
+    event_type: telegram_callback
+    event_data:
+      data: /pavlina_status
+  action:
+  - service: telegram_bot.answer_callback_query
+    data_template:
+      callback_query_id: '{{ trigger.event.data.id }}'
+      show_alert: true
+      message: '{{states.device_tracker.pavlina.name}} βρίσκετε {% if is_state(''{{
+        states.device_tracker.pavlina.state }}'', ''home'') %} σπίτι! {% else %} εκτός
+        σπιτιού! {% endif %}
+
+        '
+  id: 5eff56e545a44e6e809f6d87111b7113
+- alias: Telegram - Dehumidifier ON
+  trigger:
+    platform: event
+    event_type: telegram_callback
+    event_data:
+      data: /dehumi_on
+  action:
+  - service: telegram_bot.answer_callback_query
+    data_template:
+      callback_query_id: '{{ trigger.event.data.id }}'
+      message: Αφυγραντήρας ON
+  - service: climate.set_hvac_mode
+    data:
+      entity_id: climate.midea_dehumi_18691697727728
+      hvac_mode: fan_only
+  id: 6da49b7051c94123a50507cce11b2baf
+- alias: Telegram - Dehumidifier OFF
+  trigger:
+    platform: event
+    event_type: telegram_callback
+    event_data:
+      data: /dehumi_off
+  action:
+  - service: telegram_bot.answer_callback_query
+    data_template:
+      callback_query_id: '{{ trigger.event.data.id }}'
+      message: Αφυγραντήρας OFF
+  - service: climate.set_hvac_mode
+    data:
+      entity_id: climate.midea_dehumi_18691697727728
+      hvac_mode: false
+  id: af026543ef57492791c03f0e1ba74f1a
+- alias: Telegram - All Lights OFF
+  trigger:
+    platform: event
+    event_type: telegram_callback
+    event_data:
+      data: /all_lights_off
+  action:
+  - service: telegram_bot.answer_callback_query
+    data_template:
+      callback_query_id: '{{ trigger.event.data.id }}'
+      message: Έσβησα όλα τα φώτα στο σπίτι!
+  - service: homeassistant.turn_off
+    data:
+      entity_id: group.all_lights
+  - service: switch.turn_off
+    data:
+      entity_id: switch.tp_link
+  id: 345ea3ae8de3460683de441ea13f5057
+- id: 107881d50a7f42228a0f0d4263b42df1
+  alias: Telegram - All Lights ON
+  trigger:
+  - event_data:
+      data: /all_lights_on
+    event_type: telegram_callback
+    platform: event
+  action:
+  - data_template:
+      callback_query_id: '{{ trigger.event.data.id }}'
+      message: Άναψα όλα τα φώτα στο σπίτι!
+    service: telegram_bot.answer_callback_query
+  - data:
+      brightness: 60
+      entity_id:
+      - light.ypnodomatio
+      - light.kouzina
+      - light.saloni
+    service: light.turn_on
+  - data:
+      entity_id: switch.tp_link
+    service: switch.turn_on
+- id: '1579290114579'
+  alias: Thanasis Bedroom Light ON
+  description: ''
+  trigger:
+  - entity_id: binary_sensor.dwmatio_thanasis_pir
+    from: 'off'
+    platform: state
+    to: 'on'
+  condition:
+  - after: sunset
+    after_offset: -01:00:00
+    condition: sun
+  action:
+  - data:
+      brightness_pct: 100
+      entity_id: light.ypnodomatio
+      transition: 10
+    service: light.turn_on
+- id: '1579290239707'
+  alias: Thanasis Bedroom Light Dim
+  description: ''
+  trigger:
+  - entity_id: binary_sensor.dwmatio_thanasis_pir
+    for: '300'
+    from: 'on'
+    platform: state
+    to: 'off'
+  condition: []
+  action:
+  - data:
+      brightness_pct: 30
+      transition: 120
+    entity_id: light.ypnodomatio
+    service: light.turn_on
+  mode: single
+- id: '1581168939811'
+  alias: Koudouni Unavailable
+  description: ''
+  trigger:
+  - entity_id: binary_sensor.outside_button
+    platform: state
+    to: unavailable
+  condition: []
+  action:
+  - data:
+      message: Kουδούνια unavailable
+    service: notify.thanasis_tel
+- id: '3541385218'
+  alias: Pir Θανάση Unavailable
+  description: ''
+  trigger:
+  - entity_id: binary_sensor.dwmatio_thanasis_pir
+    platform: state
+    to: unavailable
+  condition: []
+  action:
+  - data:
+      disable_notification: true
+      message: PIR Θανάσης unavailable
+      target: 280755619
+    service: telegram_bot.send_message
+- id: '9841638219'
+  alias: Pir Κουζίνα Unavailable
+  description: ''
+  trigger:
+  - entity_id: binary_sensor.kouzina_pir
+    platform: state
+    to: unavailable
+  condition: []
+  action:
+  - data:
+      disable_notification: true
+      message: PIR Κουζίνας unavailable
+      target: 627190871
+    service: telegram_bot.send_message
+- id: '7412589632585'
+  alias: Pir3 Unavailable
+  description: ''
+  trigger:
+  - entity_id: binary_sensor.saloni_pir
+    platform: state
+    to: unavailable
+  condition: []
+  action:
+  - data:
+      message: PIR Σαλονιού unavailable
+    service: notify.thanasis_tel
+- id: '1581550004246'
+  alias: Κουρτινόξυλο ΟΝ
+  description: ''
+  trigger:
+  - entity_id: binary_sensor.koudoni_ttgocam_pir
+    from: 'off'
+    platform: state
+    to: 'on'
+  condition:
+  - condition: state
+    entity_id: light.saloni
+    state: 'on'
+  - condition: state
+    entity_id: switch.tp_link
+    state: 'off'
+  action:
+  - device_id: 0bd51ed97c8b4c2fb7507a0d6dd62d09
+    domain: switch
+    entity_id: switch.tp_link
+    type: turn_on
+- id: '1581550107241'
+  alias: Κουρτινόξυλο OFF
+  description: ''
+  trigger:
+  - entity_id: binary_sensor.koudoni_ttgocam_pir
+    for: 00:30:00
+    from: 'on'
+    platform: state
+    to: 'off'
+  condition: []
+  action:
+  - device_id: 0bd51ed97c8b4c2fb7507a0d6dd62d09
+    domain: switch
+    entity_id: switch.tp_link
+    type: turn_off
+- id: '1584455782758'
+  alias: Coronavirus Austria
+  description: ''
+  trigger:
+  - entity_id: sensor.austria_coronavirus_confirmed
+    platform: state
+  condition: []
+  action:
+  - data:
+      message: There are currently {{states.sensor.austria_coronavirus_current.state}}
+        people infected, {{states.sensor.austria_coronavirus_recovered.state}} recoveries
+        and {{states.sensor.austria_coronavirus_deaths.state}} deaths!
+      title: Infected people increased to {{states.sensor.austria_coronavirus_confirmed.state}}!
+      data:
+        tag: coronavirus-at
+        color: green
+        actions:
+        - action: URI
+          title: See More
+          uri: /lovelace/1
+    service: notify.mobile_app_thanasis
+  - data: {}
+    service: script.1585512199381
+  - delay: 00:00:05
+  - data:
+      data:
+        method: speak
+        type: announce
+      message: There is a total of <amazon:emotion name="excited" intensity="medium">
+        {{states.sensor.austria_coronavirus_confirmed.state}}</amazon:emotion> cases,
+        of which {{states.sensor.austria_coronavirus_current.state}} people are currently
+        infected, {{states.sensor.austria_coronavirus_recovered.state}} have recovered
+        and {{states.sensor.austria_coronavirus_deaths.state}} died!
+    service: notify.alexa_media_office
+  mode: single
+- id: '1584456368605'
+  alias: Coronavirus Greece
+  description: ''
+  trigger:
+  - entity_id: sensor.greece_coronavirus_confirmed
+    platform: state
+  condition: []
+  action:
+  - data:
+      message: Αυτή τη στιγμή υπάρχουν {{states.sensor.greece_coronavirus_current.state}}
+        επιβεβαιωμένα κρούσματα, {{states.sensor.greece_coronavirus_recovered.state}}
+        σε ανάρρωση και {{states.sensor.greece_coronavirus_deaths.state}} θανάτοι!
+      title: Ο αριθμός κρουσμάτων αυξήθηξε στα {{states.sensor.greece_coronavirus_confirmed.state}}!
+      data:
+        tag: coronavirus-gr
+        color: green
+        actions:
+        - action: URI
+          title: Περισσότερα
+          uri: /lovelace/1
+    service: notify.modile_app_family
+- id: '1584649558522'
+  alias: Twilio Call Failed
+  description: ''
+  trigger:
+  - event_data:
+      data:
+        body: test
+    event_type: twilio_data_receiveds
+    platform: event
+  condition: []
+  action:
+  - data:
+      message: This is a test
+    service: notify.mobile_app_thanasis
+- id: '1584824265259'
+  alias: Dehumidifier OFF  MC
+  description: ''
+  trigger:
+  - device_id: cc78b14cb76940ecb72f8ec6e02f976a
+    domain: deconz
+    platform: device
+    subtype: ''
+    type: remote_double_tap_any_side
+  condition:
+  - condition: state
+    entity_id: climate.midea_dehumi_18691697727728
+    state: auto
+  action:
+  - data:
+      hvac_mode: 'off'
+    entity_id: climate.midea_dehumi_18691697727728
+    service: climate.set_hvac_mode
+- id: '1584824352872'
+  alias: Dehumidifier ON MC
+  description: ''
+  trigger:
+  - device_id: cc78b14cb76940ecb72f8ec6e02f976a
+    domain: deconz
+    platform: device
+    subtype: ''
+    type: remote_double_tap_any_side
+  condition:
+  - condition: state
+    entity_id: climate.midea_dehumi_18691697727728
+    state: auto
+  action:
+  - data:
+      hvac_mode: auto
+    entity_id: climate.midea_dehumi_18691697727728
+    service: climate.set_hvac_mode
+- id: '1584825561828'
+  alias: Fun Ring Doorbell
+  description: ''
+  trigger:
+  - device_id: cc78b14cb76940ecb72f8ec6e02f976a
+    domain: deconz
+    platform: device
+    subtype: side_6
+    type: remote_double_tap
+  condition: []
+  action:
+  - device_id: 01eefe5c733649abbac1a16d1fbfd7cc
+    domain: switch
+    entity_id: switch.koudouni_sound
+    type: turn_on
+- id: '1585249385832'
+  alias: Button ring bell
+  description: ''
+  trigger:
+  - device_id: c8a875ad54f5457294a7332f4eacd107
+    domain: deconz
+    platform: device
+    subtype: turn_on
+    type: remote_button_short_press
+  condition: []
+  action:
+  - device_id: 01eefe5c733649abbac1a16d1fbfd7cc
+    domain: switch
+    entity_id: switch.koudouni_sound
+    type: turn_on
+- id: '1585767837863'
+  alias: 'Deconz Restart '
+  description: ''
+  trigger:
+  - above: '30'
+    entity_id: sensor.processor_use
+    for: 00:15:00
+    platform: numeric_state
+  condition: []
+  action:
+  - data:
+      addon: core_deconz
+    service: hassio.addon_restart
+  - delay: 00:05:00
+  - data:
+      message: CPU above 30% for more than 15min. Restarted deCONZ. Currently CPU
+        at {{states.sensor.processor_use.state}}% 5min post addon restart.
+    service: notify.mobile_app_thanasis
+- id: '1587313399097'
+  alias: Couch Lamp ON - LUX
+  description: ''
+  trigger:
+  - below: '500'
+    entity_id: sensor.lightlevel
+    for: 00:10:00
+    platform: numeric_state
+  condition:
+  - condition: device
+    type: is_off
+    device_id: 333b79774fe544778453de2b7c3e8874
+    entity_id: light.saloni
+    domain: light
+  action:
+  - data:
+      brightness_pct: 60
+      entity_id: light.saloni
+      color_temp: 320
+      transition: 800
+    entity_id: light.saloni
+    service: light.turn_on
+  mode: single
+- id: '1587746668976'
+  alias: Set theme for all devices
+  description: 'Triggered on boot to set correct theme on everyone''s devices. Otherwise
+    sidebar and topbar colours incorrect '
+  trigger:
+  - event: start
+    platform: homeassistant
+  condition: []
+  action:
+  - data:
+      name: dark_mint
+    service: frontend.set_theme
+- id: '6368566325'
+  alias: Front door left unlocked for 5 mins
+  trigger:
+  - entity_id: switch.apothikaki_light
+    from: 'off'
+    platform: state
+    to: 'on'
+  action:
+  - data_template:
+      alexa_device: media_player.office
+      event_id: actionable_notification_lock_left_unlocked
+      text: <amazon:emotion name="excited" intensity="medium"> Five seconds till lift
+        off! <say-as interpret-as="digits">54321</say-as>. Lift off! </amazon:emotion>
+    service: script.activate_alexa_actionable_notification
+- alias: Lock the door via actionable notificaiton
+  trigger:
+    platform: event
+    event_type: alexa_actionable_notification
+    event_data:
+      event_id: actionable_notification_lock_left_unlocked
+      event_response: ResponseYes
+  action:
+  - service: notify.thanasis_tel
+    data:
+      message: Saloni light just turned ON. Light level outside is {{states.sensor.lightlevel.state}}
+        lux.
+  id: 0f14e390ac2d4a7f9ff74baf0a76019b
+- id: '1589390597240'
+  alias: Kalispera
+  description: ''
+  trigger:
+  - entity_id: binary_sensor.kouzina_pir
+    from: 'off'
+    platform: state
+    to: 'on'
+  condition: []
+  action:
+  - data:
+      data:
+        method: speak
+        type: announce
+      message: <voice name='Enrique'><lang xml:lang='es-ES'><prosody rate='slow' pitch='medium'>Kalispera!</prosody></lang></voice>
+    service: notify.alexa_media_home_echo
+  - data: {}
+    entity_id: automation.kalispera
+    service: automation.turn_off
+- id: '1589918358799'
+  alias: Alexa Manual Announcement
+  description: ''
+  trigger: []
+  condition: []
+  action:
+  - data:
+      data:
+        type: tts
+      message: '{{states.input_text.alexa_text.state}}'
+    service: notify.alexa_media_office
+- id: '1591136610639'
+  alias: 17track delivery
+  description: ''
+  trigger:
+    platform: event
+    event_type: state_changed
+    event_data: {}
+  condition:
+    condition: and
+    conditions:
+    - condition: template
+      value_template: '{{ trigger.event.data.entity_id.startswith(''sensor.17track_package_'')
+        }}'
+    - condition: or
+      conditions:
+      - condition: template
+        value_template: '{{ ''out for delivery'' in trigger.event.data.new_state.attributes.info_text|lower
+          }}'
+      - condition: template
+        value_template: '{{ ''delivered'' in trigger.event.data.new_state.attributes.info_text|lower
+          }}'
+  action:
+    service: notify.mobile_app_thanasis
+    data_template:
+      message: '{{ trigger.event.data.new_state.attributes.friendly_name | replace("Seventeentrack
+        Package: ","") }}: {{ trigger.event.data.new_state.attributes.info_text }}'
+- id: '1592177570356'
+  alias: Lifx unvailable
+  description: ''
+  trigger:
+  - entity_id: light.saloni
+    for: 05:05:00
+    platform: state
+    to: unavailable
+  condition: []
+  action:
+  - data:
+      data:
+        color: red
+      message: Δεν έχω καταφέρει να επικοινώνησω με το LIFX φως "Φωτιστικό Δαπέδου"
+        στην περιοχή ΣΑΛΟΝΙ για αρκετό διάστημα. Παρακαλώ ερευνήστε το πρόβλημα!
+      title: Χειροκίνητη Παρέμβαση Αναγκαία
+    service: notify.modile_app_family
+- alias: Leave any zone
+  trigger:
+  - platform: state
+    entity_id: device_tracker.zte_gps_logger
+    to: not_home
+  condition:
+  - condition: numeric_state
+    entity_id: sensor.hassio_uptime
+    above: 1
+  - condition: template
+    value_template: '{{ as_timestamp(now()) - as_timestamp(states.automation.leave_any_zone.attributes.last_triggered)
+      | int > 120 }}'
+  action:
+  - service: input_number.set_value
+    data_template:
+      entity_id: input_number.commute_start_time
+      value: '{{ as_timestamp(now()) }}'
+  - service: input_text.set_value
+    data_template:
+      entity_id: input_text.commute_start_zone
+      value: '{{ trigger.from_state.state }}'
+  id: 008a22dc69d14a70a097ed0d25320b77
+- id: '1592746493755'
+  alias: Enter Any Zone
+  description: ''
+  trigger:
+  - entity_id: device_tracker.zte_gps_logger
+    from: not_home
+    platform: state
+  condition:
+  - above: '1'
+    condition: numeric_state
+    entity_id: sensor.hassio_uptime
+  - condition: template
+    value_template: '{{ as_timestamp(now()) - as_timestamp(states.automation.enter_any_zone_2.attributes.last_triggered)
+      | int > 120 }}'
+  - condition: template
+    value_template: '{{ states(''input_text.commute_start_zone'') != states(''device_tracker.zte_gps_logger'')
+      }}'
+  action:
+  - data:
+      data:
+        color: yellow
+      message: Your commute from {{ states('input_text.commute_start_zone') }} to
+        {{ states('device_tracker.zte_gps_logger') }} took {{ ((as_timestamp(now())
+        - (states('input_number.commute_start_time')|int))/60)|round }} minutes
+      title: Commute Logged
+    service: notify.mobile_app_zte_blade_10_vita
+- id: '1592856530320'
+  alias: Couch Lamp Auto Turn Off
+  description: ''
+  trigger:
+  - platform: device
+    type: turned_on
+    device_id: 333b79774fe544778453de2b7c3e8874
+    entity_id: light.saloni
+    domain: light
+  condition:
+  - above: '1500'
+    condition: numeric_state
+    entity_id: sensor.lightlevel
+  action:
+  - type: turn_off
+    device_id: 333b79774fe544778453de2b7c3e8874
+    entity_id: light.saloni
+    domain: light
+  mode: single
+- id: '1593510859687'
+  alias: Notify Mum when her Wifi is connected to Erasmia
+  description: ''
+  trigger:
+  - entity_id: sensor.wifi_connection
+    platform: state
+    to: Erasmia
+  condition: []
+  action:
+  - data:
+      message: Αφού είστε εδώ, βγάλτε και μία φωοτγραφία τις κιλοβατώρες
+    service: notify.pavlina_tel
+  - delay: 00:05:00
+  - data: {}
+    entity_id: automation.notify_mum_when_her_wifi_is_connected_to_erasmia
+    service: automation.turn_off
+- id: '1593949883642'
+  alias: Low Battery on Zigbee devices
+  description: ''
+  trigger:
+  - below: 20
+    device_id: 11ec6109f5af4fc099200087a52946d8
+    domain: sensor
+    entity_id: sensor.opple_switch_3_gang_battery_level
+    platform: device
+    type: battery_level
+    for:
+      hours: 1
+      minutes: 0
+      seconds: 0
+  - below: 20
+    device_id: e4be0ba8ff994733857e6854e86c1370
+    domain: sensor
+    entity_id: sensor.openclose_11_battery_level
+    platform: device
+    type: battery_level
+    for:
+      hours: 1
+      minutes: 0
+      seconds: 0
+  - below: 20
+    device_id: 91b241e6a78f4ff0a6d4ee61854f3bd4
+    domain: sensor
+    entity_id: sensor.light_sensor_battery_level
+    platform: device
+    type: battery_level
+    for:
+      hours: 1
+      minutes: 0
+      seconds: 0
+  - below: 20
+    device_id: 23d922ed8ec04d97bfa864610eee6dec
+    domain: sensor
+    entity_id: sensor.garage_door_battery_level
+    platform: device
+    type: battery_level
+    for:
+      hours: 1
+      minutes: 0
+      seconds: 0
+  - below: 20
+    device_id: ccdd91efcc354da997f8f23dee3cf413
+    domain: sensor
+    entity_id: sensor.switch_kouzina_battery_level
+    platform: device
+    type: battery_level
+    for:
+      hours: 1
+      minutes: 0
+      seconds: 0
+  - type: battery_level
+    platform: device
+    device_id: 8a51395da03d4133b4ad5114f2be7243
+    entity_id: sensor.multi_sensor_outside_battery_level
+    domain: sensor
+    below: 20
+    for:
+      hours: 1
+      minutes: 0
+      seconds: 0
+  - type: battery_level
+    platform: device
+    device_id: a48b7cf09c2148dcae17e97149d79dbc
+    entity_id: sensor.multi_sensor_inside_battery_level
+    domain: sensor
+    below: 20
+    for:
+      hours: 1
+      minutes: 0
+      seconds: 0
+  - below: 20
+    device_id: cc78b14cb76940ecb72f8ec6e02f976a
+    domain: sensor
+    entity_id: sensor.cube_battery_level
+    platform: device
+    type: battery_level
+    for:
+      hours: 1
+      minutes: 0
+      seconds: 0
+  condition: []
+  action:
+  - data:
+      message: The battery for {{ trigger.to_state.attributes.friendly_name }} is
+        below 20%.
+      title: Zigbee Device Battery Low
+    service: notify.thanasis_tel
+  mode: single
+- id: '1593951594642'
+  alias: Unavailable Devices
+  description: ''
+  trigger:
+  - entity_id: sensor.temperature_outside
+    for: 00:10:00
+    platform: state
+    to: unavailable
+  - entity_id: sensor.temperature_inside
+    for: 00:10:00
+    platform: state
+    to: unavailable
+  - entity_id: sensor.sprinkler_ip
+    for: 00:10:00
+    platform: state
+    to: unavailable
+  - entity_id: sensor.saloni_ip
+    for: 00:10:00
+    platform: state
+    to: unavailable
+  - entity_id: sensor.kouzina_ip
+    for: 00:10:00
+    platform: state
+    to: unavailable
+  - entity_id: sensor.koudouni_ip
+    for: 00:10:00
+    platform: state
+    to: unavailable
+  - entity_id: sensor.apothiki_ip
+    for: 00:10:00
+    platform: state
+    to: unavailable
+  - entity_id: switch.tp_link
+    for: 00:10:00
+    platform: state
+    to: unavailable
+  - entity_id: sensor.lightlevel
+    for: 00:10:00
+    platform: state
+    to: unavailable
+  condition: []
+  action:
+  - data:
+      message: '{{ trigger.to_state.attributes.friendly_name }} is offline'
+      title: Offline Device
+    service: notify.thanasis_tel
+- id: '1598865913514'
+  alias: Bedroom Thanasis Light ON (kitchen 3-gang)
+  description: Turrn on Thanasis Main Light from the kitchen 3-gang switch
+  trigger:
+  - device_id: 11ec6109f5af4fc099200087a52946d8
+    domain: deconz
+    platform: device
+    subtype: turn_on
+    type: remote_button_short_release
+  condition: []
+  action:
+  - brightness_pct: 100
+    device_id: c1c3312965a6496591f337d8566b03db
+    domain: light
+    entity_id: light.ypnodomatio
+    type: turn_on
+  mode: single
+- id: '1598866026274'
+  alias: Bedroom Thanasis Light OFF (kitchen 3-gang)
+  description: Turrn off Thanasis Main Light from the kitchen 3-gang switch
+  trigger:
+  - device_id: 11ec6109f5af4fc099200087a52946d8
+    domain: deconz
+    platform: device
+    subtype: turn_off
+    type: remote_button_short_release
+  condition: []
+  action:
+  - device_id: 8e8f4b524fb4408c9802375867f23746
+    domain: light
+    entity_id: light.kouzina
+    type: turn_off
+  mode: single
+- id: '1598866412185'
+  alias: OPPLE 1(Single Press) - Turn OFF Kitchen Light
+  description: ''
+  trigger:
+  - device_id: 11ec6109f5af4fc099200087a52946d8
+    domain: deconz
+    platform: device
+    subtype: turn_off
+    type: remote_button_short_release
+  condition: []
+  action:
+  - type: turn_off
+    device_id: 270563f49c8e4495ac344958479f3da6
+    entity_id: light.kouzina
+    domain: light
+  mode: single
+- id: '1598866454708'
+  alias: OPPLE 2 (Single Press) - Turn ON Kitchen Light
+  description: ''
+  trigger:
+  - device_id: 11ec6109f5af4fc099200087a52946d8
+    domain: deconz
+    platform: device
+    subtype: turn_on
+    type: remote_button_short_release
+  condition: []
+  action:
+  - type: turn_on
+    device_id: 270563f49c8e4495ac344958479f3da6
+    entity_id: light.kouzina
+    domain: light
+    brightness_pct: 100
+  mode: single
+- id: '1598875045747'
+  alias: OPPLE 4 (Single Press) - Thanasis Light Turn ON
+  description: ''
+  trigger:
+  - device_id: 11ec6109f5af4fc099200087a52946d8
+    domain: deconz
+    platform: device
+    subtype: dim_up
+    type: remote_button_short_release
+  condition:
+  - condition: device
+    device_id: c1c3312965a6496591f337d8566b03db
+    domain: light
+    entity_id: light.ypnodomatio
+    type: is_off
+  action:
+  - brightness_pct: 100
+    device_id: c1c3312965a6496591f337d8566b03db
+    domain: light
+    entity_id: light.ypnodomatio
+    type: turn_on
+  mode: single
+- id: '1598875137858'
+  alias: OPPLE 4 (Single Press) - Thanasis Light Turn OFF
+  description: ''
+  trigger:
+  - device_id: 11ec6109f5af4fc099200087a52946d8
+    domain: deconz
+    platform: device
+    subtype: dim_up
+    type: remote_button_short_release
+  condition:
+  - condition: device
+    device_id: c1c3312965a6496591f337d8566b03db
+    domain: light
+    entity_id: light.ypnodomatio
+    type: is_on
+  action:
+  - device_id: c1c3312965a6496591f337d8566b03db
+    domain: light
+    entity_id: light.ypnodomatio
+    type: turn_off
+  mode: single
+- id: '1598875571765'
+  alias: OPPLE 3 (Double Press) - Thanasis Light Brightness Increase
+  description: ''
+  trigger:
+  - device_id: 11ec6109f5af4fc099200087a52946d8
+    domain: deconz
+    platform: device
+    subtype: dim_down
+    type: remote_button_double_press
+  condition: []
+  action:
+  - device_id: c1c3312965a6496591f337d8566b03db
+    domain: light
+    entity_id: light.ypnodomatio
+    type: brightness_increase
+  mode: queued
+  max: 10
+- id: '1598875591670'
+  alias: OPPLE 4 (Double Press) - Thanasis Light Brightness Increase
+  description: ''
+  trigger:
+  - device_id: 11ec6109f5af4fc099200087a52946d8
+    domain: deconz
+    platform: device
+    subtype: dim_up
+    type: remote_button_double_press
+  condition: []
+  action:
+  - device_id: c1c3312965a6496591f337d8566b03db
+    domain: light
+    entity_id: light.ypnodomatio
+    type: brightness_increase
+  mode: single
+- id: '1600021782044'
+  alias: Eisodos Cam on Kouzina Display
+  description: Cast Eisodos Cam on Kouzina Display when Eksoporta is opened
+  trigger:
+  - device_id: 008073a1884f40629c628ee95edd1b7c
+    domain: binary_sensor
+    entity_id: binary_sensor.eksoporta
+    platform: device
+    type: opened
+  - device_id: 81c541cd5def41758eaf49be76d6fa50
+    domain: binary_sensor
+    entity_id: binary_sensor.openclose_16
+    platform: device
+    type: opened
+  - type: opened
+    platform: device
+    device_id: 75507ad2be3148d0873972e425b1b309
+    entity_id: binary_sensor.kuria_eisodos
+    domain: binary_sensor
+  condition:
+  - after: '18:00:00'
+    before: 04:00:00
+    condition: time
+  action:
+  - service: media_player.volume_mute
+    data:
+      is_volume_muted: 'no'
+    entity_id: media_player.kouzina_display
+  - data:
+      media_content_id: http://192.168.1.249:8889/
+      media_content_type: image/jpg
+    entity_id: media_player.kouzina_display
+    service: media_player.play_media
+  - delay: 00:01:30
+  - data: {}
+    entity_id: media_player.kouzina_display
+    service: media_player.turn_off
+  mode: single
+- id: '1600031107502'
+  alias: Φως Πόρτας Σπιτιού ΟΝ
+  description: ''
+  trigger:
+  - device_id: 8900fce7b6c94990be7b6cbede3c3011
+    domain: binary_sensor
+    entity_id: binary_sensor.porta_spitiou
+    platform: device
+    type: opened
+  - device_id: 75507ad2be3148d0873972e425b1b309
+    domain: binary_sensor
+    entity_id: binary_sensor.kuria_eisodos
+    platform: device
+    type: opened
+  - device_id: 81c541cd5def41758eaf49be76d6fa50
+    domain: binary_sensor
+    entity_id: binary_sensor.porta_apothikis
+    platform: device
+    type: opened
+  condition:
+  - condition: and
+    conditions:
+    - type: is_illuminance
+      condition: device
+      device_id: 91b241e6a78f4ff0a6d4ee61854f3bd4
+      entity_id: sensor.lightlevel
+      domain: sensor
+      below: 500
+    - condition: time
+      after: '15:00'
+      before: 08:00
+  action:
+  - data:
+      brightness_pct: 20
+      entity_id: light.portas_spitiou
+      transition: 10
+    service: light.turn_on
+  mode: restart
+- id: '1600031276939'
+  alias: Φως Πόρτας Σπιτιού ΟFF
+  description: ''
+  trigger:
+  - device_id: 8900fce7b6c94990be7b6cbede3c3011
+    domain: binary_sensor
+    entity_id: binary_sensor.porta_spitiou
+    for:
+      hours: 0
+      minutes: 5
+      seconds: 0
+    platform: device
+    type: not_opened
+  - device_id: 75507ad2be3148d0873972e425b1b309
+    domain: binary_sensor
+    entity_id: binary_sensor.kuria_eisodos
+    for:
+      hours: 0
+      minutes: 5
+      seconds: 0
+    platform: device
+    type: not_opened
+  - device_id: 81c541cd5def41758eaf49be76d6fa50
+    domain: binary_sensor
+    entity_id: binary_sensor.porta_apothikis
+    for:
+      hours: 0
+      minutes: 5
+      seconds: 0
+    platform: device
+    type: not_opened
+  condition: []
+  action:
+  - data:
+      entity_id: light.portas_spitiou
+      transition: 10
+    service: light.turn_off
+  mode: single
+- id: '1600368035272'
+  alias: Thanasis Bedroom Light OFF
+  description: ''
+  trigger:
+  - device_id: af049f71d0e44c3e9978fe944b5799d5
+    domain: binary_sensor
+    entity_id: binary_sensor.dwmatio_thanasis_pir
+    for:
+      hours: 0
+      minutes: 10
+      seconds: 0
+    platform: device
+    type: no_motion
+  condition: []
+  action:
+  - data:
+      transition: 120
+    entity_id: light.ypnodomatio
+    service: light.turn_off
+  mode: single
+- id: '1601761290425'
+  alias: sonoff basic off
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: switch.sonoff_basic_1_relay
+    from: unavailable
+  condition: []
+  action:
+  - type: turn_off
+    device_id: 51121162db524b6a8b7a73a269166749
+    entity_id: switch.sonoff_basic_1_relay
+    domain: switch
+  - service: notify.mobile_app_thanasis
+    data:
+      message: Sonoff Basic 1 Turned OFF!
+  mode: single
+- id: '1602243168085'
+  alias: Camera Eisodos Snap (Duplicate)
+  description: ''
+  trigger:
+  - entity_id: binary_sensor.koudoni_ttgocam_button
+    from: 'off'
+    platform: state
+    to: 'on'
+  condition: []
+  action:
+  - data:
+      entity_id: camera.eisodos_hd_mjpeg
+      filename: /tmp/eisodos_outside.jpg
+    service: camera.snapshot
+  - delay: 00:00:03
+  - data:
+      caption: Κουδούνι!
+      file: /tmp/eisodos_outside.jpg
+      target:
+      - 627190871
+    service: telegram_bot.send_photo
+  mode: single
+- id: '1602277618726'
+  alias: Create /tmp/eisodos.jpg on HA startup
+  description: Create a eisodos.jpg picture on HA startup otherwise HA throws erros
+    because file is located on /tmp/
+  trigger:
+  - platform: homeassistant
+    event: start
+  condition: []
+  action:
+  - service: camera.snapshot
+    data:
+      filename: /tmp/eisodos.jpg
+    entity_id: camera.eisodos_hd_mjpeg
+  mode: single
+- id: '1603375666928'
+  alias: RPI Uptime Sensor Update
+  description: Triggers "update_entitty" to recalculate the RPI uptime sensor
+  trigger:
+  - platform: time_pattern
+    minutes: '10'
+  condition: []
+  action:
+  - service: homeassistant.update_entity
+    data: {}
+    entity_id: sensor.rpi_uptime
+  mode: single
+- id: 7fcebef6-613c-4aec-8620-d4a3d1625abc
+  alias: Dehumidifer Fan Mode Change
+  trigger:
+    entity_id: input_select.dehumidifier_fan_mode
+    platform: state
+  action:
+    service: midea_dehumidifier.set_fan_speed
+    data_template:
+      entity_id: humidifier.midea_dehumidifier_18691697727728
+      fan_speed: '{{ states.input_select.dehumidifier_fan_mode.state }}'
+- id: e7c887ef-16b8-49aa-b6ba-e76944ccdc05
+  alias: Dehumidifier Fan Speed Change
+  trigger:
+    entity_id: humidifier.midea_dehumidifier_18691697727728
+    platform: state
+  action:
+    service: input_select.select_option
+    data_template:
+      entity_id: input_select.dehumidifier_fan_mode
+      option: '{{ states.humidifier.midea_dehumidifier_18691697727728.attributes.fan_speed_mode
+        }}'
+- id: cc0642a0-94d3-404e-8948-863b53ebbf4f
+  alias: input_select.dehumidifier_fan_mode option to 'High' when set to Dryer
+  trigger:
+  - platform: template
+    value_template: '{% if is_state(''input_select.dehumidifier_modes'', ''Dryer'')
+      %}true{% endif %}'
+  action:
+  - service: input_select.set_options
+    data_template:
+      entity_id: input_select.dehumidifier_fan_mode
+      options:
+      - High
+  mode: single
+- id: a03962c7-6283-43fd-abf6-d4c0a0508ec6
+  alias: Input_select.dehumidifier_fan_mode revert when not Dryer
+  description: Revert back input_select.dehumidifier_fan_mode options when state of
+    device change to not Dryer
+  trigger:
+  - platform: template
+    value_template: '{% if not is_state(''input_select.dehumidifier_modes'', ''Dryer'')
+      %}true{% endif %}'
+  action:
+  - service: input_select.set_options
+    data_template:
+      entity_id: input_select.dehumidifier_fan_mode
+      options:
+      - Silent
+      - medium
+      - High
+  mode: single
+- id: fec61495-7450-4f16-a45b-0440faa31cae
+  alias: Dehumidifier Mode Change from Input Select
+  trigger:
+    entity_id: input_select.dehumidifier_modes
+    platform: state
+  action:
+    service: midea_dehumidifier.set_mode
+    data_template:
+      entity_id: humidifier.midea_dehumidifier_18691697727728
+      mode: '{{ states.input_select.dehumidifier_modes.state }}'
+- id: 4309a59b-d357-431d-a7f8-9c95437b8430
+  alias: Dehumidifier Mode Change from Device
+  trigger:
+    entity_id: humidifier.midea_dehumidifier_18691697727728
+    platform: state
+  action:
+    service: input_select.select_option
+    data_template:
+      entity_id: input_select.dehumidifier_modes
+      option: '{{ states.humidifier.midea_dehumidifier_18691697727728.attributes.mode
+        }}'
+- id: '1604251261327'
+  alias: Movement No One Home
+  description: Notify when there is movement detected but no one is home
+  trigger:
+  - type: motion
+    platform: device
+    device_id: 88df64bca71d4222819a30601669916b
+    entity_id: binary_sensor.kouzina_pir
+    domain: binary_sensor
+  - type: motion
+    platform: device
+    device_id: 6f17588026674fe6916114df4fdb7d1b
+    entity_id: binary_sensor.saloni_pir
+    domain: binary_sensor
+  - type: motion
+    platform: device
+    device_id: af049f71d0e44c3e9978fe944b5799d5
+    entity_id: binary_sensor.dwmatio_thanasis_pir
+    domain: binary_sensor
+  condition:
+  - condition: state
+    entity_id: group.family_status
+    state: not_home
+  action:
+  - service: notify.alexa_media_office
+    data:
+      data:
+        method: speak
+        type: announce
+      message: Alert! Movement detected in the house, but no one is home!
+  mode: single
+- id: '1604777578278'
+  alias: Main Door Light Unavailable
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: light.portas_spitiou
+    to: unavailable
+    for: 00:00:30
+  condition: []
+  action:
+  - service: notify.mobile_app_thanasis
+    data:
+      data:
+        color: red
+        image: /api/camera_proxy/camera.saloni_mjpeg
+        tag: motion
+      message: ''
+      title: 💡 Φως Μη Διαθέσιμο
+  - service: notify.mobile_app_redmi_note_9_pro
+    data:
+      data:
+        color: red
+        image: /api/camera_proxy/camera.saloni_mjpeg
+        tag: motion
+      message: ''
+      title: 💡 Φως Μη Διαθέσιμο
+  mode: single
+- id: '1604834939561'
+  alias: Couch Lamp OFF if too many LUX outside
+  description: ''
+  trigger:
+  - platform: numeric_state
+    entity_id: sensor.lightlevel
+    above: '550'
+    for: 00:05:00
+  condition:
+  - condition: device
+    type: is_on
+    device_id: 333b79774fe544778453de2b7c3e8874
+    entity_id: light.saloni
+    domain: light
+  action:
+  - type: turn_off
+    device_id: 333b79774fe544778453de2b7c3e8874
+    entity_id: light.saloni
+    domain: light
+  mode: single
+- id: '1605207852942'
+  alias: New Home Assistant Release
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: binary_sensor.updater
+    from: 'off'
+    to: 'on'
+  condition: []
+  action:
+  - service: notify.alexa_media_office
+    data:
+      data:
+        method: speak
+        type: announce
+      message: <amazon:emotion name="excited" intensity="medium"> <s>Exciting News
+        Thanasis!</s>  <s>Home Assistant version {{ state_attr('binary_sensor.updater',
+        'newest_version')}}   is now available!</s>   <s>I could not help myself,
+        so I sent you the release notes on your phone.</s> <s>Rejoice!</s> </amazon:emotion>
+  - delay: 00:00:14
+  - service: notify.thanasis_tel
+    data:
+      title: Here they are!
+      message: '{{ state_attr(''binary_sensor.updater'', ''release_notes'') }}'
+  mode: single
+- id: '1606933162763'
+  alias: Restart Time (start)
+  description: Publish Start Time to MQTT
+  trigger:
+  - platform: homeassistant
+    event: start
+  condition: []
+  action:
+  - service: mqtt.publish
+    data:
+      topic: homeassistant/start
+      payload: '{{ now()|as_timestamp }}'
+      retain: true
+  mode: single
+- id: '1606933243846'
+  alias: Restart Time (shutdown)
+  description: Publish curent timestamp to MQTT on shutdown
+  trigger:
+  - platform: homeassistant
+    event: shutdown
+  condition: []
+  action:
+  - service: mqtt.publish
+    data:
+      topic: homeassistant/shutdown
+      payload: '{{ now()|as_timestamp }}'
+      retain: true
+  mode: single
+- id: '1607198123122'
+  alias: Couch Light Automation + Light Toggle
+  description: ''
+  trigger:
+  - device_id: c8a875ad54f5457294a7332f4eacd107
+    domain: deconz
+    platform: device
+    type: remote_button_short_press
+    subtype: turn_on
+  condition: []
+  action:
+  - type: toggle
+    device_id: 333b79774fe544778453de2b7c3e8874
+    entity_id: light.saloni
+    domain: light
+  - service: automation.toggle
+    data:
+      entity_id: group.couch_blue
+  mode: single
+- id: '1607201884533'
+  alias: Couch Light Automation Toggle
+  description: ''
+  trigger:
+  - device_id: c8a875ad54f5457294a7332f4eacd107
+    domain: deconz
+    platform: device
+    type: remote_button_double_press
+    subtype: turn_on
+  condition: []
+  action:
+  - service: automation.toggle
+    data:
+      entity_id: group.couch_blue
+  - service: lifx.effect_pulse
+    data:
+      brightness: 50
+      cycles: 1
+      entity_id:
+      - light.saloni
+      mode: breathe
+  mode: single
+- id: '1607276664774'
+  alias: Xmas DoorBell
+  description: ''
+  trigger:
+  - type: turned_on
+    platform: device
+    device_id: 01eefe5c733649abbac1a16d1fbfd7cc
+    entity_id: binary_sensor.outside_button
+    domain: binary_sensor
+  - type: turned_on
+    platform: device
+    device_id: 01eefe5c733649abbac1a16d1fbfd7cc
+    entity_id: binary_sensor.inside_button
+    domain: binary_sensor
+  condition: []
+  action:
+  - service: media_player.volume_set
+    data:
+      volume_level: 0.7
+    entity_id: media_player.kouzina_display
+  - service: media_player.play_media
+    data:
+      entity_id: media_player.kouzina_display
+    data_template:
+      media_content_id: '{{ ["https://192.168.1.250:8123/local/audio/xmas/1.mp3",
+        "https://192.168.1.250:8123/local/audio/xmas/2.mp3", "https://192.168.1.250:8123/local/audio/xmas/3.mp3",
+        "https://192.168.1.250:8123/local/audio/xmas/4.mp3", "https://192.168.1.250:8123/local/audio/xmas/5.mp3",
+        "https://192.168.1.250:8123/local/audio/xmas/6.mp3", "https://192.168.1.250:8123/local/audio/xmas/7.mp3"]
+        | random}}'
+      media_content_type: audio/mp3
+  mode: queued
+  max: 10
+- id: '1608928439795'
+  alias: Humidifier Tank Full
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: sensor.dehumi_tank
+    from: Empty
+    to: Full
+    for: 00:00:15
+  condition: []
+  action:
+  - service: notify.mobile_app_thanasis
+    data:
+      message: Η δεξαμενή του αφυγραντήρα είναι γεμάτη!
+  - service: notify.mobile_app_redmi_note_9_pro
+    data:
+      message: Η δεξαμενή του αφυγραντήρα είναι γεμάτη!
+  mode: single
+- id: '1608994825438'
+  alias: Camera Snap Test
+  description: ''
+  trigger: []
+  condition: []
+  action:
+  - service: camera.snapshot
+    data:
+      filename: /media/eisodos.jpg
+    entity_id: camera.eisodos_hd_mjpeg
+  - delay: 00:00:05
+  - service: notify.mobile_app_thanasis
+    data:
+      data:
+        image: /media/eisodos.jpg
+      message: 🔔 Κουδούνι 🔔
+      title: Κίνηση στην πόρτα 🚪🚶
+  mode: single
+- id: '1609091711529'
+  alias: HACS Updates
+  description: Create a notification when there is updates pending in HACS
+  trigger:
+    platform: state
+    entity_id: sensor.hacs
+  condition:
+  - condition: template
+    value_template: '{{ states(trigger.entity_id) != ''unknown''}}'
+  - condition: template
+    value_template: '{{ (states(trigger.entity_id) | float) != 0}}'
+  action:
+    service: persistent_notification.create
+    data_template:
+      title: Updates pending in HACS
+      notification_id: hacs-update
+      message: "{% for repo in state_attr(trigger.entity_id, 'repositories') %}\n\
+        \  **{{ repo.display_name }}** _{{ repo[\"installed_version\"] }}_ -> _{{\
+        \ repo[\"available_version\"] }}_\n{% endfor %}"
+  mode: single
+- id: '1609100037881'
+  alias: Alexa Media Player Login Expired
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: media_player.office
+    to: unavailable
+    for: 00:01:00
+  - platform: state
+    entity_id: media_player.bathroom
+    to: unavailable
+    for: 00:01:00
+  - platform: state
+    entity_id: media_player.home_echo
+    for: 00:01:00
+    to: unavailable
+  condition:
+  - condition: and
+    conditions:
+    - condition: state
+      entity_id: media_player.home_echo
+      state: unavailable
+    - condition: state
+      entity_id: media_player.bathroom
+      state: unavailable
+    - condition: state
+      entity_id: media_player.office
+      state: unavailable
+  action:
+  - service: notify.mobile_app_thanasis
+    data:
+      message: Alexa Media Player Integration requires reconfiguring
+      title: Integration Error
+  mode: single
+- id: '1609448646562'
+  alias: New Years Midnight
+  description: ''
+  trigger:
+  - platform: time
+    at: 00:00:00
+  condition: []
+  action:
+  - type: flash
+    device_id: 270563f49c8e4495ac344958479f3da6
+    entity_id: light.kouzina
+    domain: light
+  - type: flash
+    device_id: 693e32ea49154feab61a6a4df67f5332
+    entity_id: light.krevatokamara
+    domain: light
+  - type: flash
+    device_id: 7fb24f3e36664ac8b916aa4f631d012e
+    entity_id: light.portas_spitiou
+    domain: light
+  - service: lifx.effect_pulse
+    data:
+      brightness: 100
+      cycles: 2
+      entity_id:
+      - light.ypnodomatio
+      - light.saloni
+      mode: breathe
+  mode: single
+- id: '1611702191670'
+  alias: DrZzs Streaming
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: sensor.drzzs
+    to: streaming
+  condition: []
+  action:
+  - device_id: 50cefa2e0d2043f3aa3cc738d37e4c3a
+    domain: mobile_app
+    type: notify
+    message: Dr Zzs is live!
+    title: ''
+  - service: notify.alexa_media_office
+    data:
+      data:
+        method: speak
+        type: announce
+      message: <amazon:emotion name="excited" intensity="medium"><s>Exciting news!
+        Dr Zees is now live streaming!</s> </amazon:emotion>
+  mode: single

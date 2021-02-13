@@ -1,0 +1,156 @@
+substitutions:
+  devicename: koudounia
+  upper_devicename: Koudounia
+
+esphome:
+  name: $devicename
+  platform: ESP8266
+  board: nodemcuv2
+  on_loop:
+    then:
+      - lambda: delay(5);
+
+packages:
+  wifi: !include common_substitutions/wifi.yaml
+  device_base: !include common_substitutions/device_base.yaml
+
+  
+# Sync time with Home Assistant.
+time:
+  - platform: homeassistant
+    id: homeassistant_time
+
+# Global to store the on/off state of the buzzer
+globals:
+  - id: buzzer
+    type: bool
+    restore_value: true
+    initial_value: 'true'
+  - id: lock
+    type: bool
+    restore_value: true
+    initial_value: 'true'
+    
+# Exposed switches.
+switch:
+  # Switch to unlock the door
+  - platform: gpio
+    id: relay_lock
+    inverted: true
+    name: Outdoor Lock
+    pin: GPIO14
+    restore_mode: ALWAYS_OFF
+  # Switch to sound the buzzer
+  - platform: gpio
+    id: relay_buzzer
+    inverted: true
+    name: Outdoor Buzzer
+    pin: GPIO12
+    restore_mode: ALWAYS_OFF
+  # Switch to turn on Apothikaki light
+  - platform: gpio
+    id: relay_apothikaki
+    inverted: true
+    name: Apothikaki Light
+    pin: GPIO15
+    restore_mode: ALWAYS_OFF
+  # Switch to turn on/off buzzer when
+  # Koudouni button is pushed.
+  # It creates a "virtual" switch based
+  # on a global variable.
+  - platform: template
+    name: Koudounia Outdoor Buzzer Active
+    id: buzzer_active
+    restore_state: false
+    turn_on_action:
+      - globals.set:
+          id: buzzer
+          value: 'true'
+    turn_off_action:
+      - globals.set:
+          id: buzzer
+          value: 'false'
+    lambda: |-
+      return id(buzzer);
+  - platform: template
+    name: Koudounia Outdoor Lock Active
+    id: lock_active
+    restore_state: false
+    turn_on_action:
+      - globals.set:
+          id: lock
+          value: 'true'
+    turn_off_action:
+      - globals.set:
+          id: lock
+          value: 'false'
+    lambda: |-
+      return id(lock);
+
+# Binary sensor representing the Outdoor Koudounia Push.
+binary_sensor:
+  - platform: gpio
+    id: reed_apothikaki
+    name: Door Apothikaki
+    pin:
+      number: GPIO3
+      mode: INPUT_PULLUP
+      inverted: false
+    filters:
+      # Small filter, to debounce the button press.
+      - delayed_on: 25ms
+      - delayed_off: 25ms
+  - platform: gpio
+    id: outdoor_koudouni_extra
+    name: Extra Koudouni
+    pin:
+      number: GPIO4
+      mode: INPUT_PULLUP
+      inverted: true
+    filters:
+      # Small filter, to debounce the button press.
+      - delayed_on: 25ms
+      - delayed_off: 25ms
+  - platform: gpio
+    id: outdoor_koudouni_sofita
+    name: Sofita Koudouni
+    pin:
+      number: GPIO13
+      mode: INPUT_PULLUP
+      inverted: true
+    filters:
+      # Small filter, to debounce the button press.
+      - delayed_on: 25ms
+      - delayed_off: 25ms
+  - platform: gpio
+    id: outdoor_koudouni
+    name: Outdoor Koudouni
+    pin:
+      number: GPIO5
+      mode: INPUT_PULLUP
+      inverted: true
+    filters:
+      # Small filter, to debounce the button press.
+      - delayed_on: 25ms
+      - delayed_off: 25ms
+    on_press:
+      # Only turn on outdoor buzzer when it is active.
+      then:
+        if:
+          condition:
+            - switch.is_on: buzzer_active
+          then:
+            - switch.turn_on: relay_buzzer
+    on_release:
+      # On release, turn off the outdoor buzzer.
+      - switch.turn_off: relay_buzzer
+    on_click:
+      min_length: 1s
+      max_length: 2s
+      then:
+        if:
+          condition:
+            - binary_sensor.is_on: outdoor_koudouni_extra
+            - binary_sensor.is_on: outdoor_koudouni_sofita
+          then:
+            - switch.turn_on: restart_switch

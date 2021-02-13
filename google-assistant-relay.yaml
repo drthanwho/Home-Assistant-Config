@@ -1,0 +1,17 @@
+assistant_broadcast:
+    url: http://192.168.10.2:3000/assistant
+    method: POST
+    content_type: 'application/json'
+    payload: '{"command":"{{ command }}", "user":"username", "broadcast":true}'
+    
+assistant_converse:
+  url: http://192.168.10.2:3000/assistant
+  method: POST
+  content_type: 'application/json'
+  payload: '{"command":"{{ command }}", "user":"username", "converse":true}'
+
+assistant_relay:
+  url: http://192.168.10.2:3000/assistant
+  method: POST
+  content_type: 'application/json'
+  payload: '{"command":"{{ command }}", "user":"username"}'

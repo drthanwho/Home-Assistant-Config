@@ -1,0 +1,31 @@
+- platform: template
+  sensors:
+    humidifier_state:
+      friendly_name: "Humidifier State"
+      value_template: >-
+        {{states('humidifier.midea_dehumidifier_18691697727728')}}
+
+# - platform: mqtt
+#   name: "doorstatus"
+#   state_topic: "esprfid/send"
+#   value_template: "{{value_json.desc}}"
+#   payload_on: "Door Open"
+#   payload_off: "Door Closed"
+#   device_class: door
+  
+# - platform: template
+#   sensors:
+#     rfid_doorstatus_inverted:
+#       value_template: >-
+#         {{ is_state('binary_sensor.doorstatus', 'off') }}
+#       friendly_name: Κατάσταση
+#       device_class: door
+      
+# - platform: mqtt
+#   unique_id: "rfid_door_unlock"
+#   state_topic: "esprfid"
+#   value_template: "{{value_json.cmd}}"
+#   payload_on: "opendoor"
+#   payload_off: "OFF"
+#   device_class: lock
+#   name: 'Κλειδαριά'

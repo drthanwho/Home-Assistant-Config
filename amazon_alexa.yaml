@@ -1,0 +1,18 @@
+smart_home:
+    locale: en-GB
+    endpoint: https://api.eu.amazonalexa.com/v3/events
+    client_id: !secret alexa_client_id
+    client_secret: !secret alexa_client_secret
+    filter:
+      include_entities:
+        - binary_sensor.pir_kouzina
+        - binary_sensor.saloni_pir
+        - binary_sensor.pir_sensor
+        - binary_sensor.porta_spitiou
+        - binary_sensor.eksoporta
+        - humidifier.midea_dehumidifier_18691697727728
+      include_entity_globs:
+        - sensor.humidity*
+        - sensor.temperature*
+      include_domains:
+        - light

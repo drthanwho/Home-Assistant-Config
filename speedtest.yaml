@@ -1,0 +1,8 @@
+- platform: speedtestdotnet
+  name: Internet Speed Test
+  monitored_conditions:
+    - ping
+    - download
+    - upload
+  scan_interval:
+    days: 0

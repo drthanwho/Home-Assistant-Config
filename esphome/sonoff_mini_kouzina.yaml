@@ -1,0 +1,54 @@
+substitutions:
+  devicename: sonoff_mini_kouzina
+  upper_devicename: sonoff_mini_kouzina
+
+esphome:
+  name: $devicename
+  platform: ESP8266
+  board: esp01_1m
+  
+packages:
+  wifi: !include common_substitutions/wifi.yaml
+  device_base: !include common_substitutions/device_base.yaml
+
+# tasmota template: {"NAME":"Sonoff Mini","GPIO":[17,0,0,0,9,0,0,0,21,56,0,0,255],"FLAG":0,"BASE":1}
+# tasmota template decoded: GPIO: GPIO00 17 Button1, GPIO04 9 Switch1, GPIO12 21 Relay1, GPIO13 56 Led1i, GPIO16 255 userdef; BASE: Sonoff Basic
+
+status_led:
+  pin:
+    number: GPIO13
+    inverted: true
+
+binary_sensor:
+  - platform: gpio
+    pin: GPIO00
+    id: reset
+    internal: true
+    filters:
+      - invert:
+      - delayed_off: 10ms
+    on_press:
+      - switch.toggle: 
+          id: relay_1
+
+  - platform: gpio
+    name: "$devicename switch"
+    pin: 
+      number: GPIO04
+      inverted: true
+    id: switch_1
+    on_press:
+      then:
+        - switch.turn_on:
+            id: relay_1
+    on_release:
+      then:
+        - switch.turn_off:
+            id: relay_1
+
+switch:
+  - platform: gpio
+    name: "$devicename relay"
+    pin: GPIO12
+    id: relay_1
+    restore_mode: restore_default_off

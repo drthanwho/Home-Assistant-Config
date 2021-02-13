@@ -1,0 +1,44 @@
+substitutions:
+  devicename: sonoff_basic_1
+  upper_devicename: "Sonoff Basic 1"
+
+esphome:
+  name: $devicename
+  platform: ESP8266
+  board: esp01_1m
+
+packages:
+  device_base: !include common_substitutions/device_base.yaml
+
+#Sonoff Basic seems to have issues with "connecting to wifi" loops. Fast connect and specifying bssid seem to avoid this for now
+wifi:
+  networks:
+    ssid: "HOME"
+    password: !secret wifi_password
+    bssid: "94:A7:B7:32:09:7C"
+  fast_connect: true
+
+#Web server active seems to also help somehow. Need to look into a better solution overall
+web_server:
+  port: 80
+
+binary_sensor:
+  - platform: gpio
+    pin:
+      number: GPIO0
+      mode: INPUT_PULLUP
+      inverted: True
+    name: "Sonoff Basic 1 Button"
+    on_press:
+      - switch.toggle: relay
+
+switch:
+  - platform: gpio
+    name: "Sonoff Basic 1 Relay"
+    pin: GPIO12
+    id: relay
+
+status_led:
+  pin:
+    number: GPIO13
+    inverted: yes

@@ -1,0 +1,24 @@
+substitutions:
+  devicename: garage_door
+  upper_devicename: Garage Door
+
+esphome:
+  name: $devicename
+  platform: ESP8266
+  board: nodemcuv2
+
+packages:
+  wifi: !include common_substitutions/wifi.yaml
+  device_base: !include common_substitutions/device_base.yaml
+
+status_led:
+    pin: 16
+
+sensor:    
+  - platform: adc
+    pin: A0
+    name: "TEMT6000 Illuminance"
+    unit_of_measurement: lx
+    filters:
+      - lambda: |-
+          return (x / 10000.0) * 2000000.0;

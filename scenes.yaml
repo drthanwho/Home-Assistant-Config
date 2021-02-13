@@ -1,0 +1,24 @@
+- id: '1607188916196'
+  name: Saloni Light OFF
+  entities:
+    light.saloni:
+      min_mireds: 111
+      max_mireds: 400
+      effect_list:
+      - effect_colorloop
+      - effect_pulse
+      - effect_stop
+      friendly_name: Φωτιστικό Δαπέδου
+      supported_features: 55
+      icon: mdi:floor-lamp
+      state: 'off'
+    group.couch_blue:
+      entity_id:
+      - automation.couch_lamp_brightness_after_12am
+      - automation.couch_lamp_brightness_before_12am
+      - automation.couch_lamp_off
+      - automation.couch_lamp_on_darksky
+      - automation.couch_lamp_overnight
+      order: 3
+      friendly_name: Couch Blue
+      state: 'off'

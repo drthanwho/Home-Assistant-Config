@@ -1,0 +1,60 @@
+project_id: !secret google_assistant_project_id
+report_state: true
+service_account: !include google_api.json
+expose_by_default: false
+entity_config:
+  light.kouzina:
+    expose: true
+    name: Κουζίνα
+    aliases:
+      - Kitchen_Light
+    room: Κουζίνα
+  light.sofia_light:
+    expose: true
+    name: Φως Σοφίας
+    aliases:
+      - Sofia_light
+      - Sofia_main_light
+    room: Δωμάτιο Σοφίας
+  switch.provoleas_led:
+    expose: true
+    name: LED Προβολέας
+    aliases: 
+      - LED_provoleas
+      - LED_light
+      - Led_outside
+      - lights_outside
+    room: Κήπος
+  switch.provoleas_aristera:
+    expose: true
+    name: Αριστερά Προβολέας
+    aliases: 
+      - aristera_provoleas
+      - aristera_light
+      - aristera_outside
+      - lights_outside
+    room: Κήπος
+  switch.sonoff_basic_1_relay:
+    expose: true
+    name: Βεράντα
+    room: Κήπος
+  switch.sonoff_basic_2_relay:
+    expose: true
+    name: Εισόδου
+    room: Κήπος
+  light.portas_spitiou:
+    expose: true
+    name: Πόρτα Σπιτιού
+    room: Κλιμακοστάσιο
+  group.couch_blue:
+    expose: true
+    name: Αυτοματισμός Φως Δαπέδου
+    room: Σαλόνι
+  light.krevatokamara:
+    expose: true
+    name: Φως Κρεβατοκάμαρας
+    room: Κρεβατοκάμαρα
+  humidifier.midea_dehumidifier_18691697727728:
+    expose: true
+    name: Αφυγραντήρας EVA II
+    room: Σπίτι

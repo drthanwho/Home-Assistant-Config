@@ -1,0 +1,41 @@
+#
+# An * ensures that everything will be ignored.
+# You can whitelist files/folders with !, these will not be ignored.
+!*.yaml
+!.gitignore
+!*.md
+!*.vscode
+
+# Ignore folders.
+.vscode
+.storage
+.cloud
+.google.token
+/glances/*
+deps
+.uuid
+/tts/*
+/www/audio/*
+/www/community/*/*
+/custom_components/*/*
+/node-red/*
+
+# Ensure these YAML files are ignored, otherwise your secret data/credentials will leak.
+ip_bans.yaml
+scripts.yaml
+secrets.yaml
+known_devices.yaml
+
+/secrets.yaml
+/esphome/secrets.yaml
+/esphome/includes/secrets.yaml
+
+
+google_api.json
+users-list
+Rpi_server_private_key
+entity_log.txt
+/www/*.jpg
+*.disabled
+alexa*.html
+*.log

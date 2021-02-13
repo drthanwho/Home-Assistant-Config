@@ -1,0 +1,244 @@
+homeassistant:
+  auth_providers:
+    - type: homeassistant
+    - type: trusted_networks
+      trusted_networks:
+        - 192.168.0.0/24
+  # packages: !include_dir_named packages
+  allowlist_external_dirs:
+    - /tmp
+  media_dirs:
+    media: /media
+    tmp: /tmp
+  # Name of the location where Home Assistant is running
+  # name: Home
+  # Location required to calculate the time the sun rises and sets
+  # latitude: !secret lattitude
+  # longitude: !secret longitude
+  # Impacts weather/sunrise data (altitude above sea level in meters)
+  # elevation: 350
+  # metric for Metric, imperial for Imperial
+  # unit_system: metric
+  # Pick yours from here: http://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+  # time_zone: Europe/Athens
+  # Customization file
+  customize: !include customize.yaml
+# Show links to resources in log and frontend
+system_health:
+#introduction:
+python_script:
+media_source:
+# Enables the frontend
+frontend:
+  themes: !include_dir_merge_named themes
+#Enables configuration UI
+config:
+# Uncomment this if you are using SSL/TLS, running in Docker container, etc.
+http:
+  ssl_certificate: /ssl/fullchain.pem
+  ssl_key: /ssl/privkey.pem
+#  base_url: !secret base_url
+#  ip_ban_enabled: true
+#  login_attempts_threshold: 8
+mobile_app:
+hacs:
+  token: !secret hacs_token
+
+ifttt:
+  key: !secret ifttt_key
+  
+discovery:
+
+browser_mod:
+  prefix: "browser_"
+  devices:
+    f21a5faf-70b7cf41:
+      name: thanasis_laptop
+    62b133c4-287df53c:
+      name: pixelc
+
+influxdb:
+  username: homeassistant
+  password: !secret influxdb_password
+  database: homeassistant
+  max_retries: 3
+  default_measurement: state
+
+stream:
+ffmpeg:
+  ffmpeg_bin: /usr/bin/ffmpeg
+  # hwaccel_args:
+  #   - -c:v
+  #   - h264_v4l2m2m
+camera: !include_dir_merge_list cameras/
+
+# #LIFX Lights
+# lifx:
+#   light:
+#     server: !secret lifx_server
+#     broadcast: !secret lifx_broadcast
+#Telegram Bot
+telegram_bot:
+  - platform: polling
+    api_key: !secret telegram_api_key
+    allowed_chat_ids:
+      - !secret telegram_thanasis_id
+      - !secret telegram_makis_id
+      - !secret telegram_pavlina_id
+
+notify: !include notify.yaml
+
+#Device Tracker
+device_tracker:
+  - platform: nmap_tracker
+    hosts:
+      - 192.168.1.144
+      - 192.168.1.145
+      - 192.168.1.146
+      - 192.168.1.147
+      - 192.168.1.148
+      - 192.168.1.149
+      - 192.168.1.150
+    home_interval: 10
+    interval_seconds: 20
+
+# tplink:
+#   discovery: true
+#   switch:
+#     - host: 192.168.1.143
+
+twilio:
+  account_sid: !secret twilio_sid
+  auth_token: !secret twilio_token
+
+speedtestdotnet:
+  server_id: !secret speedtest_server_id
+  scan_interval: 
+    days: 1
+
+spotify:
+  client_id: !secret spotify_client_id
+  client_secret: !secret spotify_client_secret
+
+#Partially working custom integration for EVA II Dehumidifier ~ major logging
+midea_dehumidifier:
+  username: !secret midea_dehumi_username
+  password: !secret midea_dehumi_pwd
+
+input_boolean:
+input_datetime:
+input_number:
+input_text:
+  alexa_actionable_notification:
+    name: Alexa Actionable Notification Holder
+    max: 255
+    initial: '{"text": "This is a test of the alexa actions custom skill. Did it work?", "event": "actionable.skill.test"}'
+
+api:
+
+alexa: !include amazon_alexa.yaml
+
+rest_command: !include google-assistant-relay.yaml
+
+# mqtt:
+#   broker: m20.cloudmqtt.com
+#   port: 18261
+#   username: !secret cloudmqtt_username
+#   password: !secret cloudmqtt_password
+updater:
+
+# Allows you to issue voice commands from the frontend in enabled browsers
+conversation:
+# Enables support for tracking state changes over time
+logger:
+  default: warn
+  logs:
+    custom_components.midea_dehumidifier.humidifier: critical
+    custom_components.midea_dehumidifier: critical
+    custom_components.humidifier.midea_dehumidifier: critical
+    homeassistant.components.nest: critical
+    homeassistant.components.nest.camera_sdm: critical
+    google_nest_sdm: critical
+    google_nest_sdm.device: critical
+    google_nest_sdm.device_manager: critical
+    google_nest_sdm.google_nest_subscriber: critical
+    google_nest_sdm.event: critical
+    google.cloud.pubsub_v1: critical
+    google.cloud.pubsub_v1.subscriber._protocol.streaming_pull_manager: critical
+    homeassistant.components.stream.worker: critical
+    homeassistant.components.stream: critical
+    libav.rtsp: critical 
+    libav.tls: critical
+    # homeassistant.components.deconz: debug
+## for v 1.0.0
+    # custom_components.alexa_media: debug  
+## for API debugging (verbose and intended for service debugging)
+    # alexapy: debug
+    # custom_components.midea_dehumi: fatal
+    # custom_components.climate.midea_dehumi: fatal
+    # custom_components.sensor.midea_dehumi: fatal
+    # custom_components.midea_dehumi.climate: fatal
+    # homeassistant.components.sensor: fatal
+    # homeassistant.components.http.ban: debug
+history:
+# View all events in a logbook
+logbook:
+# Enables a map showing the location of tracked devices
+map:
+# Track the sun
+sun:
+#DarkSky
+weather:
+  - platform: darksky
+    api_key: !secret darksky_api_key
+  # language: el
+    mode: daily
+# Text to speech
+tts:
+  - platform: google_translate
+    service_name: google_say
+
+google_assistant: !include google_assistant.yaml
+
+# media_player:
+#   platform: mpd
+#   host: 192.168.1.250
+  
+# monitor_docker:
+#   - name: Docker
+#   - url: tcp://192.168.1.245:2376
+
+#sonoff:
+#  username: !secret sonoff_username
+#  password: !secret sonoff_password
+#  scan_interval: 60
+#  grace_period: 600
+#  api_region: 'eu'
+#light:
+#   - platform: sonoff
+#     host: "192.168.1.250"
+#     port: "1082"
+nest:
+  client_id: !secret nest_client_id
+  client_secret: !secret nest_client_secret
+# "Project ID" in the Device Access Console
+  project_id: !secret nest_project_id
+# Provide the full path exactly as shown under "Subscription name" in Google Cloud Console
+  subscriber_id: !secret nest_subscriber_id
+# nest:
+#   client_id: !secret nest_legacy_client_id
+#   client_secret: !secret nest_legacy_client_secret   
+
+group: !include groups.yaml
+automation: !include automations.yaml
+script: !include scripts.yaml
+switch: !include switches.yaml
+input_select: !include input-select.yaml
+sensor: !include sensor.yaml
+binary_sensor: !include binary_sensor.yaml
+recorder: !include recorder.yaml
+utility_meter: !include utility_meter.yaml
+scene: !include scenes.yaml
+
+# automations: !include automations.yaml
+# automations manual: !include awesome_automations.yaml

@@ -1,0 +1,44 @@
+substitutions:
+  devicename: kouzina_sensor
+  upper_devicename: Kouzina
+
+esphome:
+  name: $devicename
+  platform: ESP8266
+  board: nodemcuv2
+  on_loop:
+    then:
+      - lambda: delay(5);
+
+packages:
+  wifi: !include common_substitutions/wifi.yaml
+  device_base: !include common_substitutions/device_base.yaml
+
+# Sync time with Home Assistant.
+time:
+  - platform: homeassistant
+    id: homeassistant_time
+  
+binary_sensor:
+  - platform: gpio
+    pin: 13
+    name: "$upper_devicename PIR"
+    device_class: motion
+
+#i2c:
+#  sda: GPIO0
+#  scl: GPIO2
+#  scan: True
+#  id: bus_a
+
+# sensor:
+#  - platform: bme280
+#    temperature:
+#      name: "BME280 Temperature"
+#      oversampling: 16x
+#    pressure:
+#      name: "BME280 Pressure"
+#    humidity:
+#      name: "BME280 Humidity"
+#    address: 0x76
+#    update_interval: 60s

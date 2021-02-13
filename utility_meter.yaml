@@ -1,0 +1,9 @@
+  heating_emeis:
+    source: sensor.petrelaio_makis
+    cycle: monthly
+  heating_leonidas:
+    source: sensor.petrelaio_leonidas
+    cycle: monthly
+  heating_sofita:
+    source: sensor.petrelaio_sofita
+    cycle: monthly

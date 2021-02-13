@@ -1,0 +1,36 @@
+substitutions:
+  devicename: giagia_temp
+  upper_devicename: Giagia Temp
+
+esphome:
+  name: $devicename
+  platform: ESP8266
+  board: nodemcuv2
+
+packages:
+  wifi: !include common_substitutions/wifi.yaml
+  device_base: !include common_substitutions/device_base.yaml
+
+wifi:
+  networks:
+  - ssid: "Erasmia"
+    password: !secret wifi_password
+
+# # Enable Home Assistant API
+# api:
+#   password: "tardistype40"
+  
+mqtt:
+  broker: !secret mqtt_broker
+  port: !secret mqtt_broker_port
+  username: !secret mqtt_broker_username
+  password: !secret mqtt_broker_password
+
+sensor:
+  - platform: dht
+    pin: D2
+    temperature:
+      name: "Giagia Kouzina Temperature"
+    humidity:
+      name: "Giagia Kouzina Humidity"
+    update_interval: 60s

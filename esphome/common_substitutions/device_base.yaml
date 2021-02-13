@@ -1,0 +1,36 @@
+logger:
+
+api:
+  password: !secret api_password
+
+ota:
+  password: !secret ota_password
+
+captive_portal:
+
+sensor:
+  - platform: wifi_signal
+    name: $upper_devicename WiFi Signal
+    update_interval: 15s
+    filters:
+      - sliding_window_moving_average:
+          window_size: 15
+          send_every: 15
+          send_first_at: 15
+  - platform: uptime
+    name: $upper_devicename Uptime
+
+binary_sensor:
+  - platform: status
+    name: $upper_devicename Status
+
+switch:
+  - platform: restart
+    name: "Restart $upper_devicename"
+    id: restart_switch
+
+text_sensor:
+  # Expose WiFi information as sensors.
+  - platform: wifi_info
+    ip_address:
+      name: $upper_devicename  IP

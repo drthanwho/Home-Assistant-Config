@@ -1,0 +1,34 @@
+- name: twilio
+  platform: twilio_call
+  from_number: !secret twilio_number
+#  - name: pushbullet
+#    platform: pushbullet
+#    api_key: !secret pushbullet_api_key
+- name: thanasis_tel
+  platform: telegram
+  chat_id: !secret telegram_thanasis_id
+- name: pavlina_tel
+  platform: telegram
+  chat_id: !secret telegram_pavlina_id
+- name: makis_tel
+  platform: telegram
+  chat_id: !secret telegram_makis_id
+- name: family
+  platform: group
+  services:
+    - service: thanasis_tel
+    - service: pavlina_tel
+    - service: makis_tel
+- name: alexa_media
+  platform: alexa_media
+- name: modile_app_family
+  platform: group
+  services:
+    - service: mobile_app_thanasis
+    - service: mobile_app_mi_8_lite
+    - service: mobile_app_bv4000pro
+    - service: mobile_app_sm_a500fu
+- platform: file
+  name: entity_log
+  filename: /config/www/entity_log.txt
+  timestamp: false

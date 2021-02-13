@@ -1,0 +1,60 @@
+log_level:
+  name: Log Level
+  options:
+    - critical
+    - fatal
+    - error
+    - warning
+    - warn
+    - info
+    - debug
+    - notset
+  initial: critical 
+ 
+pavlina_status_dropdown:
+    name: Mum
+    options:
+      - Unknown
+      - Home
+      - Just Arrived
+      - Just Left
+      - Away
+      - Extended Away
+#    initial: Unknown 
+makis_status_dropdown:
+    name: Makis 
+    options:
+      - Unknown
+      - Home
+      - Just Arrived
+      - Just Left
+      - Away
+      - Extended Away
+#    initial: Unknown 
+sofia_status_dropdown:
+    name: Sofia
+    options:
+      - Unknown
+      - Home
+      - Just Arrived
+      - Just Left
+      - Away
+      - Extended Away
+#    initial: Unknown
+thanasis_status_dropdown:
+    name: Thanasis
+    options:
+      - Home
+      - Just Arrived
+      - Just Left
+      - Away
+      - Extended Away
+#    initial: Unknown
+dad_status_dropdown:
+    name: Dad
+    options:
+      - Home
+      - Just Arrived
+      - Just Left
+      - Away
+      - Extended Away

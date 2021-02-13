@@ -1,0 +1,12 @@
+- platform: combined
+  base_address: !secret base_url
+  entities:
+    - camera.koudoni_ttgocam_camera
+    - camera.veranta_hd_mjpeg
+    - camera.saloni_mjpeg
+    - camera.kouzina_mjpeg
+    - camera.kipos_mjpeg
+    - camera.eisodos_hd_mjpeg
+    # - camera.domatio_mjpeg
+    - camera.erythres
+    - camera.erythres_2

@@ -1,0 +1,115 @@
+substitutions:
+  devicename: entrance
+  upper_devicename: Koudouni
+
+esphome:
+  name: $devicename
+  platform: ESP8266
+  board: esp01_1m
+  on_boot:
+    priority: 800.0
+    then:
+      - switch.turn_off: relay
+
+packages:
+  wifi: !include common_substitutions/wifi.yaml
+  device_base: !include common_substitutions/device_base.yaml
+
+# Sync time with Home Assistant.
+time:
+  - platform: homeassistant
+    id: homeassistant_time
+
+# Global to store the on/off state of the buzzer
+globals:
+  - id: buzzer
+    type: bool
+    restore_value: true
+    initial_value: 'true'
+
+# Exposed switches.
+switch:
+  # Switch to turn on/off the buzzer.
+  - platform: gpio
+    id: relay
+    inverted: false
+    name: $upper_devicename Sound
+    pin: GPIO3
+    restore_mode: ALWAYS_OFF
+
+  # Switch to turn on/off buzzer when
+  # Koudouni button is pushed.
+  # It creates a "virtual" switch based
+  # on a global variable.
+  - platform: template
+    name: $upper_devicename Sound Active
+    id: buzzer_active
+    restore_state: false
+    turn_on_action:
+      - globals.set:
+          id: buzzer
+          value: 'true'
+    turn_off_action:
+      - globals.set:
+          id: buzzer
+          value: 'false'
+    lambda: |-
+      return id(buzzer);
+# Binary sensor representing the
+# Koudouni button push.
+binary_sensor:
+  - platform: gpio
+    id: button_outside
+    name: Outside Button
+    pin:
+      # Connected to GPIO on the ESP-01S.
+      number: GPIO2
+      mode: INPUT_PULLUP
+      inverted: true
+    filters:
+      # Small filter, to debounce the button press.
+      - delayed_on: 25ms
+      - delayed_off: 25ms
+    on_press:
+      # Only turn on the buzzer when it is active.
+      then:
+        if:
+          condition:
+            - switch.is_on: buzzer_active
+          then:
+            - switch.turn_on: relay
+    on_release:
+      # On release, turn of the buzzer.
+      - switch.turn_off: relay
+    on_click:
+      min_length: 200ms
+      max_length: 500ms
+      then:
+        if:
+          condition:
+            - binary_sensor.is_on: button_inside
+          then:
+            - switch.turn_on: restart_switch
+  - platform: gpio
+    id: button_inside
+    name: Inside Button
+    pin:
+      # Connected to GPIO on the ESP-01S.
+      number: GPIO1
+      mode: INPUT_PULLUP
+      inverted: true
+    filters:
+      # Small filter, to debounce the button press.
+      - delayed_on: 25ms
+      - delayed_off: 25ms
+    on_press:
+      # Only turn on the buzzer when it is active.
+      then:
+        if:
+          condition:
+            - switch.is_on: buzzer_active
+          then:
+            - switch.turn_on: relay
+    on_release:
+      # On release, turn of the buzzer.
+      - switch.turn_off: relay

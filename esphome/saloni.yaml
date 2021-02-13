@@ -1,0 +1,45 @@
+substitutions:
+  devicename: saloni
+  upper_devicename: Saloni
+
+esphome:
+  name: $devicename
+  platform: ESP8266
+  board: nodemcuv2
+  comment: "Motion sensor for the living room" 
+  on_loop:
+    then:
+      - lambda: delay(5);
+
+packages:
+  wifi: !include common_substitutions/wifi.yaml
+  device_base: !include common_substitutions/device_base.yaml
+
+binary_sensor:
+  - platform: gpio
+    pin: 14
+    name: "$upper_devicename PIR"
+    device_class: motion
+  # - platform: gpio
+  #   id: test_button
+  #   name: Test Button
+  #   pin:
+  #     number: GPIO13
+  #     mode: INPUT_PULLUP
+  #     inverted: true
+  #   on_click:
+  #     min_length: 600ms
+  #     max_length: 2s
+  #     then:
+  #       - homeassistant.service:
+  #           service: light.toggle
+  #           data:
+  #             entity_id: light.saloni
+  #   on_double_click:
+  #     min_length: 50ms
+  #     max_length: 400ms
+  #     then:
+  #       - homeassistant.service:
+  #           service: light.toggle
+  #           data:
+  #             entity_id: light.kouzina

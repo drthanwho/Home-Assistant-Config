@@ -1,0 +1,73 @@
+binary_sensor:
+  - platform: gpio
+    id: pavlina_email
+    name: Pavlina Email Scan
+    pin:
+      number: GPIO12
+      mode: INPUT_PULLUP
+      inverted: true
+    on_press:
+      then:
+        - homeassistant.service:
+            service: switch.turn_on
+            data:
+              entity_id: switch.pdf2mail_pavlina
+        - delay: 1s
+        - homeassistant.service:
+            service: switch.turn_off
+            data:
+              entity_id: switch.pdf2mail_pavlina
+  - platform: gpio
+    id: makis_email
+    name: Makis Email Scan
+    pin:
+      number: GPIO2
+      mode: INPUT_PULLUP
+      inverted: true
+    on_press:
+      then:
+        - homeassistant.service:
+            service: switch.turn_on
+            data:
+              entity_id: switch.pdf2mail_makis
+        - delay: 1s
+        - homeassistant.service:
+            service: switch.turn_off
+            data:
+              entity_id: switch.pdf2mail_makis
+  - platform: gpio
+    id: thanasis_email
+    name: Thanasis Email Scan
+    pin:
+      number: GPIO3
+      mode: INPUT_PULLUP
+      inverted: true
+    on_press:
+      then:
+        - homeassistant.service:
+            service: switch.turn_on
+            data:
+              entity_id: switch.pdf2mail_thanasis
+        - delay: 1s
+        - homeassistant.service:
+            service: switch.turn_off
+            data:
+              entity_id: switch.pdf2mail_thanasis
+  - platform: gpio
+    id: print
+    name: Print
+    pin:
+      number: GPIO1
+      mode: INPUT_PULLUP
+      inverted: true
+    on_press:
+      then:
+        - homeassistant.service:
+            service: switch.turn_on
+            data:
+              entity_id: switch.pdf2print_makis
+        - delay: 1s
+        - homeassistant.service:
+            service: switch.turn_off
+            data:
+              entity_id: switch.pdf2print_makis

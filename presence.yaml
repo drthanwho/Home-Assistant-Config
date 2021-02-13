@@ -1,0 +1,306 @@
+#Very outdate entity_ids!
+- alias: Mark Mum as just arrived
+  trigger:
+    - platform: state
+      entity_id: device_tracker.android2424a6fa317e0fdc
+      from: 'not_home'
+      to: 'home'
+  action:
+    - service: input_select.select_option
+      data:
+        entity_id: input_select.mum_status_dropdown
+        option: Just Arrived
+- alias: Mark Mum as home
+  trigger:
+    - platform: state
+      entity_id: input_select.mum_status_dropdown
+      to: 'Just Arrived'
+      for:
+        minutes: 10
+    - platform: state
+      entity_id: input_select.mum_status_dropdown
+      from: 'Just Left'
+      to: 'Just Arrived'
+  condition:
+  action:
+    - service: input_select.select_option
+      data:
+        entity_id: input_select.mum_status_dropdown
+        option: Home
+- alias: Mark Mum as just left
+  trigger:
+    - platform: state
+      entity_id: device_tracker.android2424a6fa317e0fdc
+      from: 'home'
+      to: 'not_home'
+  action:
+    - service: input_select.select_option
+      data:
+        entity_id: input_select.mum_status_dropdown
+        option: Just Left
+- alias: Mark Mum as away
+  trigger:
+    - platform: state
+      entity_id: input_select.mum_status_dropdown
+      to: 'Just Left'
+      for:
+        minutes: 10
+  action:
+    - service: input_select.select_option
+      data:
+        entity_id: input_select.mum_status_dropdown
+        option: Away
+- alias: Mark Makis as just arrived
+  trigger:
+    - platform: state
+      entity_id: device_tracker.android_2412886ef357737e
+      from: 'not_home'
+      to: 'home'
+  action:
+    - service: input_select.select_option
+      data:
+        entity_id: input_select.makis_status_dropdown
+        option: Just Arrived
+- alias: Mark Makis as home
+  trigger:
+    - platform: state
+      entity_id: input_select.makis_status_dropdown
+      to: 'Just Arrived'
+      for:
+        minutes: 10
+    - platform: state
+      entity_id: input_select.makis_status_dropdown
+      from: 'Just Left'
+      to: 'Just Arrived'
+  condition:
+  action:
+    - service: input_select.select_option
+      data:
+        entity_id: input_select.makis_status_dropdown
+        option: Home
+- alias: Mark Makis as just left
+  trigger:
+    - platform: state
+      entity_id: device_tracker.android_2412886ef357737e
+      from: 'home'
+      to: 'not_home'
+  action:
+    - service: input_select.select_option
+      data:
+        entity_id: input_select.makis_status_dropdown
+        option: Just Left
+- alias: Mark Makis as away
+  trigger:
+    - platform: state
+      entity_id: input_select.makis_status_dropdown
+      to: 'Just Left'
+      for:
+        minutes: 10
+  action:
+    - service: input_select.select_option
+      data:
+        entity_id: input_select.makis_status_dropdown
+        option: Away
+- alias: Mark Sofia as just arrived
+  trigger:
+    - platform: state
+      entity_id: device_tracker.mi8lite
+      from: 'not_home'
+      to: 'home'
+  action:
+    - service: input_select.select_option
+      data:
+        entity_id: input_select.sofia_status_dropdown
+        option: Just Arrived
+- alias: Mark Sofia as home
+  trigger:
+    - platform: state
+      entity_id: input_select.sofia_status_dropdown
+      to: 'Just Arrived'
+      for:
+        minutes: 10
+    - platform: state
+      entity_id: input_select.sofia_status_dropdown
+      from: 'Just Left'
+      to: 'Just Arrived'
+  condition:
+  action:
+    - service: input_select.select_option
+      data:
+        entity_id: input_select.sofia_status_dropdown
+        option: Home
+- alias: Mark Sofia as just left
+  trigger:
+    - platform: state
+      entity_id: device_tracker.mi8lite
+      from: 'home'
+      to: 'not_home'
+  action:
+    - service: input_select.select_option
+      data:
+        entity_id: input_select.sofia_status_dropdown
+        option: Just Left
+- alias: Mark Sofia as away
+  trigger:
+    - platform: state
+      entity_id: input_select.sofia_status_dropdown
+      to: 'Just Left'
+      for:
+        minutes: 10
+  action:
+    - service: input_select.select_option
+      data:
+        entity_id: input_select.sofia_status_dropdown
+        option: Away
+- alias: Mark Thanasis as just arrived
+  trigger:
+    - platform: state
+      entity_id: device_tracker.192168160
+      from: 'not_home'
+      to: 'home'
+  action:
+    - service: input_select.select_option
+      data:
+        entity_id: input_select.thanasis_status_dropdown
+        option: Just Arrived
+- alias: Mark Thanasis as home
+  trigger:
+    - platform: state
+      entity_id: input_select.thanasis_status_dropdown
+      to: 'Just Arrived'
+      for:
+        minutes: 10
+    - platform: state
+      entity_id: input_select.thanasis_status_dropdown
+      from: 'Just Left'
+      to: 'Just Arrived'
+  condition:
+  action:
+    - service: input_select.select_option
+      data:
+        entity_id: input_select.thanasis_status_dropdown
+        option: Home
+- alias: Mark Thanasis as just left
+  trigger:
+    - platform: state
+      entity_id: device_tracker.192168160
+      from: 'home'
+      to: 'not_home'
+  action:
+    - service: input_select.select_option
+      data:
+        entity_id: input_select.thanasis_status_dropdown
+        option: Just Left
+- alias: Mark Thanasis as away
+  trigger:
+    - platform: state
+      entity_id: input_select.thanasis_status_dropdown
+      to: 'Just Left'
+      for:
+        minutes: 10
+  action:
+    - service: input_select.select_option
+      data:
+        entity_id: input_select.thanasis_status_dropdown
+        option: Away
+#Automation for away for too long
+- alias: Mark Thanasis as extended away
+  trigger:
+    - platform: state
+      entity_id: input_select.thanasis_status_dropdown
+      to: 'Away'
+      for:
+        hours: 24
+  action:
+    - service: input_select.select_option
+      data_template:
+        entity_id: input_select.thanasis_status_dropdown
+        option: Extended Away
+- alias: Mark Sofia as extended away
+  trigger:
+    - platform: state
+      entity_id: input_select.sofia_status_dropdown
+      to: 'Away'
+      for:
+        hours: 24
+  action:
+    - service: input_select.select_option
+      data_template:
+        entity_id: input_select.sofia_status_dropdown
+        option: Extended Away
+- alias: Mark Makis as extended away
+  trigger:
+    - platform: state
+      entity_id: input_select.makis_status_dropdown
+      to: 'Away'
+      for:
+        hours: 24
+  action:
+    - service: input_select.select_option
+      data_template:
+        entity_id: input_select.makis_status_dropdown
+        option: Extended Away
+- alias: Mark Mum as extended away
+  trigger:
+    - platform: state
+      entity_id: input_select.mum_status_dropdown
+      to: 'Away'
+      for:
+        hours: 24
+  action:
+    - service: input_select.select_option
+      data_template:
+        entity_id: input_select.mum_status_dropdown
+        option: Extended Away
+        
+- alias: Mark Dad as just arrived
+  trigger:
+    - platform: state
+      entity_id: person.makis
+      from: 'not_home'
+      to: 'home'
+  action:
+    - service: input_select.select_option
+      data:
+        entity_id: input_select.dad_status_dropdown
+        option: Just Arrived
+- alias: Mark Dad as home
+  trigger:
+    - platform: state
+      entity_id: input_select.dad_status_dropdown
+      to: 'Just Arrived'
+      for:
+        minutes: 10
+    - platform: state
+      entity_id: input_select.dad_status_dropdown
+      from: 'Just Left'
+      to: 'Just Arrived'
+  condition:
+  action:
+    - service: input_select.select_option
+      data:
+        entity_id: input_select.dad_status_dropdown
+        option: Home
+- alias: Mark Makis as just left
+  trigger:
+    - platform: state
+      entity_id: person.makis
+      from: 'home'
+      to: 'not_home'
+  action:
+    - service: input_select.select_option
+      data:
+        entity_id: input_select.dad_status_dropdown
+        option: Just Left
+- alias: Mark Makis as away
+  trigger:
+    - platform: state
+      entity_id: input_select.dad_status_dropdown
+      to: 'Just Left'
+      for:
+        minutes: 10
+  action:
+    - service: input_select.select_option
+      data:
+        entity_id: input_select.dad_status_dropdown
+        option: Away

@@ -1,0 +1,34 @@
+substitutions:
+  devicename: dwmatio_thanasis
+  upper_devicename: Dwmatio Thanasis
+
+esphome:
+  name: $devicename
+  platform: ESP8266
+  board: nodemcuv2
+  comment: "Room motion sensor and scanner/printer buttons to automate scanning documents and sent to email or to printer"
+
+packages:
+  wifi: !include common_substitutions/wifi.yaml
+  device_base: !include common_substitutions/device_base.yaml
+  buttons: !include common_substitutions/printer_scanner_buttons.yaml
+
+status_led:
+    pin: 16
+
+binary_sensor:
+  - platform: gpio
+    pin: GPIO13
+    name: "$upper_devicename PIR"
+    device_class: motion
+    # on_press:
+    #   then:
+    #     - homeassistant.service:
+    #         service: light.turn_on
+    #         data:
+    #           entity_id: light.ypnodomatio
+    #     - delay: 10min
+    #     - homeassistant.service:
+    #         service: light.turn_off
+    #         data:
+    #           entity_id: light.ypnodomatio
