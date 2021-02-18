@@ -8,6 +8,8 @@ include:
     - person
     - media_player
   entity_globs:
+    - sensor.temperature*
+    - sensor.humidity*
     - sensor.heating*
     - sensor.xreosi_petrelaiou*
     - sensor.petrelaio*
@@ -77,10 +79,6 @@ include:
     - sensor.maria_db_size
     - sensor.dehumidifier_current_humidity
     - sensor.lightlevel
-    - sensor.humidity_inside
-    - sensor.humidity_outside
-    - sensor.temperature_inside
-    - sensor.temperature_outside
     - sensor.disk_free_home
     - sensor.hassio_cpu_temperature
     - sensor.load_15m
