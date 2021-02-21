@@ -8,6 +8,7 @@ include:
     - person
     - media_player
   entity_globs:
+    - sensor.apc*
     - sensor.temperature*
     - sensor.humidity*
     - sensor.heating*
