@@ -732,7 +732,6 @@
   mode: single
 - id: telegram-start
   alias: Telegram Start Command
-  initial_state: 'on'
   trigger:
     platform: event
     event_type: telegram_command
@@ -748,7 +747,6 @@
       - /start, /epiloges
 - id: telegram-control-pannel-start
   alias: Telegram - Control Pannel
-  initial_state: 'on'
   trigger:
     platform: event
     event_type: telegram_command
@@ -1038,96 +1036,12 @@
   - event_data:
       data:
         body: test
-    event_type: twilio_data_receiveds
+    event_type: twilio_data_received
     platform: event
   condition: []
   action:
   - data:
       message: This is a test
-    service: notify.mobile_app_thanasis
-- id: '1584824265259'
-  alias: Dehumidifier OFF  MC
-  description: ''
-  trigger:
-  - device_id: cc78b14cb76940ecb72f8ec6e02f976a
-    domain: deconz
-    platform: device
-    subtype: ''
-    type: remote_double_tap_any_side
-  condition:
-  - condition: state
-    entity_id: climate.midea_dehumi_18691697727728
-    state: auto
-  action:
-  - data:
-      hvac_mode: 'off'
-    entity_id: climate.midea_dehumi_18691697727728
-    service: climate.set_hvac_mode
-- id: '1584824352872'
-  alias: Dehumidifier ON MC
-  description: ''
-  trigger:
-  - device_id: cc78b14cb76940ecb72f8ec6e02f976a
-    domain: deconz
-    platform: device
-    subtype: ''
-    type: remote_double_tap_any_side
-  condition:
-  - condition: state
-    entity_id: climate.midea_dehumi_18691697727728
-    state: auto
-  action:
-  - data:
-      hvac_mode: auto
-    entity_id: climate.midea_dehumi_18691697727728
-    service: climate.set_hvac_mode
-- id: '1584825561828'
-  alias: Fun Ring Doorbell
-  description: ''
-  trigger:
-  - device_id: cc78b14cb76940ecb72f8ec6e02f976a
-    domain: deconz
-    platform: device
-    subtype: side_6
-    type: remote_double_tap
-  condition: []
-  action:
-  - device_id: 01eefe5c733649abbac1a16d1fbfd7cc
-    domain: switch
-    entity_id: switch.koudouni_sound
-    type: turn_on
-- id: '1585249385832'
-  alias: Button ring bell
-  description: ''
-  trigger:
-  - device_id: c8a875ad54f5457294a7332f4eacd107
-    domain: deconz
-    platform: device
-    subtype: turn_on
-    type: remote_button_short_press
-  condition: []
-  action:
-  - device_id: 01eefe5c733649abbac1a16d1fbfd7cc
-    domain: switch
-    entity_id: switch.koudouni_sound
-    type: turn_on
-- id: '1585767837863'
-  alias: 'Deconz Restart '
-  description: ''
-  trigger:
-  - above: '30'
-    entity_id: sensor.processor_use
-    for: 00:15:00
-    platform: numeric_state
-  condition: []
-  action:
-  - data:
-      addon: core_deconz
-    service: hassio.addon_restart
-  - delay: 00:05:00
-  - data:
-      message: CPU above 30% for more than 15min. Restarted deCONZ. Currently CPU
-        at {{states.sensor.processor_use.state}}% 5min post addon restart.
     service: notify.mobile_app_thanasis
 - id: '1587313399097'
   alias: Couch Lamp ON - LUX
@@ -1485,148 +1399,6 @@
       message: '{{ trigger.to_state.attributes.friendly_name }} is offline'
       title: Offline Device
     service: notify.thanasis_tel
-- id: '1598865913514'
-  alias: Bedroom Thanasis Light ON (kitchen 3-gang)
-  description: Turrn on Thanasis Main Light from the kitchen 3-gang switch
-  trigger:
-  - device_id: 11ec6109f5af4fc099200087a52946d8
-    domain: deconz
-    platform: device
-    subtype: turn_on
-    type: remote_button_short_release
-  condition: []
-  action:
-  - brightness_pct: 100
-    device_id: c1c3312965a6496591f337d8566b03db
-    domain: light
-    entity_id: light.ypnodomatio
-    type: turn_on
-  mode: single
-- id: '1598866026274'
-  alias: Bedroom Thanasis Light OFF (kitchen 3-gang)
-  description: Turrn off Thanasis Main Light from the kitchen 3-gang switch
-  trigger:
-  - device_id: 11ec6109f5af4fc099200087a52946d8
-    domain: deconz
-    platform: device
-    subtype: turn_off
-    type: remote_button_short_release
-  condition: []
-  action:
-  - device_id: 8e8f4b524fb4408c9802375867f23746
-    domain: light
-    entity_id: light.kouzina
-    type: turn_off
-  mode: single
-- id: '1598866412185'
-  alias: OPPLE 1(Single Press) - Turn OFF Kitchen Light
-  description: ''
-  trigger:
-  - device_id: 11ec6109f5af4fc099200087a52946d8
-    domain: deconz
-    platform: device
-    subtype: turn_off
-    type: remote_button_short_release
-  condition: []
-  action:
-  - type: turn_off
-    device_id: 270563f49c8e4495ac344958479f3da6
-    entity_id: light.kouzina
-    domain: light
-  mode: single
-- id: '1598866454708'
-  alias: OPPLE 2 (Single Press) - Turn ON Kitchen Light
-  description: ''
-  trigger:
-  - device_id: 11ec6109f5af4fc099200087a52946d8
-    domain: deconz
-    platform: device
-    subtype: turn_on
-    type: remote_button_short_release
-  condition: []
-  action:
-  - type: turn_on
-    device_id: 270563f49c8e4495ac344958479f3da6
-    entity_id: light.kouzina
-    domain: light
-    brightness_pct: 100
-  mode: single
-- id: '1598875045747'
-  alias: OPPLE 4 (Single Press) - Thanasis Light Turn ON
-  description: ''
-  trigger:
-  - device_id: 11ec6109f5af4fc099200087a52946d8
-    domain: deconz
-    platform: device
-    subtype: dim_up
-    type: remote_button_short_release
-  condition:
-  - condition: device
-    device_id: c1c3312965a6496591f337d8566b03db
-    domain: light
-    entity_id: light.ypnodomatio
-    type: is_off
-  action:
-  - brightness_pct: 100
-    device_id: c1c3312965a6496591f337d8566b03db
-    domain: light
-    entity_id: light.ypnodomatio
-    type: turn_on
-  mode: single
-- id: '1598875137858'
-  alias: OPPLE 4 (Single Press) - Thanasis Light Turn OFF
-  description: ''
-  trigger:
-  - device_id: 11ec6109f5af4fc099200087a52946d8
-    domain: deconz
-    platform: device
-    subtype: dim_up
-    type: remote_button_short_release
-  condition:
-  - condition: device
-    device_id: c1c3312965a6496591f337d8566b03db
-    domain: light
-    entity_id: light.ypnodomatio
-    type: is_on
-  action:
-  - device_id: c1c3312965a6496591f337d8566b03db
-    domain: light
-    entity_id: light.ypnodomatio
-    type: turn_off
-  mode: single
-- id: '1598875571765'
-  alias: OPPLE 3 (Double Press) - Thanasis Light Brightness Increase
-  description: ''
-  trigger:
-  - device_id: 11ec6109f5af4fc099200087a52946d8
-    domain: deconz
-    platform: device
-    subtype: dim_down
-    type: remote_button_double_press
-  condition: []
-  action:
-  - device_id: c1c3312965a6496591f337d8566b03db
-    domain: light
-    entity_id: light.ypnodomatio
-    type: brightness_increase
-  mode: queued
-  max: 10
-- id: '1598875591670'
-  alias: OPPLE 4 (Double Press) - Thanasis Light Brightness Increase
-  description: ''
-  trigger:
-  - device_id: 11ec6109f5af4fc099200087a52946d8
-    domain: deconz
-    platform: device
-    subtype: dim_up
-    type: remote_button_double_press
-  condition: []
-  action:
-  - device_id: c1c3312965a6496591f337d8566b03db
-    domain: light
-    entity_id: light.ypnodomatio
-    type: brightness_increase
-  mode: single
 - id: '1600021782044'
   alias: Eisodos Cam on Kouzina Display
   description: Cast Eisodos Cam on Kouzina Display when Eksoporta is opened
@@ -2029,47 +1801,6 @@
       payload: '{{ now()|as_timestamp }}'
       retain: true
   mode: single
-- id: '1607198123122'
-  alias: Couch Light Automation + Light Toggle
-  description: ''
-  trigger:
-  - device_id: c8a875ad54f5457294a7332f4eacd107
-    domain: deconz
-    platform: device
-    type: remote_button_short_press
-    subtype: turn_on
-  condition: []
-  action:
-  - type: toggle
-    device_id: 333b79774fe544778453de2b7c3e8874
-    entity_id: light.saloni
-    domain: light
-  - service: automation.toggle
-    data:
-      entity_id: group.couch_blue
-  mode: single
-- id: '1607201884533'
-  alias: Couch Light Automation Toggle
-  description: ''
-  trigger:
-  - device_id: c8a875ad54f5457294a7332f4eacd107
-    domain: deconz
-    platform: device
-    type: remote_button_double_press
-    subtype: turn_on
-  condition: []
-  action:
-  - service: automation.toggle
-    data:
-      entity_id: group.couch_blue
-  - service: lifx.effect_pulse
-    data:
-      brightness: 50
-      cycles: 1
-      entity_id:
-      - light.saloni
-      mode: breathe
-  mode: single
 - id: '1607276664774'
   alias: Xmas DoorBell
   description: ''
@@ -2243,3 +1974,111 @@
       message: <amazon:emotion name="excited" intensity="medium"><s>Exciting news!
         Dr Zees is now live streaming!</s> </amazon:emotion>
   mode: single
+- id: '1585767837863'
+  alias: 'Deconz Restart '
+  description: ''
+  trigger:
+  - above: '30'
+    entity_id: sensor.processor_use
+    for: 00:15:00
+    platform: numeric_state
+  condition: []
+  action:
+  - data:
+      addon: core_deconz
+    service: hassio.addon_restart
+  - delay: 00:05:00
+  - data:
+      message: CPU above 30% for more than 15min. Restarted deCONZ. Currently CPU
+        at {{states.sensor.processor_use.state}}% 5min post addon restart.
+    service: notify.mobile_app_thanasis
+- id: '1614173671258'
+  alias: Send actionable notifications for Android
+  description: ''
+  use_blueprint:
+    path: vorion/actionable-notifications-for-android.yaml
+    input:
+      notify_device: 50cefa2e0d2043f3aa3cc738d37e4c3a
+      action_1_title: Kouzina OFF
+      first_action:
+      - type: turn_off
+        device_id: 270563f49c8e4495ac344958479f3da6
+        entity_id: light.kouzina
+        domain: light
+      action_2_title: Kouzina ON
+      second_action:
+      - type: turn_on
+        device_id: 270563f49c8e4495ac344958479f3da6
+        entity_id: light.kouzina
+        domain: light
+        brightness_pct: 100
+      notification_title: Test
+      notification_message: Test
+      trigger_entity: input_boolean.test
+- id: '1614173983913'
+  alias: Mi Magic Cube
+  description: ''
+  use_blueprint:
+    path: bergstrom/mi-magic-cube-deconz-45-actions.yaml
+    input:
+      remote: cc78b14cb76940ecb72f8ec6e02f976a
+      one_side_slide: true
+      cube_one_side_slide:
+      - type: turn_on
+        device_id: 7fb24f3e36664ac8b916aa4f631d012e
+        entity_id: light.portas_spitiou
+        domain: light
+        brightness_pct: 100
+- id: '1614174553868'
+  alias: deCONZ - Aqara Opple - Wireless Scene Switch 6 Button
+  description: ''
+  use_blueprint:
+    path: Savjee/deconz-aqara-opple-wireless-scene-switch-6-button.yaml
+    input:
+      remote: 11ec6109f5af4fc099200087a52946d8
+      button_top_left_single_press:
+      - type: turn_off
+        device_id: 270563f49c8e4495ac344958479f3da6
+        entity_id: light.kouzina
+        domain: light
+      button_top_left_hold_in:
+      - type: brightness_decrease
+        device_id: 270563f49c8e4495ac344958479f3da6
+        entity_id: light.kouzina
+        domain: light
+      button_top_right_single_press:
+      - type: turn_on
+        device_id: 270563f49c8e4495ac344958479f3da6
+        entity_id: light.kouzina
+        domain: light
+        brightness_pct: 100
+      button_top_right_hold_in:
+      - type: brightness_increase
+        device_id: 270563f49c8e4495ac344958479f3da6
+        entity_id: light.kouzina
+        domain: light
+- id: '1614177108362'
+  alias: Couch Blue Switch
+  description: Toggling Couch Light and its automations
+  use_blueprint:
+    path: Savjee/deconz-xiaomi-mijia-wireless-switch.yaml
+    input:
+      remote: c8a875ad54f5457294a7332f4eacd107
+      button_press_in:
+      - type: toggle
+        device_id: 333b79774fe544778453de2b7c3e8874
+        entity_id: light.saloni
+        domain: light
+      - service: automation.toggle
+        data:
+          entity_id: group.couch_blue
+      button_double_press:
+      - service: automation.toggle
+        data:
+          entity_id: group.couch_blue
+      - service: lifx.effect_pulse
+        data:
+          brightness: 50
+          entity_id: light.saloni
+          cycles: 1
+          mode: breathe

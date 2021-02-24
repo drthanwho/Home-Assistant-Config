@@ -54,8 +54,6 @@ browser_mod:
   devices:
     f21a5faf-70b7cf41:
       name: thanasis_laptop
-    62b133c4-287df53c:
-      name: pixelc
 
 influxdb:
   username: homeassistant
@@ -138,7 +136,7 @@ api:
 
 alexa: !include amazon_alexa.yaml
 
-rest_command: !include google-assistant-relay.yaml
+rest_command: !include rest_command.yaml
 
 # mqtt:
 #   broker: m20.cloudmqtt.com
