@@ -39,3 +39,4 @@ entity_log.txt
 *.disabled
 alexa*.html
 *.log
+twilio-credentials.sh

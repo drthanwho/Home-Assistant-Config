@@ -237,6 +237,7 @@ binary_sensor: !include binary_sensor.yaml
 recorder: !include recorder.yaml
 utility_meter: !include utility_meter.yaml
 scene: !include scenes.yaml
+shell_command: !include shell_command.yaml
 
 # automations: !include automations.yaml
 # automations manual: !include awesome_automations.yaml

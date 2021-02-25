@@ -2082,3 +2082,15 @@
           entity_id: light.saloni
           cycles: 1
           mode: breathe
+- id: '1614201790116'
+  alias: Twilio Call
+  description: ''
+  trigger: []
+  condition: []
+  action:
+  - service: shell_command.twilio_phone
+    data_template:
+      recipient_number: !secret thanasis_uk_number
+      twilio_number: !secret twilio_number
+      twilio_flow: !secret twilio_flow_test
+  mode: single
