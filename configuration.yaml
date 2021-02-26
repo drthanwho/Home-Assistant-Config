@@ -167,6 +167,8 @@ logger:
     homeassistant.components.stream: critical
     libav.rtsp: critical 
     libav.tls: critical
+    # homeassistant.components.tts: debug
+    # pycsspeechtts.pycsspeechtts: debug
     # homeassistant.components.deconz: debug
 ## for v 1.0.0
     # custom_components.alexa_media: debug  
@@ -195,6 +197,12 @@ weather:
 tts:
   - platform: google_translate
     service_name: google_say
+  - platform: microsoft
+    api_key: !secret azure_speach_api_key
+    language: el-gr
+    gender: Female
+    type: AthinaNeural
+    region: westeurope
 
 google_assistant: !include google_assistant.yaml
 

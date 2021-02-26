@@ -2090,7 +2090,20 @@
   action:
   - service: shell_command.twilio_phone
     data_template:
-      recipient_number: !secret thanasis_uk_number
-      twilio_number: !secret twilio_number
-      twilio_flow: !secret twilio_flow_test
+      recipient_number: 447518563579
+      twilio_number: 12407021349
+      twilio_flow: FWc0a2e8c66777232e1da11c47463e8246
+  mode: single
+- id: '1614293120714'
+  alias: New Automation
+  description: ''
+  trigger: []
+  condition: []
+  action:
+  - service: tts.microsoft_say
+    data:
+      entity_id: media_player.browser_thanasis_laptop
+      message: Προσοχή! Ανιχνεύθηκε διακοπή ρεύματος. Απομένουν {{(states('sensor.apc_rs_1000_battery_runtime')|int/60)|round(0)}}
+        λεπτά λειτουργίας. Εάν δεν υπάρξει αποκατάσταση ρεύματος μέσα στο προανεφερθέν
+        χρονικό όριο, θα εκτελεστεί η ακουλοθεία τερματισμού συστήματος!
   mode: single
