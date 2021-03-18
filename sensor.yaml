@@ -13,6 +13,7 @@
   host: 192.168.1.249
   printers:
     - CP_1025
+    - HP_LaserJet_CP_1025
 
 - platform: twitch
   client_id: !secret twitch_client_id
@@ -75,11 +76,11 @@
       friendly_name: 'Dad'
 
 
-- platform: mqtt
-  name: "Kerbeors Video Path"
-  state_topic: "kios/mqtt"
-  value_template: "{{ value_json.pathToVideo }}"
-  expire_after: 3600
+# - platform: mqtt
+#   name: "Kerbeors Video Path"
+#   state_topic: "kios/mqtt"
+#   value_template: "{{ value_json.pathToVideo }}"
+#   expire_after: 3600
 
 - platform: mqtt
   name: Start Timestamp
