@@ -41,9 +41,9 @@ http:
 #  ip_ban_enabled: true
 #  login_attempts_threshold: 8
 mobile_app:
-hacs:
-  token: !secret hacs_token
-
+# hacs:
+#   token: !secret hacs_token
+my:
 ifttt:
   key: !secret ifttt_key
   
@@ -62,9 +62,9 @@ influxdb:
   max_retries: 3
   default_measurement: state
 
-stream:
-ffmpeg:
-  ffmpeg_bin: /usr/bin/ffmpeg
+# stream:
+# ffmpeg:
+#   ffmpeg_bin: /usr/bin/ffmpeg
   # hwaccel_args:
   #   - -c:v
   #   - h264_v4l2m2m
@@ -154,19 +154,19 @@ logger:
     custom_components.midea_dehumidifier.humidifier: critical
     custom_components.midea_dehumidifier: critical
     custom_components.humidifier.midea_dehumidifier: critical
-    homeassistant.components.nest: critical
-    homeassistant.components.nest.camera_sdm: critical
-    google_nest_sdm: critical
-    google_nest_sdm.device: critical
-    google_nest_sdm.device_manager: critical
-    google_nest_sdm.google_nest_subscriber: critical
-    google_nest_sdm.event: critical
-    google.cloud.pubsub_v1: critical
-    google.cloud.pubsub_v1.subscriber._protocol.streaming_pull_manager: critical
-    homeassistant.components.stream.worker: critical
-    homeassistant.components.stream: critical
-    libav.rtsp: critical 
-    libav.tls: critical
+    # homeassistant.components.nest: critical
+    # homeassistant.components.nest.camera_sdm: critical
+    # google_nest_sdm: critical
+    # google_nest_sdm.device: critical
+    # google_nest_sdm.device_manager: critical
+    # google_nest_sdm.google_nest_subscriber: critical
+    # google_nest_sdm.event: critical
+    # google.cloud.pubsub_v1: critical
+    # google.cloud.pubsub_v1.subscriber._protocol.streaming_pull_manager: critical
+    # homeassistant.components.stream.worker: critical
+    # homeassistant.components.stream: critical
+    # libav.rtsp: critical 
+    # libav.tls: critical
     # homeassistant.components.tts: debug
     # pycsspeechtts.pycsspeechtts: debug
     # homeassistant.components.deconz: debug
