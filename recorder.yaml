@@ -7,6 +7,7 @@ include:
     - device_tracker
     - person
     - media_player
+    - automation
   entity_globs:
     - sensor.apc*
     - sensor.temperature*
@@ -111,7 +112,6 @@ exclude:
     - camera
     - switch
     - group
-    - automation
     - binary_sensor
     - zone
     - input_text
