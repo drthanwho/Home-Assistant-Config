@@ -2,7 +2,7 @@
     name: erythres
     still_image_url: !secret erythres_cam
     verify_ssl: false
-  - platform: generic
-    name: erythres_2
-    still_image_url: !secret erythres_cam_2
-    verify_ssl: false
+  # - platform: generic
+  #   name: erythres_2
+  #   still_image_url: !secret erythres_cam_2
+  #   verify_ssl: false
