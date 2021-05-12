@@ -1,0 +1,38 @@
+blueprint:
+  name: Osram Zigbee Bulb Factory Reset
+  description: Factory resets Osram Zigbee bulbs for re-pairing with a ZigBee Hub
+  domain: automation
+  input:
+    input_boolean:
+      name: Input Boolean
+      description: This Input boolean will trigger the factory reset automation
+      selector:
+        entity:
+          domain: input_boolean
+    light_switch:
+      name: Light Switch
+      description: The light switch to use for factory resetting the Osram bulb
+      selector:
+        entity:
+          domain: switch
+  source_url: https://community.home-assistant.io/t/osram-zigbee-bulb-factory-reset/260725
+trigger:
+- entity_id: !input 'input_boolean'
+  from: 'off'
+  platform: state
+  to: 'on'
+action:
+- service: switch.turn_on
+  entity_id: !input 'light_switch'
+- delay: '2'
+- repeat:
+    count: '5'
+    sequence:
+    - service: switch.turn_off
+      entity_id: !input 'light_switch'
+    - delay: '5'
+    - service: switch.turn_on
+      entity_id: !input 'light_switch'
+    - delay: '5'
+- service: input_boolean.turn_off
+  entity_id: !input 'input_boolean'
