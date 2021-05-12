@@ -1,0 +1,57 @@
+- platform: command_line
+  name: Speedport Entry2i status
+  scan_interval: 60
+  command: 'python3 /config/python_scripts/speedport_entry2i.py "http://192.168.1.1"'
+  value_template: '{{ value_json.dsl_link_status }}'
+  json_attributes:
+    - vdsl_atnu
+    - vdsl_atnd
+    - dsl_crc_errors
+    - dsl_fec_errors
+    - dsl_snrd
+    - dsl_snru
+    - dsl_downstream
+    - dsl_upstream
+    - dsl_max_downstream
+    - dsl_max_upstream
+    - uptime
+    - uptime_online
+    - dsl_online_status
+    - dsl_transmission_mode
+    - firmware_version
+
+- platform: derivative
+  source: sensor.dsl_errors_crc
+  name: DSL Error rate (CRC)
+  round: 0
+  unit_time: h
+  unit: "Err/h"
+  time_window: "00:05:00"  # we look at the change over the last 5 minutes
+- platform: derivative
+  source: sensor.dsl_errors_fec
+  name: DSL Error rate (FEC)
+  round: 0
+  unit_time: h
+  unit: "Err/h"      
+  time_window: "00:05:00"  # we look at the change over the last 5 minutes
+
+- platform: template
+  sensors:
+    dsl_sync_downstream:
+        friendly_name: DSL Sync downstream
+        value_template: >-
+            {{state_attr('sensor.speedport_entry2i_status', 'dsl_downstream') | float | multiply(0.001) | round(2) }}
+        unit_of_measurement: "Mbit/s"
+    dsl_sync_upstream:
+        friendly_name: DSL Sync upstream
+        value_template: >-
+            {{state_attr('sensor.speedport_entry2i_status', 'dsl_upstream') | float | multiply(0.001) | round(2) }}
+        unit_of_measurement: "Mbit/s"
+    dsl_errors_crc:
+        friendly_name: DSL CRC Errors
+        value_template: >-
+            {{state_attr('sensor.speedport_entry2i_status', 'dsl_crc_errors') }}
+    dsl_errors_fec:
+        friendly_name: DSL FEC Errors
+        value_template: >-
+            {{state_attr('sensor.speedport_entry2i_status', 'dsl_fec_errors') }}

@@ -1,0 +1,97 @@
+
+- platform: history_stats
+  name: Zigbee Unavailable
+  entity_id: sensor.temperature_inside
+  state: 'unavailable'
+  type: count
+  end: '{{ now().replace(hour=0).replace(minute=0).replace(second=0) }}'
+  duration:
+    days: 7
+#Maimou history sensors based on door and pir sensors to test principle
+# Duration is a week from today to today minus 86400 minutes
+- platform: history_stats
+  name: Petrelaio Makis
+  entity_id: binary_sensor.saloni_pir
+  state: 'on'
+  type: time
+  end: '{{ now().replace(hour=0).replace(minute=0).replace(second=0) }}'
+  duration:
+    days: 7
+- platform: history_stats
+  name: Petrelaio Leonidas
+  entity_id: binary_sensor.pir_kouzina
+  state: 'on'
+  type: time
+  end: '{{ now().replace(hour=0).replace(minute=0).replace(second=0) }}'
+  duration:
+    days: 7
+- platform: history_stats
+  name: Petrelaio Sofita
+  entity_id: binary_sensor.pir_sensor
+  state: 'on'
+  type: time
+  end: '{{ now().replace(hour=0).replace(minute=0).replace(second=0) }}'
+  duration:
+    days: 7
+- platform: history_stats
+  name: Katanalosi Kaustira
+  entity_id: binary_sensor.door_apothikaki
+  state: 'on'
+  type: time
+  end: '{{ now().replace(hour=0).replace(minute=0).replace(second=0) }}'
+  duration:
+    days: 7
+
+# - platform: history_stats
+#   name: Δουλειά Εβδομάδας
+# - platform: history_stats
+#   entity_id: device_tracker.zte_gps_logger
+#   state: 'Δουλειά'
+#   type: time
+  
+  # start: '{{ as_timestamp( now().replace(hour=0).replace(minute=0).replace(second=0) ) - now().weekday() * 86400 }}'
+  # end: '{{ now() }}'
+  # start: '{{ now().replace(hour=0).replace(minute=0).replace(second=0) }}'
+  # duration:
+  #   days: 7
+  # end: '{{ now() }}'
+
+# - platform: history_stats
+#   name: Δουλειά Σήμερα
+#   entity_id:  device_tracker.zte_gps_logger
+#   state: 'Δουλειά'
+#   type: time
+#   start: '{{ now().replace(hour=0).replace(minute=0).replace(second=0) }}'
+#   duration:
+#     days: 1
+- platform: history_stats
+  name: Δουλειά Μήνας
+  entity_id: device_tracker.redmi9
+  state: 'Cablel'
+  type: time
+  start:  "{{ now().replace(day=1).replace(hour=0).replace(minute=0).replace(second=0) }}"
+  end: "{{ now() }}"
+  # payload_available: "{{value_json.type} | heartbeat }"
+- platform: history_stats
+  name: Δουλειά Εβδομάδας
+  entity_id: device_tracker.redmi9
+  state: 'Cablel'
+  type: time
+  start: "{{ as_timestamp( now().replace(hour=0, minute=0, second=0) ) - now().weekday() * 86400 }}"
+  end: "{{ now() }}"
+  # payload_available: "{{value_json.type} | heartbeat }"
+#- platform: history_stats
+#  type: time
+#  name: Πόση ώρα σπίτι
+#  entity_id: device_tracker.android2424a6fa317e0fdc
+#  state: 'home'
+#  start: '{{ now().replace(hour=0).replace(minute=0).replace(second=0) }}'
+#  end: '{{ now() }}'
+
+#- platform: history_stats
+#  type: time
+#  name: Πόση ώρα εκτός
+#  entity_id: device_tracker.android2424a6fa317e0fdc
+#  state: 'not_home'
+#  start: '{{ now().replace(hour=0).replace(minute=0).replace(second=0) }}'
+#  end: '{{ now() }}'

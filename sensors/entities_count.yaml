@@ -1,0 +1,38 @@
+- platform: template
+  sensors:
+    sensor_count:
+      friendly_name: 'Sensors Count'
+      value_template: '{{ states.sensor | count }}'
+    automation_count:
+      friendly_name: 'Automations Count'
+      value_template: '{{ states.automation | count }}'
+    script_count:
+      friendly_name: 'Scripts Count'
+      value_template: '{{ states.script | count }}'
+    switch_count:
+      friendly_name: 'Switches Count'
+      value_template: '{{ states.switch | count }}'
+    binary_sensor_count:
+      friendly_name: 'Binary Sensors Count'
+      value_template: '{{ states.binary_sensor | count }}'
+    lights_count:
+      friendly_name: 'Lights Count'
+      value_template: '{{ states.light | count }}'
+    tracker_count:
+      friendly_name: 'Devices Count'
+      value_template: '{{ states.device_tracker | count }}'
+    camera_count:
+      friendly_name: 'Cameras Count'
+      value_template: '{{ states.camera | count }}'
+    group_count:
+      friendly_name: 'Groups Count'
+      value_template: '{{ states.group | count }}'
+    inputs_count:
+      friendly_name: 'Inputs Count'
+      value_template: "{{ states | map(attribute='entity_id') | map('regex_search','^input') | select('true') | list | count}}"
+    entities_count:
+      friendly_name: 'Entities Count'
+      value_template: "{{ states | map(attribute='entity_id') | list | count}}"
+    media_player_count:
+      friendly_name: 'Players Count'
+      value_template: '{{ states.media_player | count }}'

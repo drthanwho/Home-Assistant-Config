@@ -1,0 +1,35 @@
+- platform: mqtt
+  name: Start Timestamp
+  unique_id: 120a114d-a8a1-4364-8d43-a35954b19239
+  icon: mdi:timer-outline
+  state_topic: homeassistant/start
+
+# Sensor for Home Assistant shutdown timestamp.
+- platform: mqtt
+  name: Shutdown Timestamp
+  unique_id: affce05d-153b-48f2-af61-1333e50c2163
+  icon: mdi:timer-outline
+  state_topic: homeassistant/shutdown
+
+
+#- platform: mqtt
+#   name: "rfid_reading"
+#   state_topic: "esprfid/send"
+#   value_template: "{{value_json.uid}}"
+#   expire_after: 3
+
+# - platform: mqtt
+#   name: "rfid_user"
+#   state_topic: "esprfid/send"
+#   value_template: "{{value_json.username}}"
+#   expire_after: 3
+
+# - platform: mqtt
+#   name: "rfid_opendoor"
+#   state_topic: "esprfid"
+#   value_template: "{{value_json.cmd}}"
+#   expire_after: 5 
+
+# - platform: mqtt
+#   state_topic: "sensors/rf/receiver"
+#   name: "RF Receiver"
