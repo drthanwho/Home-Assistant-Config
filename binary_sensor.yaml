@@ -5,6 +5,13 @@
       value_template: >-
         {{states('humidifier.midea_dehumidifier_18691697727728')}}
 
+- platform: ping
+  host: 'https://hc-ping.com/60970594-871a-4349-9367-eba0c7e68432'
+  name: "HA Online"
+  count: 2
+  scan_interval: 15
+
+
 # - platform: mqtt
 #   name: "doorstatus"
 #   state_topic: "esprfid/send"
