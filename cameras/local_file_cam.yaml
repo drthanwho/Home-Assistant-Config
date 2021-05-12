@@ -1,3 +1,6 @@
+# - platform: local_file
+#   name: eisodos_still_file
+#   file_path: /tmp/eisodos.jpg
 - platform: local_file
-  name: eisodos_still_file
-  file_path: /tmp/eisodos.jpg
+  name: eisodos_hd_still
+  file_path: /media/eisodos.jpg

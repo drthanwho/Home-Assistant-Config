@@ -1,9 +1,9 @@
 # - platform: ffmpeg
 #   name: domatio_rtsp
 #   input: !secret saloni_url
-- platform: ffmpeg
-  name: saloni_rtsp
-  input: !secret porta_url
+# - platform: ffmpeg
+#   name: saloni_rtsp
+#   input: !secret porta_url
 - platform: mjpeg
   name: Saloni_mjpeg
   mjpeg_url: !secret saloni_mjpeg_url
@@ -12,11 +12,11 @@
   password: !secret vivotek_password
   authentication: basic
   verify_ssl: false
-- platform: mjpeg
-  name: Domatio_mjpeg
-  mjpeg_url: !secret dwmatio_mjpeg_url
-  still_image_url: !secret dwmatio_still_image_url
-  username: !secret vivotek_username
-  password: !secret vivotek_password
-  authentication: digest
-  verify_ssl: false
+# - platform: mjpeg
+#   name: Domatio_mjpeg
+#   mjpeg_url: !secret dwmatio_mjpeg_url
+#   still_image_url: !secret dwmatio_still_image_url
+#   username: !secret vivotek_username
+#   password: !secret vivotek_password
+#   authentication: digest
+#   verify_ssl: false
