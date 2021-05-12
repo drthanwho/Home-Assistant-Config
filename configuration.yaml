@@ -24,15 +24,12 @@ homeassistant:
   # Customization file
   customize: !include customize.yaml
 # Show links to resources in log and frontend
-system_health:
-#introduction:
 python_script:
-media_source:
 # Enables the frontend
 frontend:
   themes: !include_dir_merge_named themes
-#Enables configuration UI
-config:
+  
+default_config:
 # Uncomment this if you are using SSL/TLS, running in Docker container, etc.
 http:
   ssl_certificate: /ssl/fullchain.pem
@@ -40,10 +37,10 @@ http:
 #  base_url: !secret base_url
 #  ip_ban_enabled: true
 #  login_attempts_threshold: 8
-mobile_app:
+
 # hacs:
 #   token: !secret hacs_token
-my:
+
 ifttt:
   key: !secret ifttt_key
   
@@ -62,7 +59,7 @@ influxdb:
   max_retries: 3
   default_measurement: state
 
-# stream:
+stream:
 # ffmpeg:
 #   ffmpeg_bin: /usr/bin/ffmpeg
   # hwaccel_args:
@@ -123,9 +120,6 @@ midea_dehumidifier:
   username: !secret midea_dehumi_username
   password: !secret midea_dehumi_pwd
 
-input_boolean:
-input_datetime:
-input_number:
 input_text:
   alexa_actionable_notification:
     name: Alexa Actionable Notification Holder
@@ -143,30 +137,33 @@ rest_command: !include rest_command.yaml
 #   port: 18261
 #   username: !secret cloudmqtt_username
 #   password: !secret cloudmqtt_password
-updater:
-
+analytics:
 # Allows you to issue voice commands from the frontend in enabled browsers
 conversation:
 # Enables support for tracking state changes over time
 logger:
   default: warn
   logs:
+    # custom_components.healthchecksio: debug
     custom_components.midea_dehumidifier.humidifier: critical
     custom_components.midea_dehumidifier: critical
     custom_components.humidifier.midea_dehumidifier: critical
-    # homeassistant.components.nest: critical
-    # homeassistant.components.nest.camera_sdm: critical
-    # google_nest_sdm: critical
-    # google_nest_sdm.device: critical
-    # google_nest_sdm.device_manager: critical
-    # google_nest_sdm.google_nest_subscriber: critical
-    # google_nest_sdm.event: critical
-    # google.cloud.pubsub_v1: critical
-    # google.cloud.pubsub_v1.subscriber._protocol.streaming_pull_manager: critical
-    # homeassistant.components.stream.worker: critical
-    # homeassistant.components.stream: critical
-    # libav.rtsp: critical 
-    # libav.tls: critical
+    homeassistant.components.esphome: error
+    homeassistant.components.nest: critical
+    homeassistant.components.nest.camera_sdm: critical
+    google_nest_sdm: critical
+    google_nest_sdm.device: critical
+    google_nest_sdm.device_manager: critical
+    google_nest_sdm.google_nest_subscriber: critical
+    google_nest_sdm.event: critical
+    google.cloud.pubsub_v1: critical
+    google.cloud.pubsub_v1.subscriber._protocol.streaming_pull_manager: critical
+    homeassistant.components.stream.worker: critical
+    homeassistant.components.stream: critical
+    libav.rtsp: critical 
+    libav.tls: critical
+    homeassistant.components.webhook: error
+    homeassistant.components.generic.camera: critical
     # homeassistant.components.tts: debug
     # pycsspeechtts.pycsspeechtts: debug
     # homeassistant.components.deconz: debug
@@ -180,13 +177,15 @@ logger:
     # custom_components.midea_dehumi.climate: fatal
     # homeassistant.components.sensor: fatal
     # homeassistant.components.http.ban: debug
-history:
-# View all events in a logbook
-logbook:
-# Enables a map showing the location of tracked devices
-map:
-# Track the sun
-sun:
+  filters:
+    homeassistant.components.websocket_api.http.connection:
+      - "^Error handling message: Unknown error.*"
+    root:
+      - "^MideaClient::send_api_request:.*"
+      - "^MideaClient:.*"
+    homeassistant.helpers.entity:
+      - "^Update for humidifier.midea_dehumidifier_18691697727728 fails.*"
+
 #DarkSky
 weather:
   - platform: darksky
@@ -214,9 +213,9 @@ google_assistant: !include google_assistant.yaml
 #   - name: Docker
 #   - url: tcp://192.168.1.245:2376
 
-#sonoff:
-#  username: !secret sonoff_username
-#  password: !secret sonoff_password
+sonoff:
+ username: !secret sonoff_username
+ password: !secret sonoff_password
 #  scan_interval: 60
 #  grace_period: 600
 #  api_region: 'eu'
@@ -234,13 +233,16 @@ nest:
 # nest:
 #   client_id: !secret nest_legacy_client_id
 #   client_secret: !secret nest_legacy_client_secret   
-
+# recorder:
+#   db_url: !secret mariadb_url
+#   purge_keep_days: 14
 group: !include groups.yaml
 automation: !include automations.yaml
 script: !include scripts.yaml
 switch: !include switches.yaml
 input_select: !include input-select.yaml
-sensor: !include sensor.yaml
+sensor: !include_dir_merge_list sensors/
+# !include sensor.yaml
 binary_sensor: !include binary_sensor.yaml
 recorder: !include recorder.yaml
 utility_meter: !include utility_meter.yaml
