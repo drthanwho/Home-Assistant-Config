@@ -1,14 +1,37 @@
 db_url: !secret mariadb_url
-purge_keep_days: 14
+purge_keep_days: 30
 include:
   domains:
     - light
     - input_select
     - device_tracker
     - person
+    - camera
+    - binary_sensor
+    - group
     - media_player
     - automation
   entity_globs:
+    - binary_sensor.eisods_*
+    - binary_sensor.kipos_*
+    - binary_sensor.kouzina_*
+    - binary_sensor.veranda_*
+    - sensor.cpu*
+    - sensor.eisodos_*
+    - sensor.kipos_*
+    - sensor.kouzina_*
+    - sensor.veranda_*
+    - switch.*_clips
+    - switch.*_detect
+    - switch.*_snapshots
+    - sensor.vac*
+    - sensor.safemoon_*
+    - sensor.*_owned
+    - sensor.dsl*
+    - sensor.speedport*
+    - sensor.red*
+    # - binary_sensor.red*
+    - sensor.odroid*
     - sensor.apc*
     - sensor.temperature*
     - sensor.humidity*
@@ -30,48 +53,41 @@ include:
     - sensor.*_pressure_sensor
     - sensor.*_steps_sensor
     - sensor.*_storage_sensor
+    # - binary_sensor.*_pir
+    - switch.levitostasio_*
+    - switch.sonoff_*
+    - sensor.presence_*
+    - sensor.emvoliasmoi*
+    # - binary_sensor.presence_*
   entities:
-    - binary_sensor.kouzina_pir
-    - binary_sensor.saloni_pir
-    - binary_sensor.dwmatio_thanasis_pir
-    - binary_sensor.koudoni_ttgocam_pir
+    - sensor.douleia_ebdomadas
+    - sensor.douleia_menas
+    - sensor.detection_fps
+    - sensor.test_vaccinations
+    # - binary_sensor.kouzina_pir
+    # - binary_sensor.saloni_pir
+    # - binary_sensor.dwmatio_thanasis_pir
+    # - binary_sensor.koudoni_ttgocam_pir
     - sensor.restart_time
+    - sensor.motion_saloni
+    # - binary_sensor.saloni_zigbee_pir
     - sensor.dark_sky_temperature
-    - sensor.active_kilocalories
-    - sensor.active_time
-    - sensor.average_spo2
-    - sensor.awake_duration
-    - sensor.bmr_kilocalories
-    - sensor.burned_kilocalories
-    - sensor.daily_step_goal
-    - sensor.floors_ascended
-    - sensor.floors_ascended_goal
-    - sensor.floors_descended
-    - sensor.max_heart_rate
-    - sensor.min_heart_rate
-    - sensor.resting_heart_rate
-    - sensor.sedentary_time
-    - sensor.sleep_duration
-    - sensor.sleeping_time
-    - sensor.total_distance_mtr
-    - sensor.total_kilocalories
-    - sensor.total_steps
     - sensor.zigbee_unavailable
-    - group.people_status
-    - binary_sensor.inside_button
-    - binary_sensor.kleidaria
-    - binary_sensor.humidifier_state
-    - binary_sensor.kuria_eisodos
-    - binary_sensor.openclose_11
-    - binary_sensor.openclose_18
-    - binary_sensor.outdoor_koudouni
-    - binary_sensor.outside_button
-    - binary_sensor.porta_apothikis
-    - binary_sensor.porta_spitiou
-    - binary_sensor.sonoff_mini_switch
-    - binary_sensor.sonoff_mini_switch_2
-    - binary_sensor.eksoporta
-    - binary_sensor.door_apothikaki
+    # - group.people_status
+    # - binary_sensor.inside_button
+    # - binary_sensor.kleidaria
+    # - binary_sensor.humidifier_state
+    # - binary_sensor.kuria_eisodos
+    # - binary_sensor.openclose_11
+    # - binary_sensor.openclose_18
+    # - binary_sensor.outdoor_koudouni
+    # - binary_sensor.outside_button
+    # - binary_sensor.porta_apothikis
+    # - binary_sensor.porta_spitiou
+    # - binary_sensor.sonoff_mini_switch
+    # - binary_sensor.sonoff_mini_switch_2
+    # - binary_sensor.eksoporta
+    # - binary_sensor.door_apothikaki
     - humidifier.midea_dehumidifier_18691697727728
     - switch.sonoff_basic_1_relay
     - switch.sonoff_basic_2_relay
@@ -90,60 +106,41 @@ include:
     - sensor.processor_use
     - switch.apothikaki_light
     - switch.door_lock
-    - switch.levitostasio_relay_1
-    - switch.levitostasio_relay_2
-    - switch.levitostasio_relay_3
-    - switch.levitostasio_relay_4
-    - switch.levitostasio_relay_5
-    - switch.levitostasio_relay_6
-    - switch.levitostasio_relay_7
-    - switch.levitostasio_relay_8
     - switch.outdoor_buzzer
     - switch.outdoor_lock
     - switch.provoleas_aristera
     - switch.provoleas_led
-    - switch.sonoff_basic_1_relay
-    - switch.sonoff_basic_2_relay
-    - switch.sonoff_mini_relay
-    - switch.sonoff_mini_relay_2
-    - switch.tp_link
 exclude:
   domains:
-    - camera
     - switch
-    - group
-    - binary_sensor
     - zone
-    - input_text
-    - input_number
+    # - input_text
+    # - input_number
   entity_globs:
     - sensor.*count
     - sensor.*_ip
-    - sensor.chinese_*
     - sensor.home_echo_*
-    - sensor.seventeentrack*
-    - sensor.thanasis_dot_*
-    - sensor.thanasis_flex_*
-    - sensor.*wifi_bssid
-    - sensor.*wifi_frequency
-    - sensor.*wifi_link_speed
+    - sensor.bathroom_*
+    - sensor.office_*
+    - switch.bathroom_*
+    - switch.office_*
+    - switch.home_echo_*
     - sensor.*wifi_signal_strength
-    - sensor.u_s_*
-    - sensor.upnp*
-    - sensor.this_device_next_*
-    - sensor.*_audio_sensor
-    - sensor.*_battery_health
-    - sensor.*_battery_state
-    - sensor.*_bluetooth_connection
-    - sensor.*_charger_type
-    - sensor.*_do_not_disturb_sensor
-    - sensor.*_geocoded_location
-    - sensor.*_last_reboot
-    - sensor.*_next_alarm
-    - sensor.*_phone_state
-    - sensor.*_proximity_sensor
-    - sensor.*_sim_1
-    - sensor.*_sim_2
+    # - sensor.upnp*
+    # - sensor.this_device_next_*
+    # - sensor.*_audio_sensor
+    # - sensor.*_battery_health
+    # - sensor.*_battery_state
+    # - sensor.*_bluetooth_connection
+    # - sensor.*_charger_type
+    # - sensor.*_do_not_disturb_sensor
+    # - sensor.*_geocoded_location
+    # - sensor.*_last_reboot
+    # - sensor.*_next_alarm
+    # - sensor.*_phone_state
+    # - sensor.*_proximity_sensor
+    # - sensor.*_sim_1
+    # - sensor.*_sim_2
   entities:
     - sensor.date
     - sensor.hacs
@@ -164,4 +161,3 @@ exclude:
     - sensor.rpi_last_boot_timestamp
     - sun.sun
     - weather.dark_sky
-  
