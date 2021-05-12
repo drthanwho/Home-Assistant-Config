@@ -241,11 +241,16 @@
 - id: '1568302203385'
   alias: Kitchen Light after 12AM OFF
   trigger:
-  - entity_id: binary_sensor.kouzina_pir
-    for: '120'
-    from: 'on'
-    platform: state
-    to: 'off'
+  - type: no_motion
+    platform: device
+    device_id: 88df64bca71d4222819a30601669916b
+    entity_id: binary_sensor.kouzina_pir
+    domain: binary_sensor
+    for:
+      hours: 0
+      minutes: 2
+      seconds: 0
+      milliseconds: 0
   condition:
   - after: 00:01:00
     before: 06:30:00
@@ -308,11 +313,11 @@
       entity_id: light.saloni
       domain: light
   action:
-  - delay: 00:05:00
   - data:
-      entity_id: light.saloni
       transition: 300
     service: light.turn_off
+    target:
+      entity_id: light.saloni
   mode: single
 - id: 995b4b2be95a4f3081b3db5c0cbe115e
   alias: Couch Lamp Overnight
@@ -412,11 +417,15 @@
     platform: state
     to: 'on'
   condition:
-  - condition: time
-    before: '23:00:00'
-  - condition: state
-    entity_id: light.saloni
-    state: 'on'
+  - condition: and
+    conditions:
+    - condition: time
+      before: '23:00:00'
+    - condition: device
+      type: is_on
+      device_id: 333b79774fe544778453de2b7c3e8874
+      entity_id: light.saloni
+      domain: light
   action:
   - data:
       brightness_pct: 100
@@ -424,13 +433,18 @@
       entity_id: light.saloni
       transition: 5
     service: light.turn_on
-  - delay: '600'
+  - delay:
+      hours: 0
+      minutes: 10
+      seconds: 0
+      milliseconds: 0
   - data:
       brightness_pct: 50
       color_temp: 320
-      entity_id: light.saloni
       transition: 60
     service: light.turn_on
+    target:
+      entity_id: light.saloni
   mode: restart
 - id: '1570820685328'
   alias: 'Couch Lamp Brightness after 12AM '
@@ -440,27 +454,36 @@
     platform: state
     to: 'on'
   condition:
-  - after: '22:00:00'
+  - after: '23:01:00'
     condition: time
-  - condition: state
+    before: 05:00:00
+  - condition: device
+    type: is_on
+    device_id: 333b79774fe544778453de2b7c3e8874
     entity_id: light.saloni
-    state: 'on'
+    domain: light
   - before: sunrise
     condition: sun
   action:
   - data:
       brightness_pct: 30
-      entity_id: light.saloni
       color_temp: 320
-      transition: 5
+      transition: 15
     service: light.turn_on
-  - delay: '120'
+    target:
+      entity_id: light.saloni
+  - delay:
+      hours: 0
+      minutes: 2
+      seconds: 0
+      milliseconds: 0
   - data:
       brightness_pct: 5
-      entity_id: light.saloni
       color_temp: 320
       transition: 60
     service: light.turn_on
+    target:
+      entity_id: light.saloni
   mode: restart
 - id: '1571083900537'
   alias: Kitchen Light before 12AM ON
@@ -506,7 +529,8 @@
   description: ''
   trigger:
   - entity_id: binary_sensor.kouzina_pir
-    for: '480'
+    for:
+      minutes: 480
     from: 'on'
     platform: state
     to: 'off'
@@ -565,7 +589,6 @@
       brightness: 100
       cycles: 1
       entity_id:
-      - light.ypnodomatio
       - light.saloni
       mode: breathe
     service: lifx.effect_pulse
@@ -622,6 +645,11 @@
     to: 'on'
   condition: []
   action:
+  - service: camera.snapshot
+    data:
+      filename: /media/eisodos.jpg
+    target:
+      entity_id: camera.eisodos_hd_mjpeg
   - data:
       data:
         actions:
@@ -629,15 +657,11 @@
           title: Δες ζωντανα
           uri: /lovelace/eisodos-cam
         color: red
-        image: /api/camera_proxy/camera.eisodos_hd_mjpeg
+        image: /media/media/eisodos.jpg
         tag: motion
       message: 🔔 Κουδούνι 🔔
       title: Κίνηση στην πόρτα 🚪🚶
     service: notify.modile_app_family
-  - service: camera.snapshot
-    data:
-      filename: /tmp/eisodos.jpg
-    entity_id: camera.eisodos_hd_mjpeg
   - service: media_player.play_media
     data:
       media_content_id: http://192.168.1.249:8889/
@@ -844,7 +868,6 @@
   - data:
       brightness: 60
       entity_id:
-      - light.ypnodomatio
       - light.kouzina
       - light.saloni
     service: light.turn_on
@@ -874,7 +897,8 @@
   description: ''
   trigger:
   - entity_id: binary_sensor.dwmatio_thanasis_pir
-    for: '300'
+    for:
+      minutes: 300
     from: 'on'
     platform: state
     to: 'off'
@@ -1451,11 +1475,6 @@
     entity_id: binary_sensor.kuria_eisodos
     platform: device
     type: opened
-  - device_id: 81c541cd5def41758eaf49be76d6fa50
-    domain: binary_sensor
-    entity_id: binary_sensor.porta_apothikis
-    platform: device
-    type: opened
   condition:
   - condition: and
     conditions:
@@ -1497,16 +1516,17 @@
       seconds: 0
     platform: device
     type: not_opened
-  - device_id: 81c541cd5def41758eaf49be76d6fa50
-    domain: binary_sensor
-    entity_id: binary_sensor.porta_apothikis
+  condition:
+  - condition: device
+    type: is_on
+    device_id: 7fb24f3e36664ac8b916aa4f631d012e
+    entity_id: light.portas_spitiou
+    domain: light
     for:
       hours: 0
-      minutes: 5
-      seconds: 0
-    platform: device
-    type: not_opened
-  condition: []
+      minutes: 4
+      seconds: 50
+      milliseconds: 0
   action:
   - data:
       entity_id: light.portas_spitiou
@@ -1948,7 +1968,6 @@
       brightness: 100
       cycles: 2
       entity_id:
-      - light.ypnodomatio
       - light.saloni
       mode: breathe
   mode: single
@@ -1961,11 +1980,10 @@
     to: streaming
   condition: []
   action:
-  - device_id: 50cefa2e0d2043f3aa3cc738d37e4c3a
+  - device_id: db09068695e85ab8aac8bc388ce28b9e
     domain: mobile_app
     type: notify
     message: Dr Zzs is live!
-    title: ''
   - service: notify.alexa_media_office
     data:
       data:
@@ -2057,6 +2075,14 @@
         device_id: 270563f49c8e4495ac344958479f3da6
         entity_id: light.kouzina
         domain: light
+      button_bottom_left_double_press:
+      - service: switch.toggle
+        target:
+          entity_id: switch.provoleas_aristera
+      button_bottom_right_double_press:
+      - service: switch.toggle
+        target:
+          entity_id: switch.provoleas_led
 - id: '1614177108362'
   alias: Couch Blue Switch
   description: Toggling Couch Light and its automations
@@ -2090,7 +2116,7 @@
   action:
   - service: shell_command.twilio_phone
     data_template:
-      recipient_number: 447518563579
+      recipient_number: 436603026933
       twilio_number: 12407021349
       twilio_flow: FWc0a2e8c66777232e1da11c47463e8246
   mode: single
@@ -2106,4 +2132,381 @@
       message: Προσοχή! Ανιχνεύθηκε διακοπή ρεύματος. Απομένουν {{(states('sensor.apc_rs_1000_battery_runtime')|int/60)|round(0)}}
         λεπτά λειτουργίας. Εάν δεν υπάρξει αποκατάσταση ρεύματος μέσα στο προανεφερθέν
         χρονικό όριο, θα εκτελεστεί η ακουλοθεία τερματισμού συστήματος!
+  mode: single
+- id: '1614535222692'
+  alias: Custom TTS to Twilio
+  description: Sends custom Greek text to Microsoft Azure TTS API returning mp3 file
+    which is then send to Twilio for playing to custom phone number
+  trigger: []
+  condition: []
+  action:
+  - service: shell_command.microsoft_tts
+    data_template:
+      text: Μη! Μην υπογράφετε εκεί! Μπορεί να χαθεί και είναι κρίμα. Εδώ υπογράψτε!
+        Στο μπλουζάκι! Θα κάνετε φρρρρουουουουου να σας ακούσω? Αιαι? Φανταστικέ τροχονόμε?
+  - service: shell_command.twilio_phone
+    data_template:
+      recipient_number: '+306981910594'
+      twilio_number: '+12407021349'
+      twilio_flow: FWc0a2e8c66777232e1da11c47463e8246
+  mode: single
+- id: '1614957347598'
+  alias: High RAM detected
+  description: ''
+  trigger:
+  - platform: numeric_state
+    entity_id: sensor.memory_use_percent
+    above: '75'
+    for: 00:03:00
+  condition: []
+  action:
+  - service: notify.alexa_media_office
+    data:
+      data:
+        method: speak
+        type: announce
+      message: <amazon:emotion name="excited" intensity="high"> RAM reaching  dangerous
+        levels at {{states('sensor.memory_use_percent')}}%!</amazon:emotion> Home
+        Assitant will now restart!
+  - service: hassio.addon_restart
+    data:
+      addon: 40817795_vscode-remote
+  mode: single
+- id: '1615070890445'
+  alias: Test
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: input_boolean.test_2
+    from: 'off'
+    to: 'on'
+  condition: []
+  action:
+  - type: turn_on
+    device_id: 7fb24f3e36664ac8b916aa4f631d012e
+    entity_id: light.portas_spitiou
+    domain: light
+    brightness_pct: 10
+  - delay:
+      hours: 0
+      minutes: 0
+      seconds: 10
+      milliseconds: 0
+  - type: turn_off
+    device_id: 7fb24f3e36664ac8b916aa4f631d012e
+    entity_id: light.portas_spitiou
+    domain: light
+  - service: input_boolean.turn_off
+    target:
+      entity_id: input_boolean.test_2
+  - device_id: 50cefa2e0d2043f3aa3cc738d37e4c3a
+    domain: mobile_app
+    type: notify
+    title: Test
+    message: Test
+  mode: single
+- id: '1616364053545'
+  alias: UPS changed state
+  description: ''
+  trigger:
+  - platform: event
+    event_type: nut.ups_event
+  condition: []
+  action:
+  - service: notify.persistent_notification
+    data:
+      title: UPS changed state
+      message: '{{ trigger.event.data.notify_msg }}'
+  - service: notify.thanasis_tel
+    data:
+      title: UPS changed state
+      message: '{{ trigger.event.data.notify_msg }}'
+  mode: single
+- id: '1616375916490'
+  alias: NUT Restart
+  description: ''
+  trigger:
+  - platform: event
+    event_type: nut.ups_event
+    event_data:
+      notify_msg: UPS APC_RS_1000@localhost is unavailable
+  condition: []
+  action:
+  - service: hassio.addon_restart
+    data:
+      addon: a0d7b954_nut
+  - service: notify.persistent_notification
+    data:
+      title: NUT Server Alert
+      message: UPS data stale! Server will restart.
+  mode: single
+- id: '1616519925254'
+  alias: Saloni Motion Detection
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: binary_sensor.saloni_pir
+    to: 'on'
+  condition: []
+  action:
+  - choose:
+    - conditions:
+      - condition: time
+        after: 07:45
+        before: '21:59'
+      sequence:
+      - type: turn_on
+        device_id: 333b79774fe544778453de2b7c3e8874
+        entity_id: light.saloni
+        domain: light
+        brightness_pct: 100
+      - delay:
+          hours: 0
+          minutes: 15
+          seconds: 0
+          milliseconds: 0
+      - type: turn_off
+        device_id: 333b79774fe544778453de2b7c3e8874
+        entity_id: light.saloni
+        domain: light
+    default:
+    - type: turn_on
+      device_id: 333b79774fe544778453de2b7c3e8874
+      entity_id: light.saloni
+      domain: light
+      brightness_pct: 100
+    - delay:
+        hours: 0
+        minutes: 2
+        seconds: 10
+        milliseconds: 0
+    - type: turn_off
+      device_id: 333b79774fe544778453de2b7c3e8874
+      entity_id: light.saloni
+      domain: light
+  mode: restart
+- id: '1616676124544'
+  alias: 'Porta Spitiou Auto Turn Off '
+  description: ''
+  trigger:
+  - platform: device
+    type: turned_on
+    device_id: 7fb24f3e36664ac8b916aa4f631d012e
+    entity_id: light.portas_spitiou
+    domain: light
+  condition:
+  - above: '1500'
+    condition: numeric_state
+    entity_id: sensor.lightlevel
+  action:
+  - type: turn_off
+    device_id: 7fb24f3e36664ac8b916aa4f631d012e
+    entity_id: light.portas_spitiou
+    domain: light
+  mode: single
+- id: '1617356027842'
+  alias: No one is home
+  description: ''
+  use_blueprint:
+    path: vorion/actionable-notifications-for-android.yaml
+    input:
+      notify_device: adb10797c927406ebb28eb71b267a8d5
+      notification_title: No One Home
+      notification_message: No one is home for 45 minutes. Should I turn any of these
+        off?
+      action_1_title: Living Room Light
+      first_action:
+      - type: turn_off
+        device_id: 333b79774fe544778453de2b7c3e8874
+        entity_id: light.saloni
+        domain: light
+      action_2_title: Kitchen Light
+      second_action:
+      - type: turn_off
+        device_id: 270563f49c8e4495ac344958479f3da6
+        entity_id: light.kouzina
+        domain: light
+      action_3_title: Dehumidifier
+      third_action:
+      - service: humidifier.turn_off
+        data:
+          entity_id: humidifier.midea_dehumidifier_18691697727728
+      trigger_entity: input_boolean.test
+- id: '1617982593064'
+  alias: Camera Snapshot when Doorbell Rings
+  description: ''
+  trigger: []
+  condition: []
+  action:
+  - service: camera.snapshot
+    data:
+      filename: /media/eisodos_{{ now ().year }}_{{ now ().month }}_{{ now ().day         }}_{{
+        now ().hour }}_{{ now ().minute }}.jpg
+    target:
+      entity_id: camera.eisodos_hd_mjpeg
+  - service: notify.mobile_app_thanasis
+    data:
+      message: Someone at the door
+      data:
+        color: red
+        tag: doorbell
+        image: /media/media/eisodos_{{ now ().year }}_{{ now ().month }}_{{ now ().day
+          }}_{{ now ().hour }}_{{ now ().minute }}.jpg
+  mode: single
+- id: '1618409087157'
+  alias: Switch
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: switch.adguard_filtering
+    from: 'off'
+    to: 'only '
+    for: 00:01:00
+  condition: []
+  action:
+  - service: switch.turn_off
+    target:
+      entity_id: switch.adguard_filtering
+  mode: single
+- id: '1618754557708'
+  alias: Bitcoin drop
+  description: ''
+  trigger:
+  - platform: numeric_state
+    entity_id: sensor.cryptoinfo_bitcoin_bitcoin_eur
+    below: '40000'
+    for: 00:01:00
+  condition: []
+  action:
+  - data:
+      data:
+        method: speak
+        type: announce
+      message: Bitcoin has fallen!
+    service: notify.alexa_media_office
+  - service: notify.mobile_app_thanasis
+    data:
+      message: Bitcoin has fallen!
+  mode: single
+- id: '1619817080767'
+  alias: Ανιχνεύθηκε Σπατάλη
+  description: ''
+  trigger: []
+  condition: []
+  action:
+  - service: notify.mobile_app_thanasis
+    data:
+      data:
+        color: red
+        image: /api/camera_proxy/camera.koudoni_ttgocam_camera
+        tag: motion
+        data:
+          ttl: 0
+          priority: high
+      message: ⚠️Ανιχνεύθηκε Σπατάλη ⚠️
+  - service: notify.mobile_app_mi_8_lite
+    data:
+      data:
+        color: red
+        image: /api/camera_proxy/camera.koudoni_ttgocam_camera
+        tag: motion
+        data:
+          ttl: 0
+          priority: high
+      message: ⚠️Ανιχνεύθηκε Σπατάλη ⚠️
+  - service: notify.mobile_app_redmi9
+    data:
+      data:
+        color: red
+        image: /api/camera_proxy/camera.koudoni_ttgocam_camera
+        tag: motion
+        data:
+          ttl: 0
+          priority: high
+      message: ⚠️Ανιχνεύθηκε Σπατάλη ⚠️
+  - service: notify.mobile_app_redmi_note_9_pro
+    data:
+      data:
+        color: red
+        image: /api/camera_proxy/camera.koudoni_ttgocam_camera
+        tag: motion
+        data:
+          ttl: 0
+          priority: high
+      message: ⚠️Ανιχνεύθηκε Σπατάλη ⚠️
+  mode: single
+- id: '1620347187123'
+  alias: Notify of events
+  description: ''
+  trigger:
+  - platform: mqtt
+    topic: frigate/events
+  action:
+  - service: notify.thanasis_tel
+    data_template:
+      message: A {{trigger.payload_json["after"]["label"]}} was detected.
+      data:
+        photo:
+        - url: http://192.168.1.245:5000/api/events/{{trigger.payload_json["after"]["id"]}}/thumbnail.jpg
+          caption: A {{trigger.payload_json["after"]["label"]}} was detected on {{
+            trigger.payload_json["after"]["camera"] }} camera
+  mode: single
+- id: '1620484538004'
+  alias: Trace examples
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: binary_sensor.kouzina_pir
+    to: 'on'
+  condition:
+  - condition: numeric_state
+    entity_id: sensor.lightlevel
+    below: '10'
+  action:
+  - service: notify.mobile_app_thanasis
+    data:
+      message: Test
+  mode: single
+- id: '1620591408436'
+  alias: Frigate Person in Veranda
+  description: Turn light on in Veranda if it's too dark and person is detected
+  trigger:
+  - platform: state
+    entity_id: binary_sensor.veranda_person_motion
+    to: 'on'
+  condition:
+  - type: is_illuminance
+    condition: device
+    device_id: 91b241e6a78f4ff0a6d4ee61854f3bd4
+    entity_id: sensor.lightlevel
+    domain: sensor
+    below: 20
+  action:
+  - service: light.turn_on
+    target:
+      entity_id: light.veranda_mesaio
+    data:
+      transition: 20
+      brightness_pct: 100
+  - delay:
+      hours: 0
+      minutes: 5
+      seconds: 0
+      milliseconds: 0
+  - service: light.turn_off
+    target:
+      entity_id: light.veranda_mesaio
+    data:
+      transition: 60
+  mode: restart
+- id: '1620755784829'
+  alias: Restart Home Assistant
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: input_boolean.restart_home_assistant
+    to: 'on'
+  condition: []
+  action:
+  - service: homeassistant.restart
   mode: single
