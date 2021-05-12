@@ -28,7 +28,6 @@ Couch Blue:
     - automation.couch_lamp_brightness_after_12am
     - automation.couch_lamp_brightness_before_12am
     - automation.couch_lamp_off
-    - automation.couch_lamp_on_darksky
     - automation.couch_lamp_overnight
     - automation.couch_lamp_on_lux
     - automation.couch_lamp_off_if_too_many_lux_outside
