@@ -1,17 +1,30 @@
 db_url: !secret mariadb_url
-purge_keep_days: 30
+purge_keep_days: 15
 include:
   domains:
     - light
     - input_select
     - device_tracker
     - person
-    - camera
     - binary_sensor
     - group
     - media_player
     - automation
   entity_globs:
+    - sensor.phase*
+    - sensor.cryptoinfo_*
+    - sensor.dogecola*
+    - sensor.eretria_*
+    - switch.eretria_*
+    - media_player.eretria_*
+    - binary_sensor.eretria_*
+    - light.eretria_*
+    - input_select.eretria_*
+    - sensor.fridge_*
+    - sensor.saloni*
+    - switch.saloni_corner*
+    - sensor.*battery_temperature
+    - switch.ypogeio_*
     - binary_sensor.eisods_*
     - binary_sensor.kipos_*
     - binary_sensor.kouzina_*
@@ -34,6 +47,7 @@ include:
     - sensor.odroid*
     - sensor.apc*
     - sensor.temperature*
+    - sensor.*_temperature
     - sensor.humidity*
     - sensor.heating*
     - sensor.xreosi_petrelaiou*
@@ -55,11 +69,26 @@ include:
     - sensor.*_storage_sensor
     # - binary_sensor.*_pir
     - switch.levitostasio_*
-    - switch.sonoff_*
     - sensor.presence_*
     - sensor.emvoliasmoi*
+    - sensor.dad_work_daily
+    - sensor.douleia_emeras
+    - sensor.*_cam_temp
+    - switch.sonoff_*
+    - sensor.*consumption
+    - binary_sensor.irrigation_unlimited_*
     # - binary_sensor.presence_*
   entities:
+    - irrigation_unlimited.coordinator
+    - sensor.bmp280_pressure
+    - utility_meter.fridge
+    - sensor.coral_inference_speed
+    - sensor.soldering_ion
+    - sensor.saloni_corner_power
+    - sensor.power_32
+    - sensor.power_34
+    - switch.sofia_lamp
+    - sensor.influxdb_db_size
     - sensor.douleia_ebdomadas
     - sensor.douleia_menas
     - sensor.detection_fps
@@ -71,7 +100,6 @@ include:
     - sensor.restart_time
     - sensor.motion_saloni
     # - binary_sensor.saloni_zigbee_pir
-    - sensor.dark_sky_temperature
     - sensor.zigbee_unavailable
     # - group.people_status
     # - binary_sensor.inside_button
@@ -89,8 +117,6 @@ include:
     # - binary_sensor.eksoporta
     # - binary_sensor.door_apothikaki
     - humidifier.midea_dehumidifier_18691697727728
-    - switch.sonoff_basic_1_relay
-    - switch.sonoff_basic_2_relay
     - switch.tp_link
     - switch.provoleas_aristera
     - switch.provoleas_led
@@ -114,9 +140,13 @@ exclude:
   domains:
     - switch
     - zone
+    - camera
     # - input_text
     # - input_number
   entity_globs:
+    - media_player.browser*
+    - sensor.browser*
+    - light.browser*
     - sensor.*count
     - sensor.*_ip
     - sensor.home_echo_*
@@ -142,6 +172,10 @@ exclude:
     # - sensor.*_sim_1
     # - sensor.*_sim_2
   entities:
+    - sensor.dsl_errors_crc
+    - sensor.kouzina_uptime_human_readable
+    - sensor.kouzina_uptime
+    - sensor.dsl_errors_fec
     - sensor.date
     - sensor.hacs
     - sensor.last_alexa
