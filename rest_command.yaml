@@ -17,7 +17,7 @@ assistant_relay:
   payload: '{"command":"{{ command }}", "user":"username"}'
 
 # twillio_studio_api:
-#   url: https://AC897039a8bc97e70d3f61eaef95153261:58f6e3155a6e970d928048049cc19944@studio.twilio.com/v2/Flows/FWc0a2e8c66777232e1da11c47463e8246/Executions
+#   url: !secret twilio_studio_url
 #   method: POST
 #   payload: '--data-urlencode {"To":"{{ To }}", --data-urlencode "From":"{{ From }}"}'
   

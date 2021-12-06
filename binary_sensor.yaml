@@ -6,11 +6,24 @@
         {{states('humidifier.midea_dehumidifier_18691697727728')}}
 
 - platform: ping
-  host: 'https://hc-ping.com/60970594-871a-4349-9367-eba0c7e68432'
+  host: !secret health_check_io
   name: "HA Online"
-  count: 2
-  scan_interval: 15
+  count: 5
+  scan_interval: 300
 
+- platform: sun2
+  monitored_conditions:
+    - elevation
+
+# - platform: mqtt
+#   name: BH PZEM Connection
+#   unique_id: 107dc94b-6e60-45ff-9057-49cdb7b94b79
+#   device_class: connectivity
+#   icon: mdi:connection
+#   payload_available: 'online'
+#   state_topic: "mqtt/7737033/available"
+  # availability:
+  #   - topic: "mqtt/7737033/available"
 
 # - platform: mqtt
 #   name: "doorstatus"
@@ -19,7 +32,7 @@
 #   payload_on: "Door Open"
 #   payload_off: "Door Closed"
 #   device_class: door
-  
+
 # - platform: template
 #   sensors:
 #     rfid_doorstatus_inverted:
@@ -27,7 +40,7 @@
 #         {{ is_state('binary_sensor.doorstatus', 'off') }}
 #       friendly_name: Κατάσταση
 #       device_class: door
-      
+
 # - platform: mqtt
 #   unique_id: "rfid_door_unlock"
 #   state_topic: "esprfid"
