@@ -1,10 +1,11 @@
 homeassistant:
-  auth_providers:
-    - type: homeassistant
-    - type: trusted_networks
-      trusted_networks:
-        - 192.168.0.0/24
-  # packages: !include_dir_named packages
+  # auth_providers:
+  #   - type: homeassistant
+  #   - type: trusted_networks
+  #     trusted_networks:
+  #       - 192.168.1.0/24
+  #       - 172.27.66.3
+  packages: !include_dir_named packages
   allowlist_external_dirs:
     - /tmp
   media_dirs:
@@ -28,29 +29,30 @@ python_script:
 # Enables the frontend
 frontend:
   themes: !include_dir_merge_named themes
+  extra_module_url:
+    - /hacsfiles/lovelace-card-mod/card-mod.js
   
 default_config:
-# Uncomment this if you are using SSL/TLS, running in Docker container, etc.
+
+#Move to NGINX setup
 http:
-  ssl_certificate: /ssl/fullchain.pem
-  ssl_key: /ssl/privkey.pem
+  use_x_forwarded_for: true
+  trusted_proxies:
+    - 172.30.33.0/24
+    # - 127.0.0.1
+  # ssl_certificate: /ssl/fullchain.pem
+  # ssl_key: /ssl/privkey.pem
 #  base_url: !secret base_url
 #  ip_ban_enabled: true
 #  login_attempts_threshold: 8
 
-# hacs:
-#   token: !secret hacs_token
-
-ifttt:
-  key: !secret ifttt_key
-  
-discovery:
-
 browser_mod:
   prefix: "browser_"
   devices:
-    f21a5faf-70b7cf41:
+    6ae19178-f0cc70ed:
       name: thanasis_laptop
+    052fd593-5ed48fb3:
+      name: huawei_phone
 
 influxdb:
   username: homeassistant
@@ -65,13 +67,18 @@ stream:
   # hwaccel_args:
   #   - -c:v
   #   - h264_v4l2m2m
-camera: !include_dir_merge_list cameras/
+lovelace_gen:
+lovelace:
+  mode: storage
+  dashboards:
+    lovelace-yaml:
+      mode: yaml
+      title: Irrigation
+      icon: mdi:flower
+      show_in_sidebar: true
+      # filename: lovelace/view_garden_irrigation.yaml
+      filename: irrigation.yaml
 
-# #LIFX Lights
-# lifx:
-#   light:
-#     server: !secret lifx_server
-#     broadcast: !secret lifx_broadcast
 #Telegram Bot
 telegram_bot:
   - platform: polling
@@ -81,35 +88,9 @@ telegram_bot:
       - !secret telegram_makis_id
       - !secret telegram_pavlina_id
 
-notify: !include notify.yaml
-
-#Device Tracker
-device_tracker:
-  - platform: nmap_tracker
-    hosts:
-      - 192.168.1.144
-      - 192.168.1.145
-      - 192.168.1.146
-      - 192.168.1.147
-      - 192.168.1.148
-      - 192.168.1.149
-      - 192.168.1.150
-    home_interval: 10
-    interval_seconds: 20
-
-# tplink:
-#   discovery: true
-#   switch:
-#     - host: 192.168.1.143
-
 twilio:
   account_sid: !secret twilio_sid
   auth_token: !secret twilio_token
-
-speedtestdotnet:
-  server_id: !secret speedtest_server_id
-  scan_interval: 
-    days: 1
 
 spotify:
   client_id: !secret spotify_client_id
@@ -132,6 +113,8 @@ alexa: !include amazon_alexa.yaml
 
 rest_command: !include rest_command.yaml
 
+rest: !include rest_sensors.yaml
+
 # mqtt:
 #   broker: m20.cloudmqtt.com
 #   port: 18261
@@ -143,27 +126,35 @@ conversation:
 # Enables support for tracking state changes over time
 logger:
   default: warn
+  # default: info
   logs:
+    # homeassistant.loader: error
     # custom_components.healthchecksio: debug
+    # homeassistant.loader: error
     custom_components.midea_dehumidifier.humidifier: critical
     custom_components.midea_dehumidifier: critical
     custom_components.humidifier.midea_dehumidifier: critical
-    homeassistant.components.esphome: error
-    homeassistant.components.nest: critical
-    homeassistant.components.nest.camera_sdm: critical
-    google_nest_sdm: critical
-    google_nest_sdm.device: critical
-    google_nest_sdm.device_manager: critical
-    google_nest_sdm.google_nest_subscriber: critical
-    google_nest_sdm.event: critical
-    google.cloud.pubsub_v1: critical
-    google.cloud.pubsub_v1.subscriber._protocol.streaming_pull_manager: critical
+    homeassistant.components.generic.camera: critical
+    # homeassistant.components.camera: debug
+    # homeassistant.components.esphome: error
+    # homeassistant.components.nest: critical
+    # homeassistant.components.nest.camera_sdm: critical
+    # google_nest_sdm: critical
+    # google_nest_sdm.device: critical
+    # google_nest_sdm.device_manager: critical
+    # google_nest_sdm.google_nest_subscriber: critical
+    # google_nest_sdm.event: critical
+    # google.cloud.pubsub_v1: critical
+    # google.cloud.pubsub_v1.subscriber._protocol.streaming_pull_manager: critical
     homeassistant.components.stream.worker: critical
     homeassistant.components.stream: critical
-    libav.rtsp: critical 
-    libav.tls: critical
-    homeassistant.components.webhook: error
-    homeassistant.components.generic.camera: critical
+    # libav.rtsp: critical 
+    # libav.tls: critical
+    # homeassistant.components.webhook: error
+    # homeassistant.components.generic.camera: critical
+    # custom_components.remote_homeassistant: critical
+    homeassistant.components.camera: critical
+    # aioesphomeapi.reconnect_logic: critical
     # homeassistant.components.tts: debug
     # pycsspeechtts.pycsspeechtts: debug
     # homeassistant.components.deconz: debug
@@ -178,13 +169,15 @@ logger:
     # homeassistant.components.sensor: fatal
     # homeassistant.components.http.ban: debug
   filters:
-    homeassistant.components.websocket_api.http.connection:
-      - "^Error handling message: Unknown error.*"
+    # homeassistant.components.websocket_api.http.connection:
+    #   - "^Error handling message: Unknown error.*"
     root:
       - "^MideaClient::send_api_request:.*"
       - "^MideaClient:.*"
     homeassistant.helpers.entity:
       - "^Update for humidifier.midea_dehumidifier_18691697727728 fails.*"
+    homeassistant.helpers.frame:
+      - "^Detected integration that accessed*"
 
 #DarkSky
 weather:
@@ -203,51 +196,78 @@ tts:
     type: AthinaNeural
     region: westeurope
 
-google_assistant: !include google_assistant.yaml
+# modbus:
+#   - type: tcp
+#     name: siemens
+#     host: 192.168.1.243
+#     port: 502
+#     sensors: !include_dir_merge_list Siemens_Sentron_PAC3200/
 
-# media_player:
-#   platform: mpd
-#   host: 192.168.1.250
-  
-# monitor_docker:
-#   - name: Docker
-#   - url: tcp://192.168.1.245:2376
+# eufy:
+#   username: !secret thanasis_email
+#   password: !secret eufy_password
+
+# irrigation_unlimited:!include irrigation_unlimited.yaml
+
+panel_custom:
+  - name: panel-redirect
+    # url_path needs to be unique for each panel_custom config
+    url_path: redirect-server-controls
+    sidebar_title: Server Controls
+    sidebar_icon: mdi:server
+    module_url: /local/panel-redirect.js
+    config:
+      # Where you want to redirect to
+      target: /config/server_control
+  - name: panel-redirect
+    # url_path needs to be unique for each panel_custom config
+    url_path: redirect-supervisor
+    sidebar_title: Supervisor
+    sidebar_icon: mdi:home-assistant
+    module_url: /local/panel-redirect.js
+    config:
+      # Where you want to redirect to
+      target: /hassio/dashboard
+
+smartir:
+
+climate:
+  - platform: smartir
+    name: Hall AC
+    unique_id: hall_ac
+    device_code: 1111
+    controller_data: bw_rc1_send_raw_command
+    temperature_sensor: sensor.temperature_inside
+    humidity_sensor: sensor.humidity_inside
 
 sonoff:
  username: !secret sonoff_username
  password: !secret sonoff_password
-#  scan_interval: 60
-#  grace_period: 600
-#  api_region: 'eu'
-#light:
-#   - platform: sonoff
-#     host: "192.168.1.250"
-#     port: "1082"
+ default_class: light
+
 nest:
   client_id: !secret nest_client_id
   client_secret: !secret nest_client_secret
-# "Project ID" in the Device Access Console
   project_id: !secret nest_project_id
-# Provide the full path exactly as shown under "Subscription name" in Google Cloud Console
   subscriber_id: !secret nest_subscriber_id
-# nest:
-#   client_id: !secret nest_legacy_client_id
-#   client_secret: !secret nest_legacy_client_secret   
-# recorder:
-#   db_url: !secret mariadb_url
-#   purge_keep_days: 14
+
 group: !include groups.yaml
 automation: !include automations.yaml
 script: !include scripts.yaml
 switch: !include switches.yaml
 input_select: !include input-select.yaml
 sensor: !include_dir_merge_list sensors/
-# !include sensor.yaml
 binary_sensor: !include binary_sensor.yaml
 recorder: !include recorder.yaml
 utility_meter: !include utility_meter.yaml
 scene: !include scenes.yaml
 shell_command: !include shell_command.yaml
-
+notify: !include notify.yaml
+media_player: !include media_player.yaml
+google_assistant: !include google_assistant.yaml
+camera: !include_dir_merge_list cameras/
+alarm_control_panel: !include alarm_control_panel.yaml
+template: !include_dir_merge_list templates/
+multiscrape: !include_dir_merge_list multiscrape/
 # automations: !include automations.yaml
 # automations manual: !include awesome_automations.yaml

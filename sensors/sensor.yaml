@@ -3,16 +3,16 @@
   scan_interval: 60
   # unit_of_measurement: days #deprecated as of 1.0!
 
-- platform: radarr
-  api_key: 11d305f6ad314329a5bf5ceeb1b53508
-  host: 192.168.1.245
-  monitored_conditions:
-    - upcoming
-    - movies
-    - commands
-    - diskspace
-    - status
-  days: 2
+# - platform: radarr
+#   api_key: !secret radarr_api_key
+#   host: 192.168.1.245
+#   monitored_conditions:
+#     - upcoming
+#     - movies
+#     - commands
+#     - diskspace
+#     - status
+#   days: 2
 
 - platform: command_line
   name: HassIO CPU Temperature
@@ -20,17 +20,17 @@
   unit_of_measurement: "°C"
   value_template: '{{ value | multiply(0.001) | round(1) }}'
 
-- platform: cups
-  host: 192.168.1.249
-  printers:
-    - CP_1025
-    - HP_LaserJet_CP_1025
+# - platform: cups
+#   host: 192.168.1.249
+#   printers:
+#     - CP_1025
+#     - HP_LaserJet_CP_1025
 
-- platform: twitch
-  client_id: !secret twitch_client_id
-  token: !secret twitch_token
-  channels:
-    - drzzs
+# - platform: twitch
+#   client_id: !secret twitch_client_id
+#   token: !secret twitch_token
+#   channels:
+#     - drzzs
   
 # - platform: command_line
 #   name: Media Server CPU Temperature
@@ -44,6 +44,11 @@
     - 'time'
 - platform: worldclock
   time_zone: Europe/Athens
+
+- platform: sun2
+  monitored_conditions:
+    - sunrise
+    - sunset
 
 - platform: template
   sensors:
@@ -66,12 +71,9 @@
 - platform: template
   sensors:
     last_alexa:
-      # entity_id:
-      #   - media_player.thanasis_echo
-      #   - media_player.thanasis_flex
-      #   - media_player.home_echo
       value_template: >
-        {{ states.media_player | selectattr('attributes.last_called', 'eq', True) | map(attribute='entity_id') | first }}
+        {{ expand(states.group.echos) | selectattr('attributes.last_called','eq',True) | map(attribute='entity_id') | first | default }}
+
 
 # - platform: feedparser
 #   name: ΣΚΑΪ NEWS
@@ -83,11 +85,11 @@
 #     - image
 # #    - published
 #     - summary
-- platform: rest
-  resource: https://version.home-assistant.io/stable.json
-  name: HassOS Latest Version
-  value_template: '{{ value_json.hassos["rpi4-64"] }}'
-  scan_interval: 3600
+# - platform: rest
+#   resource: https://version.home-assistant.io/stable.json
+#   name: HassOS Latest Version
+#   value_template: '{{ value_json.hassos["rpi4-64"] }}'
+#   scan_interval: 3600
 
 - platform: seventeentrack
   username: !secret 17track_email
@@ -213,13 +215,13 @@
     #     {% set P = (states('input_number.time_petrelaiou') | float ) %}
     #     {{'%0.2f'|format(i*P*K*c/(a+b+c))}}
     # Sensor for Home Assistant difference between start and shutdown times.
-    restart_time:
-      friendly_name: Restart Time
-      unique_id: c252bb03-374f-41a9-9e41-d1e1e02b9d90
-      icon_template: mdi:timer-outline
-      unit_of_measurement: s
-      device_class: timestamp
-      value_template: "{{ (states('sensor.start_timestamp')|float(0) - states('sensor.shutdown_timestamp')|float(0))|round(1) }}"
+    # restart_time:
+    #   friendly_name: Restart Time
+    #   unique_id: c252bb03-374f-41a9-9e41-d1e1e02b9d90
+    #   icon_template: mdi:timer-outline
+    #   unit_of_measurement: seconds
+    #   device_class: timestamp
+    #   value_template: "{{ (states('sensor.start_timestamp')|float - states('sensor.shutdown_timestamp')|float) | round(0) }}"
     dark_sky_temperature:
       friendly_name: Temperature Dark Sky
       unique_id: a1033504-b409-476b-84f3-516d91cf6d5c
@@ -263,3 +265,9 @@
 #    time_away_today:
 #      friendly_name: 'Ώρες εκτός σπιτιού'
 #      value_template: '{{states.sensor.time_away.attributes.value}}' 
+
+- platform: integration
+  source: sensor.pzem_l2_power
+  name: energy_l2_test
+  unit_prefix: k
+  round: 2
