@@ -3,26 +3,23 @@ people_status:
   entities:
     - sensor.pavlina_status
     - sensor.makis_status
-    
+
 parents_status:
   name: Parents Status
   entities:
-    - device_tracker.pavlina
-    - device_tracker.pavlina_2
+    - device_tracker.mum_nmap
     - device_tracker.makis
-    - device_tracker.redmi9_nmap
-    - device_tracker.redmi9_nmap_2
+    - device_tracker.thanasis_nmap
+    - device_tracker.redmi9
 
 family_status:
   name: Family Status
   entities:
-    - device_tracker.pavlina
-    - device_tracker.pavlina_2
+    - device_tracker.mum_nmap
     - device_tracker.makis
-    - device_tracker.redmi9_nmap
-    - device_tracker.redmi9_nmap_2
-    - device_tracker.sofia
-    
+    - device_tracker.thanasis_nmap
+    - device_tracker.redmi9
+
 Couch Blue:
   entities:
     - automation.couch_lamp_brightness_after_12am
@@ -31,14 +28,22 @@ Couch Blue:
     - automation.couch_lamp_overnight
     - automation.couch_lamp_on_lux
     - automation.couch_lamp_off_if_too_many_lux_outside
-    
+
 Sprinkler:
   entities:
-    - switch.sprinkler_zone_1
-    - switch.sprinkler_zone_2
-    - switch.sprinkler_zone_3
-    - switch.sprinkler_zone_4
-    - switch.sprinkler_zone_5
-    - switch.sprinkler_zone_6
-    - switch.sprinkler_zone_7
-    - switch.sprinkler_zone_8
+    - switch.sprinkler_system_relay_1
+    - switch.sprinkler_system_relay_2
+    - switch.sprinkler_system_relay_3
+    - switch.sprinkler_system_relay_4
+    - switch.sprinkler_system_relay_5
+    - switch.sprinkler_system_relay_6
+    - switch.sprinkler_system_relay_7
+    - switch.sprinkler_system_relay_8
+
+echos:
+  name: Echomania
+  entities:
+    - media_player.home_echo
+    - media_player.office
+    - media_player.bathroom
+    - media_player.bedroom
