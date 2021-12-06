@@ -25,14 +25,14 @@
   name: DSL Error rate (CRC)
   round: 0
   unit_time: h
-  unit: "Err/h"
+  unit: 'Err/h'
   time_window: "00:05:00"  # we look at the change over the last 5 minutes
 - platform: derivative
   source: sensor.dsl_errors_fec
   name: DSL Error rate (FEC)
   round: 0
   unit_time: h
-  unit: "Err/h"      
+  unit: 'Err/h'
   time_window: "00:05:00"  # we look at the change over the last 5 minutes
 
 - platform: template
