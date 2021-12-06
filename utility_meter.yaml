@@ -1,9 +1,59 @@
-  heating_emeis:
-    source: sensor.petrelaio_makis
-    cycle: monthly
-  heating_leonidas:
-    source: sensor.petrelaio_leonidas
-    cycle: monthly
-  heating_sofita:
-    source: sensor.petrelaio_sofita
-    cycle: monthly
+  # heating_emeis:
+  #   source: sensor.petrelaio_makis
+  #   cycle: monthly
+  # heating_leonidas:
+  #   source: sensor.petrelaio_leonidas
+  #   cycle: monthly
+  # heating_sofita:
+  #   source: sensor.petrelaio_sofita
+  #   cycle: monthly
+  # fridge:
+  #   source: sensor.consumption_37
+  #   name: Fridge Cost
+  #   cycle: daily
+  #   tariffs:
+  #     - normal
+  #     - nixterino
+
+phase_l1_monthly:
+  source: sensor.pzem_l1_energy
+  name: "Φάση 1 Κατανάλωση"
+  cycle: monthly
+  tariffs:
+    - kanoniko
+    - nixterino
+phase_l2_monthly:
+  source: sensor.pzem_l2_energy
+  name: "Φάση 2 Κατανάλωση"
+  cycle: monthly
+  tariffs:
+    - kanoniko
+    - nixterino
+phase_l3_monthly:
+  source: sensor.pzem_l3_energy
+  name: "Φάση 3 Κατανάλωση"
+  cycle: monthly
+  tariffs:
+    - kanoniko
+    - nixterino
+phase_all_monthly:
+  source: sensor.total_energy_consumption
+  name: "Συνολογική Κατανάλωση"
+  cycle: monthly
+  tariffs:
+    - kanoniko
+    - nixterino
+whole_house_power:
+  source: sensor.total_power_consumption
+  name: "Total House Power Meter"
+  cycle: daily
+  tariffs:
+    - kanoniko
+    - nixterino
+whole_house_power_hourly:
+  source: sensor.total_power_consumption
+  name: "Total House Power Meter"
+  cycle: hourly
+  tariffs:
+    - kanoniko
+    - nixterino
