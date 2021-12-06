@@ -5,111 +5,147 @@
 
 - platform: command_line
   name: safemoon_price
-  command: 'curl -X GET -H "X-CMC_PRO_API_KEY: c6ae6708-5dc1-461f-8aad-04e8656dd13a" -H "Accept: application/json" -d "symbol=SAFEMOON&convert=EUR" -G "https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest"'
+  command: !secret safemoon_price_command
   value_template: "{{ value_json['data']['SAFEMOON']['quote']['EUR']['price'] }}"
   scan_interval: 300
+  unit_of_measurement: '€'
   json_attributes:
     - data
 
 - platform: command_line
   name: safemoon_owned
-  command: 'curl -X GET -H "Accept: application/json" -G "https://api.bscscan.com/api?module=account&action=tokenbalance&contractaddress=0x8076c74c5e3f5852037f31ff0093eeb8c8add8d3&address=0xe22b8b6adf3a92fd0aa6dd5b43c6b5634f94afc6&tag=latest&apikey=DJ8V788TKUJI7QTXIWIMT6S23R39TDDPV1"'
+  command: !secret safemoon_owned_command
   value_template: '{{ value_json.result |float / 1000000000 }}'
   scan_interval: 60
+  unit_of_measurement: 'SAFEMOON'
+
+- platform: command_line
+  name: dogecola_owned
+  command: !secret dogecola_owned_command
+  value_template: '{{ value_json.result |float / 1000000000 }}'
+  scan_interval: 60
+  unit_of_measurement: 'DOGECOLA'
 
 - platform: cryptoinfo
   id: "Bitcoin"
   cryptocurrency_name: "bitcoin"
   currency_name: "eur"
-  multiplier: 1
+  multiplier: !secret bitcoin_multiplier
   update_frequency: 30
 - platform: cryptoinfo
   id: "Ethereum"
   cryptocurrency_name: "ethereum"
   currency_name: "eur"
-  multiplier: 1
+  multiplier: !secret ethereum_multiplier
   update_frequency: 30
 - platform: cryptoinfo
   id: "Stellar"
   cryptocurrency_name: "stellar"
   currency_name: "eur"
-  multiplier: 1
+  multiplier: !secret stellar_multiplier
   update_frequency: 30
 - platform: cryptoinfo
   id: "Ripple"
   cryptocurrency_name: "ripple"
   currency_name: "eur"
-  multiplier: 1
+  multiplier: !secret ripple_multiplier
   update_frequency: 30
+- platform: cryptoinfo
+  id: "Polkadot"
+  cryptocurrency_name: "polkadot"
+  currency_name: "eur"
+  multiplier: !secret polkadot_multiplier
+  update_frequency: 30
+- platform: cryptoinfo
+  id: "Numeraire"
+  cryptocurrency_name: "numeraire"
+  currency_name: "eur"
+  multiplier: !secret numeraire_multiplier
+  update_frequency: 30
+- platform: cryptoinfo
+  id: "DogeCola"
+  cryptocurrency_name: "dogecola"
+  currency_name: "eur"
+  multiplier: !secret dogecola_multiplier
+  update_frequency: 30  
 - platform: template
   sensors:
     crypto_owned:
       friendly_name: "Crypto Owned"
       unit_of_measurement: '€'
       unique_id: 62d66ba2-effb-4092-b98a-fa4c5a60d04c
-      value_template: "{{(states('sensor.btc_owned') | float) + (states('sensor.ripple_owned')| float) + (states('sensor.ethereum_owned')| float) + (states('sensor.stellar_owned')|float)|round(2)}}"
-    btc_owned:
-      friendly_name: "Bitcoin Owned"
-      unit_of_measurement: '€'
-      unique_id: 885eae11-57eb-4cfc-a8de-ae6cf7b9eab7
       value_template: >-
-        {% if not is_state('sensor.cryptoinfo_bitcoin_bitcoin_eur', 'unknown') %}
-          {{ (states('sensor.cryptoinfo_bitcoin_bitcoin_eur')|float *0.02432464) | round(2) }}
-        {%endif %}
-    ethereum_owned:
-      friendly_name: "Ethereum Owned"
-      unit_of_measurement: '€'
-      unique_id: dff5eb59-ff54-444f-bb71-9b97d6e789ce
-      value_template: >-
-        {% if not is_state('sensor.cryptoinfo_ethereum_ethereum_eur', 'unknown') %}
-          {{ (states('sensor.cryptoinfo_ethereum_ethereum_eur')|float *0.07156098) | round(2) }}
-        {%endif %}
-    stellar_owned:
-      friendly_name: "Stellar Owned"
-      unit_of_measurement: '€'
-      unique_id: 9bc7050f-a0b9-4a0f-9d75-ce20f108d58d
-      value_template: >-
-        {% if not is_state('sensor.cryptoinfo_stellar_stellar_eur', 'unknown') %}
-          {{ (states('sensor.cryptoinfo_stellar_stellar_eur')|float *141.7108156) | round(2) }}
-        {%endif %}
-    ripple_owned:
-      friendly_name: "Ripple Owned"
-      unit_of_measurement: '€'
-      unique_id: bbd2f4a1-2833-4322-a100-5dfb5fd8e01e
-      value_template: >-
-        {% if not is_state('sensor.cryptoinfo_ripple_ripple_eur', 'unknown') %}
-          {{ (states('sensor.cryptoinfo_ripple_ripple_eur')|float *575.524775) | round(2) }}
-        {%endif %}
+        {% set a= (states('sensor.cryptoinfo_bitcoin_bitcoin_eur') | float(0) ) %}
+        {% set b= (states('sensor.cryptoinfo_ripple_ripple_eur') | float(0) ) %}
+        {% set c= (states('sensor.cryptoinfo_ethereum_ethereum_eur') | float(0) ) %}
+        {% set d= (states('sensor.cryptoinfo_stellar_stellar_eur') | float(0) ) %}
+        {% set e= (states('sensor.cryptoinfo_polkadot_polkadot_eur') | float(0) ) %}
+        {% set f= (states('sensor.cryptoinfo_numeraire_numeraire_eur') | float(0) ) %}
+        {{ '%0.2f'|format(a+b+c+d+e+f)| float(0) }}
+      availability_template: "{{ states('sensor.cryptoinfo_bitcoin_bitcoin_eur') not in ['unknown', 'unavailable'] and states('sensor.cryptoinfo_ripple_ripple_eur') not in ['unknown', 'unavailable'] and states('sensor.cryptoinfo_ethereum_ethereum_eur') not in ['unknown', 'unavailable'] and states('sensor.cryptoinfo_stellar_stellar_eur') not in ['unknown', 'unavailable'] and states('sensor.cryptoinfo_polkadot_polkadot_eur') not in ['unknown', 'unavailable'] and states('sensor.cryptoinfo_numeraire_numeraire_eur') not in ['unknown', 'unavailable'] }}"
     safemoon_price:
       friendly_name: 'SafeMoon Price'
       unit_of_measurement: '€'
       value_template: "{{ state_attr('sensor.safemoon_price_2', 'data')['SAFEMOON']['quote']['EUR']['price'] }}"
-    safemoon_percent_change_1h:
-      friendly_name: 'SafeMoon Change 1H'
-      unit_of_measurement: '%'
-      value_template: "{{ state_attr('sensor.safemoon_price_2', 'data')['SAFEMOON']['quote']['EUR']['percent_change_1h'] |round(2)}}"
-    safemoon_percent_change_24h:
-      friendly_name: 'SafeMoon Change 24H'
-      unit_of_measurement: '%'
-      value_template: "{{ state_attr('sensor.safemoon_price_2', 'data')['SAFEMOON']['quote']['EUR']['percent_change_24h'] |round(2)}}"
-    safemoon_percent_change_7d:
-      friendly_name: 'SafeMoon Change 7D'
-      unit_of_measurement: '%'
-      value_template: "{{ state_attr('sensor.safemoon_price_2', 'data')['SAFEMOON']['quote']['EUR']['percent_change_7d'] |round(2)}}"
-    safemoon_percent_change_30d:
-      friendly_name: 'SafeMoon Change 30D'
-      unit_of_measurement: '%'
-      value_template: "{{ state_attr('sensor.safemoon_price_2', 'data')['SAFEMOON']['quote']['EUR']['percent_change_30d'] |round(2)}}"
     safemoon_owned_eur:
       friendly_name: 'SafeMoon'
       unit_of_measurement: '€'
-      value_template: "{{(states('sensor.safemoon_owned')|float *  states('sensor.safemoon_price') |float )|round(2)}}"
+      value_template: >-
+        {% if states('sensor.safemoon_owned')|float == 0 or states('sensor.safemoon_price')|float == 0 %}
+          {{ states('sensor.safemoon_owned_eur') | float(0)}}
+        {% else %}
+          {{ (states('sensor.safemoon_owned')|float * states('sensor.safemoon_price')|float) | round(2) | float(0)}}
+        {% endif %}
     safemoon_rewarded:
       friendly_name: 'SafeMoon Rewarded'
+      unit_of_measurement: 'SAFEMOON'
       value_template: "{{ states('sensor.safemoon_owned') | float - 32428539.014249423 }}"
     safemoon_rewarded_eur:
       friendly_name: 'SafeMoon Rewarded Price'
+      unit_of_measurement: '€'
       value_template: "{{ (states('sensor.safemoon_rewarded')| float * states('sensor.safemoon_price') | float) | round(10) }}"
     ependusi:
       friendly_name: 'Επένδυση'
-      value_template: "{{ (states('sensor.crypto_owned') |float - states('input_number.ependese')|float)|round(2)}}"
+      value_template: "{{ (states('sensor.crypto_owned') |float(0) - states('input_number.ependese')|float(0))|round(2)}}"
+    dogecola_owned_eur:
+      friendly_name: 'DogeCola'
+      unit_of_measurement: '€'
+      value_template: >-
+        {% if states('sensor.dogecola_owned')|float(0) == 0 or states('sensor.cryptoinfo_dogecola_dogecola_eur')|float(0) == 0 %}
+          {{ states('sensor.dogecola_owned_eur') | float(default=none) }}
+        {% else %}
+          {{ (states('sensor.dogecola_owned')|float(0) * states('sensor.cryptoinfo_dogecola_dogecola_eur')|float(0)) | round(2) | float(default=none) }}
+        {% endif %}
+
+    # btc_owned:
+    #   friendly_name: "Bitcoin Owned"
+    #   unit_of_measurement: '€'
+    #   unique_id: 885eae11-57eb-4cfc-a8de-ae6cf7b9eab7
+    #   value_template: >-
+    #     {% if not is_state('sensor.cryptoinfo_bitcoin_bitcoin_eur', 'unknown') %}
+    #       {{ (states('sensor.cryptoinfo_bitcoin_bitcoin_eur')|float *0.02432464) | round(2) }}
+    #     {%endif %}
+    # ethereum_owned:
+    #   friendly_name: "Ethereum Owned"
+    #   unit_of_measurement: '€'
+    #   unique_id: dff5eb59-ff54-444f-bb71-9b97d6e789ce
+    #   value_template: >-
+    #     {% if not is_state('sensor.cryptoinfo_ethereum_ethereum_eur', 'unknown') %}
+    #       {{ (states('sensor.cryptoinfo_ethereum_ethereum_eur')|float *0.07156098) | round(2) }}
+    #     {%endif %}
+    # stellar_owned:
+    #   friendly_name: "Stellar Owned"
+    #   unit_of_measurement: '€'
+    #   unique_id: 9bc7050f-a0b9-4a0f-9d75-ce20f108d58d
+    #   value_template: >-
+    #     {% if not is_state('sensor.cryptoinfo_stellar_stellar_eur', 'unknown') %}
+    #       {{ (states('sensor.cryptoinfo_stellar_stellar_eur')|float *141.7108156) | round(2) }}
+    #     {%endif %}
+    # ripple_owned:
+    #   friendly_name: "Ripple Owned"
+    #   unit_of_measurement: '€'
+    #   unique_id: bbd2f4a1-2833-4322-a100-5dfb5fd8e01e
+    #   value_template: >-
+    #     {% if not is_state('sensor.cryptoinfo_ripple_ripple_eur', 'unknown') %}
+    #       {{ (states('sensor.cryptoinfo_ripple_ripple_eur')|float *575.524775) | round(2) }}
+    #     {%endif %}
