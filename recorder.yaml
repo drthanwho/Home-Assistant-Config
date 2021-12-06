@@ -11,6 +11,7 @@ include:
     - media_player
     - automation
   entity_globs:
+    - sensor.pi_zero*
     - sensor.phase*
     - sensor.cryptoinfo_*
     - sensor.dogecola*
@@ -49,6 +50,7 @@ include:
     - sensor.temperature*
     - sensor.*_temperature
     - sensor.humidity*
+    - sensor.*_humidity
     - sensor.heating*
     - sensor.xreosi_petrelaiou*
     - sensor.petrelaio*
@@ -77,8 +79,20 @@ include:
     - switch.sonoff_*
     - sensor.*consumption
     - binary_sensor.irrigation_unlimited_*
+    - sensor.boiler*
     # - binary_sensor.presence_*
+    - sensor.pzem*
+    - sensor.garden*
+    - sensor.siemens*
+    - sensor.*_total_energy
+    - utility_meter.*
+    - sensor.3phase*
+    - sensor.*_cost
   entities:
+    - sensor.test_template_none
+    - sensor.ultrasonic_sensor
+    - switch.basement_light
+    - sensor.soil_moisture
     - irrigation_unlimited.coordinator
     - sensor.bmp280_pressure
     - utility_meter.fridge
@@ -121,7 +135,6 @@ include:
     - switch.provoleas_aristera
     - switch.provoleas_led
     - sensor.maria_db_size
-    - sensor.dehumidifier_current_humidity
     - sensor.lightlevel
     - sensor.disk_free_home
     - sensor.hassio_cpu_temperature
@@ -136,6 +149,7 @@ include:
     - switch.outdoor_lock
     - switch.provoleas_aristera
     - switch.provoleas_led
+    - sensor.energy_l2_test
 exclude:
   domains:
     - switch
