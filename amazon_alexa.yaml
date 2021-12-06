@@ -5,9 +5,6 @@ smart_home:
     client_secret: !secret alexa_client_secret
     filter:
       include_entities:
-        - switch.provoleas_led
-        - switch.provoleas_aristera
-        - script.ram
         - binary_sensor.pir_kouzina
         - binary_sensor.saloni_pir
         - binary_sensor.pir_sensor
@@ -16,7 +13,9 @@ smart_home:
         - humidifier.midea_dehumidifier_18691697727728
         - input_boolean.restart_home_assistant
       include_entity_globs:
-        - sensor.humidity*
         - sensor.temperature*
       include_domains:
         - light
+      exclude_entity_globs:
+        - light.browser_*
+        
