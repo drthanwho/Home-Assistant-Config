@@ -1,0 +1,37 @@
+- name: Emvoliasmoi
+  resource: https://greeceinfigures.com/emvolia
+  scan_interval: 60
+  sensor:
+    - unique_id: vaccinations_today
+      name: Daily Vaccinations
+      select: "div:nth-child(1) > div > p.text-3xl.font-semibold.text-center.text-gray-800"
+      value_template: '{{(value| replace(".", "")|float(0))|round(0)}}'
+    - unique_id: vaccinated_total
+      name: Total Vaccinated
+      select: "div:nth-child(2) > div > p.text-3xl.font-semibold.text-center.text-gray-800"
+      value_template: '{{(value| replace(".", "")|float(0))|round(0)}}'
+    - unique_id: vaccinated_population_percent
+      name: Vaccinated Population
+      select: "div:nth-child(3) > div > p.text-3xl.font-semibold.text-center.text-gray-800"
+      value_template: '{{ value.rstrip("%") | float }}'
+      unit_of_measurement: '%'
+    # - unique_id: vaccinations_time
+    #   name: Time till 70% of population to be vaccinated
+    #   select: "div.col-span-3.flex.flex-col.justify-center.px-4.py-4.mt-4.bg-white.border.border-gray-300.rounded.sm\\:mt-0 > div > p.text-3xl.font-semibold.text-center.text-gray-800"
+    - unique_id: vaccinations_total
+      name: Total Vaccinations
+      select: "div.sm\\:grid.sm\\:grid-flow-row.sm\\:gap-3.sm\\:grid-cols-3.mt-3 > div:nth-child(1) > div > p.text-3xl.font-semibold.text-center.text-gray-800"
+      value_template: '{{(value| replace(".", "")|float(0))|round(0)}}'
+    - unique_id: vaccinated_2_doses
+      name: Second Dose Vaccinated
+      select: "div.sm\\:grid.sm\\:grid-flow-row.sm\\:gap-3.sm\\:grid-cols-3.mt-3 > div:nth-child(2) > div > p.text-3xl.font-semibold.text-center.text-gray-800"
+      value_template: '{{(value| replace(".", "")|float(0))|round(0)}}'
+    - unique_id: emvoliasmoi_pluthismos_2_doses_percent
+      name: Fully Vaccinated Population
+      select: "div.sm\\:grid.sm\\:grid-flow-row.sm\\:gap-3.sm\\:grid-cols-3.mt-3 > div:nth-child(3) > div > p.text-3xl.font-semibold.text-center.text-gray-800"
+      value_template: '{{ value.rstrip("%") | float }}'
+      unit_of_measurement: '%'
+    - unique_id: vaccinations_last_update
+      name: Last Updated Vaccinations
+      select: "p.text-sm.text-center.text-gray-500:nth-child(2)"
+      value_template: '{{ value.split("η:")[1] }}'

@@ -1,0 +1,3 @@
+title: Irrigation
+views:
+  - !include lovelace/view_garden_irrigation.yaml
