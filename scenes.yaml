@@ -22,3 +22,48 @@
       order: 3
       friendly_name: Couch Blue
       state: 'off'
+- id: '1627818765920'
+  name: Yeelight Police
+  entities:
+    light.yeelight_color4_0x0000000017799b6b:
+      min_mireds: 153
+      max_mireds: 588
+      effect_list:
+      - Strobe color
+      - Police
+      - Christmas
+      - RGB
+      - Random Loop
+      - Fast Random Loop
+      - LSD
+      - Slowdown
+      - Night Mode
+      - Date Night
+      - Movie
+      - Sunrise
+      - Sunset
+      - Romance
+      - Happy Birthday
+      - Disco
+      - Strobe epilepsy!
+      - Alarm
+      - Police2
+      - WhatsApp
+      - Facebook
+      - Twitter
+      - Home
+      - Candle Flicker
+      - Slow Temp
+      - Stop
+      supported_color_modes:
+      - color_temp
+      - hs
+      - rgb
+      color_mode: color_temp
+      brightness: 255
+      color_temp: 191
+      flowing: false
+      music_mode: true
+      friendly_name: yeelight_color4_0x0000000017799b6b
+      supported_features: 44
+      state: 'on'
