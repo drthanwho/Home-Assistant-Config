@@ -3,6 +3,9 @@ report_state: true
 service_account: !include google_api.json
 expose_by_default: false
 entity_config:
+  camera.eisodou:
+      name: Είσοδος
+      room: Κήπος
   light.kouzina:
     expose: true
     name: Κουζίνα
@@ -18,7 +21,7 @@ entity_config:
     room: Δωμάτιο Σοφίας
   switch.provoleas_led:
     expose: true
-    name: LED Προβολέας
+    name: LED ΠροβολέαPς
     aliases: 
       - LED_provoleas
       - LED_light
@@ -34,11 +37,11 @@ entity_config:
       - aristera_outside
       - lights_outside
     room: Κήπος
-  switch.sonoff_basic_1_relay:
+  light.sonoff_ypogeio_1:
     expose: true
     name: Βεράντα
     room: Κήπος
-  switch.sonoff_basic_2_relay:
+  light.sonoff_ypogeio_2:
     expose: true
     name: Εισόδου
     room: Κήπος
@@ -58,3 +61,11 @@ entity_config:
     expose: true
     name: Αφυγραντήρας EVA II
     room: Σπίτι
+  light.veranda_mesaio:
+    expose: true
+    name: Βεράντα Μεσαίο
+    room: Κήπος
+  light.trapezaria_mesaio:
+    expose: true
+    name: Τραπεζαρία Μεσαίο
+    room: Κήπος
