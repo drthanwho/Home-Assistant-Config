@@ -1,0 +1,14 @@
+- platform: influxdb
+  host: a0d7b954-influxdb
+  port: 8086
+  username: homeassistant
+  password: !secret influxdb_password
+  queries:
+    - name: InfluxDB DB Size
+      unit_of_measurement: MB
+      value_template: '{{ (value|float / 1024 /1024)|round(1) }}'
+      group_function: sum
+      measurement: '"monitor"."shard"'
+      database: _internal
+      where: 'time > now() - 10s'
+      field: diskBytes

@@ -1,0 +1,78 @@
+- name: Siemens Current a
+  address: 13
+  slave: 1
+  data_type: float32
+  unit_of_measurement: A
+  precision: 2
+- name: Siemens Current b
+  address: 15
+  slave: 1
+  data_type: float32
+  unit_of_measurement: A 
+  precision: 2
+- name: Siemens Current c
+  address: 17
+  slave: 1
+  data_type: float32
+  unit_of_measurement: A
+  precision: 2
+- name: Siemens Average Current
+  address: 61
+  slave: 1
+  data_type: float32
+  unit_of_measurement: A
+- name: Siemens THD-R Current a
+  address: 49
+  slave: 1
+  data_type: float32
+  unit_of_measurement: '%'
+- name: Siemens THD-R Current b
+  address: 51
+  slave: 1
+  data_type: float32
+  unit_of_measurement: '%'
+- name: Siemens THD-R Current c
+  address: 53
+  slave: 1
+  data_type: float32
+  unit_of_measurement: '%'
+- name: Amplitude Unbalance - Current
+  address: 73
+  slave: 1
+  data_type: float32
+  unit_of_measurement: '%'
+- name: Siemens Maximum Current a
+  address: 87
+  slave: 1
+  data_type: float32
+  unit_of_measurement: A
+- name: Siemens Maximum Current b
+  address: 89
+  slave: 1
+  data_type: float32
+  unit_of_measurement: A
+- name: Maximum Current c
+  address: 91
+  slave: 1
+  data_type: float32
+  unit_of_measurement: A
+- name: Siemens Maximum THD-R Current a
+  address: 123
+  slave: 1
+  data_type: float32
+  unit_of_measurement: '%'
+- name: Siemens Maximum THD-R Current b
+  address: 125
+  slave: 1
+  data_type: float32
+  unit_of_measurement: '%'
+- name: Siemens Maximum THD-R Current c
+  address: 127
+  slave: 1
+  data_type: float32
+  unit_of_measurement: '%'
+- name: Siemens Maximum Average Current
+  address: 135
+  slave: 1
+  data_type: float32
+  unit_of_measurement: A

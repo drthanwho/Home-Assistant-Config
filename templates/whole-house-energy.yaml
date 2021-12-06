@@ -1,0 +1,59 @@
+- sensor:
+    - name: Total Power Consumption
+      unit_of_measurement: W
+      unique_id: 4280cbe9-6439-4c06-bc5e-dcb1d8d3a22c
+      state_class: measurement
+      device_class: power
+      state: >-
+        {% set a= (states('sensor.pzem_l1_power') | float(0) ) %}
+        {% set b= (states('sensor.pzem_l2_power') | float(0) ) %}
+        {% set c= (states('sensor.pzem_l3_power') | float(0) ) %}
+        {{ '%0.3f'|format(a+b+c) }}
+      availability: >-
+        {% set sensors = ['sensor.pzem_l1_power', 'sensor.pzem_l2_power', 'sensor.pzem_l3_power'] %}
+        {{ expand(sensors)|selectattr('state', 'in', ['unavailable', 'unknown'])|list|length == 0 }}
+
+- sensor:
+    - name: Total Energy Consumption
+      unit_of_measurement: kWh
+      unique_id: 2804bc92-74da-49d5-8e8b-814952b542b3
+      state_class: total_increasing
+      device_class: energy
+      state: >-
+        {% set a= (states('sensor.pzem_l1_energy') | float(0) ) %}
+        {% set b= (states('sensor.pzem_l2_energy') | float(0) ) %}
+        {% set c= (states('sensor.pzem_l3_energy') | float(0) ) %}
+        {{ '%0.3f'|format((a+b+c)/1000) }}
+      availability: >-
+        {% set sensors = ['sensor.pzem_l1_energy', 'sensor.pzem_l2_energy', 'sensor.pzem_l3_energy'] %}
+        {{ expand(sensors)|selectattr('state', 'in', ['unavailable', 'unknown'])|list|length == 0 }}
+
+- sensor:
+    - name: L1 Total Energy
+      unit_of_measurement: kWh
+      unique_id: bb356227-4ede-4194-b209-a8a184cdc728
+      state: "{{ (states('sensor.phase_l1_monthly_kanoniko') | float(0) + states('sensor.phase_l1_monthly_nixterino') | float(0)) / 1000 }}"
+      state_class: total_increasing
+      device_class: energy
+
+- sensor:
+    - name:  L2 Total Energy
+      unit_of_measurement: kWh
+      unique_id: 92bfc0c6-3088-46f7-a0d0-4a486a5ea9ab
+      state: "{{ (states('sensor.phase_l2_monthly_kanoniko') | float(0) + states('sensor.phase_l2_monthly_nixterino') | float(0)) / 1000 }}"
+      state_class: total_increasing
+      device_class: energy
+
+- sensor:
+    - name: L3 Total Energy
+      unit_of_measurement: kWh
+      unique_id: ee395546-1e2d-49b1-849d-12c14fccc53c
+      state: "{{ (states('sensor.phase_l3_monthly_kanoniko') | float(0) + states('sensor.phase_l3_monthly_nixterino') | float(0)) / 1000 }}"
+      state_class: total_increasing
+      device_class: energy
+
+- sensor:
+    - state: "{{states('sensor.sprinkler_system_enclosure_temperature')|float(default=none)}}"
+      name: test_template_none
+      unique_id: test_none
+      unit_of_measurement: °C

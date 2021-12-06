@@ -1,0 +1,178 @@
+- name: Siemens Apparent Power a
+  address: 19
+  slave: 1
+  data_type: float32
+  unit_of_measurement: V
+  precision: 2
+- name: Siemens Apparent Power b
+  address: 21
+  slave: 1
+  data_type: float32
+  unit_of_measurement: V
+  precision: 2
+- name: Siemens Apparent Power c
+  address: 23
+  slave: 1
+  data_type: float32
+  unit_of_measurement: V
+  precision: 2
+- name: Siemens Active Power a
+  address: 25
+  slave: 1
+  data_type: float32
+  unit_of_measurement: W
+  precision: 2
+- name: Siemens Active Power b
+  address: 27
+  slave: 1
+  data_type: float32
+  unit_of_measurement: W
+  precision: 2
+- name: Siemens Active Power c
+  address: 29
+  slave: 1
+  data_type: float32
+  unit_of_measurement: W
+  precision: 2
+- name: Siemens Reactive Power a
+  address: 31
+  slave: 1
+  data_type: float32
+  unit_of_measurement: V
+  precision: 2
+- name: Siemens Reactive Power b
+  address: 33
+  slave: 1
+  data_type: float32
+  unit_of_measurement: V
+  precision: 2
+- name: Siemens Reactive Power c
+  address: 35
+  slave: 1
+  data_type: float32
+  unit_of_measurement: V
+  precision: 2
+- name: Siemens Power Factor a
+  address: 37
+  slave: 1
+  data_type: float32
+  precision: 2
+- name: Siemens Power Factor b
+  address: 39
+  slave: 1
+  data_type: float32
+  precision: 2
+- name: Siemens Power Factor c
+  address: 41
+  slave: 1
+  data_type: float32
+  precision: 2
+- name: Siemens Total Apparent Power
+  address: 63
+  slave: 1
+  data_type: float32
+  unit_of_measurement: V
+- name: Siemens Total Active Power
+  address: 65
+  slave: 1
+  data_type: float32
+  unit_of_measurement: W
+- name: Siemens Total Reactive Power
+  address: 67
+  slave: 1
+  data_type: float32
+  unit_of_measurement: V
+- name: Siemens Total Power Factor
+  address: 69
+  slave: 1
+  data_type: float32
+- name: Siemens Maximum Apparent Power a
+  address: 93
+  slave: 1
+  data_type: float32
+  unit_of_measurement: V
+- name: Siemens Maximum Apparent Power b
+  address: 95
+  slave: 1
+  data_type: float32
+  unit_of_measurement: V
+- name: Siemens Maximum Apparent Power c
+  address: 97
+  slave: 1
+  data_type: float32
+  unit_of_measurement: V
+- name: Siemens Maximum Active Power a
+  address: 99
+  slave: 1
+  data_type: float32
+  unit_of_measurement: W
+- name: Siemens Maximum Active Power b
+  address: 101
+  slave: 1
+  data_type: float32
+  unit_of_measurement: W
+- name: Siemens Maximum Active Power c
+  address: 103
+  slave: 1
+  data_type: float32
+  unit_of_measurement: W
+- name: Siemens Maximum Reactive Power a
+  address: 105
+  slave: 1
+  data_type: float32
+  unit_of_measurement: V
+- name: Siemens Maximum Reactive Power b
+  address: 107
+  slave: 1
+  data_type: float32
+  unit_of_measurement: V
+- name: Siemens Maximum Reactive Power c
+  address: 109
+  slave: 1
+  data_type: float32
+  unit_of_measurement: V
+- name: Siemens Maximum Power Factor a
+  address: 111
+  slave: 1
+  data_type: float32
+- name: Siemens Maximum Power Factor b
+  address: 113
+  slave: 1
+  data_type: float32
+- name: Siemens Maximum Power Factor c
+  address: 115
+  slave: 1
+  data_type: float32
+
+# to be added:
+#   137	Max. Total Apparent Power	V	
+#   139	Max. Total Active Power	W	
+#   141	Max. Total Reactive Power	v	
+#   143	Maximum Total Power Factor	-	
+#   145	Minimum Voltage Va-n	V	
+#   147	Minimum Voltage Vb-n	V	
+#   149	Minimum Voltage Vc-n	V	
+#   151	Min. Voltage Va-b	V	
+#   153	Min. Voltage Vb-c	V	
+#   155	Min. Voltage Vc-a	V	
+#   157	Minimum Current a	A	
+#   159	Minimum Current b	A	
+#   161	Minimum Current c	A	
+#   163	Minimum Apparent Power a	V	
+#   165	Minimum Apparent Power b	V	
+#   167	Minimum Apparent Power c	V	
+#   169	Minimum Active Power a	W	
+#   171	Minimum Active Power b	W	
+#   173	Minimum Active Power c	W	
+#   175	Minimum Reactive Power a	v	
+#   177	Minimum Reactive Power b	v	
+#   179	Minimum Reactive Power c	v	
+#   181	Minimum Power Factor a	-	
+#   183	Minimum Power Factor b	-	
+#   185	Minimum Power Factor c	-	
+#   189	Min. Average Voltage Vph-n	V	
+#   191	Min. Average Voltage Vph-ph	V	
+#   193	Min. Average Current	A	
+#   195	Min. Total Apparent Power	V	
+#   197	Min. Total Active Power	W	
+#   199	Min. Total Reactive Power	v	

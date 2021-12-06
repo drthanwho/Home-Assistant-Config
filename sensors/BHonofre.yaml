@@ -1,0 +1,87 @@
+# - platform: mqtt
+#   availability:
+#     - topic: "mqtt/7737033/available"
+#     - payload_available: online
+#   state_topic: "mqtt/7737033/available"
+#   unique_id: 3f3cb133-70c4-41f5-a0cb-b9c9925330c8
+#   unit_of_measurement: "V"
+#   value_template: "{{ value_json.voltage }}"
+#   name: "Phase 1 Voltage"
+#   device_class: voltage
+  # device:
+  #   identifiers: 
+  #     - "7737033"
+  #   name: "PZEM V2"
+  #   model: "BH PZEM V2"
+  #   manufacturer: "Bruno Horta"
+  #   sw_version: "8.1.0"
+# - platform: mqtt
+#   state_topic: "mqtt/7737033/sensor/7737033phaseone71/state"
+#   unique_id: 77fa86a9-d5b7-4d66-aaaa-9f66fd70f73f
+#   unit_of_measurement: "Hz"
+#   value_template: "{{ value_json.frequency }}"
+#   name: "Phase 1 Frequency"
+#   icon: mdi:sine-wave
+#   device:
+#     identifiers: 
+#       - 7737033
+#     name: "PZEM V2"
+#     model: "BH PZEM V2"
+#     manufacturer: "Bruno Horta"
+#     sw_version: "8.1.0"
+# - platform: mqtt
+#   state_topic: "mqtt/7737033/sensor/7737033phaseone71/state"
+#   unique_id: 205bf7e9-021b-4d32-aeb6-784e3d5313eb
+#   value_template: "{{ value_json.pf }}"
+#   name: "Phase 1 Power Factor"
+#   device_class: power_factor
+#   device:
+#     identifiers: 
+#       - 7737033
+#     name: "PZEM V2"
+#     model: "BH PZEM V2"
+#     manufacturer: "Bruno Horta"
+#     sw_version: "8.1.0"
+# - platform: mqtt
+#   state_topic: "mqtt/7737033/sensor/7737033phaseone71/state"
+#   unique_id: 356505b1-a0c7-45e8-aa32-dce2d50ec06f
+#   unit_of_measurement: "A"
+#   value_template: "{{ value_json.current }}"
+#   name: "Phase 1 Current"
+#   icon: mdi:current-ac
+#   device_class: current
+#   device:
+#     identifiers: 
+#       - 7737033
+#     name: "PZEM V2"
+#     model: "BH PZEM V2"
+#     manufacturer: "Bruno Horta"
+#     sw_version: "8.1.0"
+# - platform: mqtt
+#   state_topic: "mqtt/7737033/sensor/7737033phaseone71/state"
+#   unique_id: 18c9454a-fc37-4849-ab6a-78a05e9cc3c2
+#   unit_of_measurement: "W"
+#   value_template: "{{ value_json.power }}"
+#   name: "Phase 1 Power"
+#   device_class: power
+#   device:
+#     identifiers: 
+#       - 7737033
+#     name: "PZEM V2"
+#     model: "BH PZEM V2"
+#     manufacturer: "Bruno Horta"
+#     sw_version: "8.1.0"
+# - platform: mqtt
+#   state_topic: "mqtt/7737033/sensor/7737033phaseone71/state"
+#   unique_id: 0ad645a5-0c4a-49ff-a0a6-02e7c1450da7
+#   unit_of_measurement: "kWh"
+#   value_template: "{{ value_json.energy }}"
+#   name: "Phase 1 Energy"
+#   device_class: energy
+#   device:
+#     identifiers: 
+#       - 7737033
+#     name: "PZEM V2"
+#     model: "BH PZEM V2"
+#     manufacturer: "Bruno Horta"
+#     sw_version: "8.1.0"

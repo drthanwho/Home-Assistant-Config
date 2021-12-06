@@ -1,0 +1,18 @@
+- name: Siemens Frequency
+  address: 55
+  slave: 1
+  data_type: float32
+  unit_of_measurement: Hz
+  precision: 2
+- name: Siemens Maximum Frequency
+  address: 129
+  slave: 1
+  data_type: float32
+  unit_of_measurement: Hz
+  precision: 2
+- name: Siemens Minimum Frequency
+  address: 187
+  slave: 1
+  data_type: float32
+  unit_of_measurement: Hz
+  precision: 2

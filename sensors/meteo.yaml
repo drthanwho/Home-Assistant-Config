@@ -1,0 +1,4 @@
+  # - platform: scrape
+  #   resource: https://meteo.gr/cf-d.cfm?city_id=29
+  #   select: "tr:nth-child(1) > td.innerTableCell.phenomeno-name.dustD"
+  #   name: Dust

@@ -1,0 +1,32 @@
+- verify_ssl: false
+  scan_interval: 60
+  resource: http://192.168.1.250:8085/api/summary
+  sensor:
+    - name: "HDD disk 1"
+      json_attributes_path: "$.data[0].smart_results[0]"
+      value_template: "OK"
+      json_attributes:
+        - "device_wwn"
+        - "date"
+        - "smart_status"
+        - "temp"
+        - "power_on_hours"
+        - "power_cycle_count"
+    # - verify_ssl: false
+    #   scan_interval: 60
+    #   resource: http://YOURIP:ADDONPORT/WWM/summary
+    #   sensor:
+    #     - name: "HDD disk 1 Read Error Rate"
+    #       json_attributes_path: "$.data[0].smart_results[0].ata_attributes[0]"
+    #       value_template: "OK"
+    #       json_attributes:
+    #         - "failure_rate" 
+    # - verify_ssl: false
+    #   scan_interval: 60
+    #   resource: http://YOURIP:ADDONPORT/WWM/summary
+    #   sensor:
+    #     - name: "HDD disk 1 Spin-Up Time Error Rate"
+    #       json_attributes_path: "$.data[1].smart_results[0].ata_attributes[0]"
+    #       value_template: "OK"
+    #       json_attributes:
+    #         - "failure_rate" 

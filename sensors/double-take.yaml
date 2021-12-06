@@ -1,0 +1,55 @@
+  - platform: mqtt
+    name: Thanasis
+    icon: mdi:account
+    state_topic: 'double-take/matches/thanasis'
+    json_attributes_topic: 'double-take/matches/thanasis'
+    value_template: '{{ value_json.camera }}'
+    availability_topic: 'double-take/available'
+
+  - platform: mqtt
+    name: Makis
+    icon: mdi:account
+    state_topic: 'double-take/matches/makis'
+    json_attributes_topic: 'double-take/matches/makis'
+    value_template: '{{ value_json.camera }}'
+    availability_topic: 'double-take/available'
+
+  - platform: mqtt
+    name: Pavlina
+    icon: mdi:account
+    state_topic: 'double-take/matches/pavlina'
+    json_attributes_topic: 'double-take/matches/pavlina'
+    value_template: '{{ value_json.camera }}'
+    availability_topic: 'double-take/available'
+
+  - platform: mqtt
+    name: Magda
+    icon: mdi:account
+    state_topic: 'double-take/matches/magda'
+    json_attributes_topic: 'double-take/matches/madga'
+    value_template: '{{ value_json.camera }}'
+    availability_topic: 'double-take/available'
+
+  - platform: mqtt
+    name: Leonidas
+    icon: mdi:account
+    state_topic: 'double-take/matches/leonidas'
+    json_attributes_topic: 'double-take/matches/leonidas'
+    value_template: '{{ value_json.camera }}'
+    availability_topic: 'double-take/available'
+
+  - platform: mqtt
+    name: Dimitris
+    icon: mdi:account
+    state_topic: 'double-take/matches/dimitris'
+    json_attributes_topic: 'double-take/matches/dimitris'
+    value_template: '{{ value_json.camera }}'
+    availability_topic: 'double-take/available'
+
+  - platform: mqtt
+    name: Kazazoglou
+    icon: mdi:account
+    state_topic: 'double-take/matches/sofia_kaz'
+    json_attributes_topic: 'double-take/matches/sofia_kaz'
+    value_template: '{{ value_json.camera }}'
+    availability_topic: 'double-take/available'

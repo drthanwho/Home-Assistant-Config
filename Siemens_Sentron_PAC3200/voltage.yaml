@@ -1,0 +1,122 @@
+- name: Siemens Voltage Va-n
+  address: 1
+  slave: 1
+  data_type: float32
+  unit_of_measurement: V
+  precision: 2
+- name: Siemens Voltage Vb-n
+  address: 3
+  slave: 1
+  data_type: float32
+  unit_of_measurement: V
+  precision: 2
+- name: Siemens Voltage Vc-n
+  address: 5
+  slave: 1
+  data_type: float32
+  unit_of_measurement: V
+  precision: 2
+- name: Siemens Voltage Va-b
+  address: 7
+  slave: 1
+  data_type: float32
+  unit_of_measurement: V
+  precision: 2
+- name: Siemens Voltage Vb-c
+  address: 9
+  slave: 1
+  data_type: float32
+  unit_of_measurement: V
+  precision: 2
+- name: Siemens Voltage Vc-a
+  address: 9
+  slave: 1
+  data_type: float32
+  unit_of_measurement: V
+  precision: 2
+- name: Siemens Average Voltage Vph-n
+  address: 57
+  slave: 1
+  data_type: float32
+  unit_of_measurement: V
+- name: Siemens Average Voltage Vph-pn
+  address: 59
+  slave: 1
+  data_type: float32
+  unit_of_measurement: V
+- name: Siemens THD-R Voltage a
+  address: 43
+  slave: 1
+  data_type: float32
+  unit_of_measurement: '%'
+- name: Siemens THD-R Voltage b
+  address: 45
+  slave: 1
+  data_type: float32
+  unit_of_measurement: '%'
+- name: Siemens THD-R Voltage c
+  address: 47
+  slave: 1
+  data_type: float32
+  unit_of_measurement: '%'
+- name: Amplitude Unbalance - Voltage
+  address: 71
+  slave: 1
+  data_type: float32
+  unit_of_measurement: '%'
+
+- name: Siemens Maximum Voltage Va-n
+  address: 75
+  slave: 1
+  data_type: float32
+  unit_of_measurement: V
+- name: Siemens Maximum Voltage Vb-n
+  address: 77
+  slave: 1
+  data_type: float32
+  unit_of_measurement: V
+- name: Siemens Maximum Voltage Vc-n
+  address: 79
+  slave: 1
+  data_type: float32
+  unit_of_measurement: V
+- name: Siemens Max. Voltage Va-b
+  address: 81
+  slave: 1
+  data_type: float32
+  unit_of_measurement: V
+- name: Siemens Max. Voltage Vb-c
+  address: 83
+  slave: 1
+  data_type: float32
+  unit_of_measurement: V
+- name: Siemens Max. Voltage Vc-a
+  address: 85
+  slave: 1
+  data_type: float32
+  unit_of_measurement: V
+- name: Siemens Maximum THD-R Voltage a
+  address: 117
+  slave: 1
+  data_type: float32
+  unit_of_measurement: '%'
+- name: Siemens Maximum THD-R Voltage b
+  address: 119
+  slave: 1
+  data_type: float32
+  unit_of_measurement: '%'
+- name: Siemens Maximum THD-R Voltage c
+  address: 121
+  slave: 1
+  data_type: float32
+  unit_of_measurement: '%'
+- name: Siemens Maximum Average Voltage Vph-n
+  address: 131
+  slave: 1
+  data_type: float32
+  unit_of_measurement: V
+- name: Siemens Maximum Average Voltage Vph-ph
+  address: 133
+  slave: 1
+  data_type: float32
+  unit_of_measurement: V

@@ -1,0 +1,40 @@
+# - platform: rest
+#   resource: http://192.168.1.102/ssi.cgi/TemperatureStatus.htm
+#   method: GET
+#   name: Kouzina Camera Temperature
+#   device_class: temperature
+#   verify_ssl: false
+#   value_template:
+
+# - platform: scrape
+#   resource: http://192.168.1.102/ssi.cgi/TemperatureStatus.htm
+#   select: "td"
+#   name: Kouzina Camera Temperature
+#   unit_of_measurement: '°C'
+#   verify_ssl: false
+# - platform: scrape
+#   resource: http://192.168.1.102/ssi.cgi/TemperatureStatus.htm
+#   select: "input:nth-child(3)"
+#   name: Kouzina Camera Temperature F
+#   verify_ssl: false
+
+# - platform: command_line
+#   name: Eisodos Cam Temp
+#   command: 'curl -X GET -H "Accept: text/html" -G "http://192.168.1.103/ssi.cgi/TemperatureStatus.htm"'
+#   scan_interval: 60
+#   unit_of_measurement: '°C'
+#   value_template: '{{ value| regex_findall_index("temperature_c=(\w+.\w+)")}}'
+
+# - platform: command_line
+#   name: Kipos Cam Temp
+#   command: 'curl -X GET -H "Accept: text/html" -G "http://192.168.1.101/ssi.cgi/TemperatureStatus.htm"'
+#   scan_interval: 60
+#   unit_of_measurement: '°C'
+#   value_template: '{{ value| regex_findall_index("temperature_c=(\w+.\w+)")}}'
+
+# - platform: command_line
+#   name: Kouzina Cam Temp
+#   command: 'curl -X GET -H "Accept: text/html" -G "http://192.168.1.102/ssi.cgi/TemperatureStatus.htm"'
+#   scan_interval: 60
+#   unit_of_measurement: '°C'
+#   value_template: '{{ value| regex_findall_index("temperature_c=(\w+.\w+)")}}'
