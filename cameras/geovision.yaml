@@ -8,7 +8,7 @@
   #   input: !secret kipos_url
   # - platform: ffmpeg
   #   name: Eisodos_rtsp
-  #   input: !secret eisodos_url
+  #   input: !secret eisodos_hd_url
   # - platform: ffmpeg
   #   name: Eisodos_HD_rtsp
   #   input: !secret eisodos_hd_url
@@ -45,4 +45,16 @@
     name: Extra_HD_mjpeg
     still_image_url: !secret still_image_url_extra_HD
     verify_ssl: false
+  - platform: generic
+    name: Saloni_mjpeg
+    still_image_url: !secret still_image_url_saloni_HD
+    verify_ssl: false
+  - platform: generic
+    name: Thanasis_HD_mjpeg
+    still_image_url: !secret still_image_url_thanasis_HD
+    verify_ssl: false
+
+
+
+
   
