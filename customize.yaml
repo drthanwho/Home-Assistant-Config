@@ -54,3 +54,5 @@ person.makis:
   entity_picture: /local/makis_2.jpg
 device_tracker.7c_fd_6b_09_7a_a6:
   entity_picture: /local/makis_2.jpg
+sensor.eisodos_cam_temp:
+  friendly_name: Είσοδος Κάμερα Θερμοκρασία
