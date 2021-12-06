@@ -79,7 +79,15 @@
   type: time
   start: "{{ as_timestamp( now().replace(hour=0, minute=0, second=0) ) - now().weekday() * 86400 }}"
   end: "{{ now() }}"
-  # payload_available: "{{value_json.type} | heartbeat }"
+- platform: history_stats
+  name: Δουλειά Ημέρας
+  entity_id: device_tracker.redmi9
+  state: 'Cablel'
+  type: time
+  start: "{{ now().replace(hour=0, minute=0, second=0) }}"
+  end: "{{ now() }}"
+
+# payload_available: "{{value_json.type} | heartbeat }"
 #- platform: history_stats
 #  type: time
 #  name: Πόση ώρα σπίτι
