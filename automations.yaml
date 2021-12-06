@@ -16,15 +16,15 @@
   - data: {}
     service: script.1585512199381
   - data:
-      message: Home Assistant back online! It took {{ states('sensor.restart_time')}}s
-    service: notify.thanasis_tel
-  - data:
       data:
         method: speak
         type: announce
       message: Home Assistant Now <emphasis level="medium">Online!</emphasis>. {{
-        states('sensor.restart_time')}} seconds this time!
+        states('sensor.start_time')}} seconds this time!
     service: notify.alexa_media_office
+  - data:
+      message: Home Assistant back online! It took {{ states('sensor.start_time')}}s
+    service: notify.thanasis_tel
   mode: single
 - alias: Mark person as just arrived
   trigger:
@@ -292,8 +292,8 @@
   trigger:
   - type: motion
     platform: device
-    device_id: 6f17588026674fe6916114df4fdb7d1b
-    entity_id: binary_sensor.saloni_pir
+    device_id: 47fbca00f00c0224ab33c14d3aa9dbf0
+    entity_id: binary_sensor.presence_30
     domain: binary_sensor
   condition:
   - condition: and
@@ -314,7 +314,7 @@
       domain: light
   action:
   - data:
-      transition: 300
+      transition: 60
     service: light.turn_off
     target:
       entity_id: light.saloni
@@ -410,17 +410,24 @@
       entity_id: switch.exoporta
     service: switch.turn_off
 - id: '1570816592068'
-  alias: Couch Lamp Brightness before 12AM
+  alias: Couch Lamp Brightness Before 11PM
   trigger:
-  - entity_id: binary_sensor.saloni_pir
-    from: 'off'
-    platform: state
-    to: 'on'
+  - type: motion
+    platform: device
+    device_id: 0a4ad8ee27b20ead13629217e717b1e9
+    entity_id: binary_sensor.saloni_pir
+    domain: binary_sensor
+  - type: motion
+    platform: device
+    device_id: 47fbca00f00c0224ab33c14d3aa9dbf0
+    entity_id: binary_sensor.presence_30
+    domain: binary_sensor
   condition:
   - condition: and
     conditions:
     - condition: time
       before: '23:00:00'
+      after: '15:00:00'
     - condition: device
       type: is_on
       device_id: 333b79774fe544778453de2b7c3e8874
@@ -447,23 +454,30 @@
       entity_id: light.saloni
   mode: restart
 - id: '1570820685328'
-  alias: 'Couch Lamp Brightness after 12AM '
+  alias: Couch Lamp Brightness After 11PM
   trigger:
-  - entity_id: binary_sensor.saloni_pir
-    from: 'off'
-    platform: state
-    to: 'on'
+  - type: motion
+    platform: device
+    device_id: 0a4ad8ee27b20ead13629217e717b1e9
+    entity_id: binary_sensor.saloni_pir
+    domain: binary_sensor
+  - type: motion
+    platform: device
+    device_id: 47fbca00f00c0224ab33c14d3aa9dbf0
+    entity_id: binary_sensor.presence_30
+    domain: binary_sensor
   condition:
-  - after: '23:01:00'
-    condition: time
-    before: 05:00:00
+  - condition: or
+    conditions:
+    - condition: time
+      after: '23:01:00'
+    - condition: time
+      before: 06:00:00
   - condition: device
     type: is_on
     device_id: 333b79774fe544778453de2b7c3e8874
     entity_id: light.saloni
     domain: light
-  - before: sunrise
-    condition: sun
   action:
   - data:
       brightness_pct: 30
@@ -519,10 +533,11 @@
     before: 06:30:00
   action:
   - data:
-      brightness_pct: 5
+      brightness_pct: 2
       transition: 5
     service: light.turn_on
-    entity_id: light.kouzina
+    target:
+      entity_id: light.kouzina
   mode: restart
 - id: '1571153150471'
   alias: Kitchen Light before 12AM OFF
@@ -662,11 +677,21 @@
       message: 🔔 Κουδούνι 🔔
       title: Κίνηση στην πόρτα 🚪🚶
     service: notify.modile_app_family
-  - service: media_player.play_media
+  - service: notify.android_tv
     data:
-      media_content_id: http://192.168.1.249:8889/
-      media_content_type: image/jpg
-    entity_id: media_player.kouzina_display
+      data:
+        duration: 30
+        transparency: 25%
+        fontsize: large
+        file:
+          path: /media/eisodos.jpg
+      title: 🔔 Κουδούνι 🔔
+      message: Κίνηση στην πόρτα 🚪🚶
+  - service: camera.play_stream
+    target:
+      entity_id: camera.eisodos
+    data:
+      media_player: media_player.kouzina_display
   - delay: 00:02:00
   - service: media_player.turn_off
     data: {}
@@ -681,11 +706,11 @@
     from: home
     platform: state
     to: not_home
-  - below: '250'
+  - below: '200'
     entity_id: sensor.lightlevel
     platform: numeric_state
   condition:
-  - below: '250'
+  - below: '200'
     condition: numeric_state
     entity_id: sensor.lightlevel
   - before: '22:00:00'
@@ -705,12 +730,15 @@
     entity_id: light.kouzina
     domain: light
     brightness_pct: 50
+  - service: automation.turn_on
+    target:
+      entity_id: group.couch_blue
   mode: single
 - id: '1578773460358'
-  alias: Humidity below 56%
-  description: 'Turn dehumidifier off if humidity is below 56% for more than 10mins '
+  alias: Humidity below 58%
+  description: 'Turn dehumidifier off if humidity is below 58% for more than 10mins '
   trigger:
-  - below: '56'
+  - below: '58'
     entity_id: sensor.dehumidifier_current_humidity
     for: 00:10:00
     platform: numeric_state
@@ -737,10 +765,10 @@
       entity_id: humidifier.midea_dehumidifier_18691697727728
   mode: single
 - id: '1578393488643'
-  alias: Humidity above 72%
-  description: Turn on dehumidifier if humidity is above 72% for more than 5 mins
+  alias: Humidity above 73%
+  description: Turn on dehumidifier if humidity is above 73% for more than 5 mins
   trigger:
-  - above: '72'
+  - above: '73'
     entity_id: sensor.dehumidifier_current_humidity
     for: 00:05:00
     platform: numeric_state
@@ -1071,7 +1099,7 @@
   alias: Couch Lamp ON - LUX
   description: ''
   trigger:
-  - below: '500'
+  - below: '100'
     entity_id: sensor.lightlevel
     for: 00:10:00
     platform: numeric_state
@@ -1339,26 +1367,6 @@
       hours: 1
       minutes: 0
       seconds: 0
-  - type: battery_level
-    platform: device
-    device_id: 8a51395da03d4133b4ad5114f2be7243
-    entity_id: sensor.multi_sensor_outside_battery_level
-    domain: sensor
-    below: 20
-    for:
-      hours: 1
-      minutes: 0
-      seconds: 0
-  - type: battery_level
-    platform: device
-    device_id: a48b7cf09c2148dcae17e97149d79dbc
-    entity_id: sensor.multi_sensor_inside_battery_level
-    domain: sensor
-    below: 20
-    for:
-      hours: 1
-      minutes: 0
-      seconds: 0
   - below: 20
     device_id: cc78b14cb76940ecb72f8ec6e02f976a
     domain: sensor
@@ -1381,48 +1389,77 @@
   alias: Unavailable Devices
   description: ''
   trigger:
-  - entity_id: sensor.temperature_outside
-    for: 00:10:00
-    platform: state
-    to: unavailable
-  - entity_id: sensor.temperature_inside
-    for: 00:10:00
-    platform: state
-    to: unavailable
   - entity_id: sensor.sprinkler_ip
-    for: 00:10:00
+    for: 00:02:00
     platform: state
     to: unavailable
   - entity_id: sensor.saloni_ip
-    for: 00:10:00
+    for: 00:02:00
     platform: state
     to: unavailable
   - entity_id: sensor.kouzina_ip
-    for: 00:10:00
+    for: 00:02:00
     platform: state
     to: unavailable
   - entity_id: sensor.koudouni_ip
-    for: 00:10:00
+    for: 00:02:00
     platform: state
     to: unavailable
   - entity_id: sensor.apothiki_ip
-    for: 00:10:00
+    for: 00:02:00
     platform: state
     to: unavailable
   - entity_id: switch.tp_link
-    for: 00:10:00
+    for: 00:02:00
     platform: state
     to: unavailable
   - entity_id: sensor.lightlevel
-    for: 00:10:00
+    for: 00:02:00
     platform: state
     to: unavailable
+  - platform: state
+    entity_id: switch.ypogeio_1
+    to: unavailable
+    for: 00:02:00
+  - type: not_connected
+    platform: device
+    device_id: 02fe1a4bb4314da49dbc9d49d76c795a
+    entity_id: binary_sensor.koudouni_ttgocam_status
+    domain: binary_sensor
+    for:
+      hours: 0
+      minutes: 2
+      seconds: 0
+      milliseconds: 0
+  - platform: state
+    entity_id: light.kouzina
+    to: unavailable
+  - platform: state
+    entity_id: light.veranda_mesaio
+    to: unavailable
+  - platform: state
+    entity_id: light.portas_spitiou
+    to: unavailable
+  - type: not_connected
+    platform: device
+    device_id: 693b52e1f9b9680dfdc0922be65952e5
+    entity_id: binary_sensor.sprinkler_system_status
+    domain: binary_sensor
+  - platform: state
+    entity_id: sensor.pzem_l1_current
+    to: unavailable
+    for:
+      hours: 0
+      minutes: 2
+      seconds: 0
+      milliseconds: 0
   condition: []
   action:
   - data:
       message: '{{ trigger.to_state.attributes.friendly_name }} is offline'
       title: Offline Device
     service: notify.thanasis_tel
+  mode: single
 - id: '1600021782044'
   alias: Eisodos Cam on Kouzina Display
   description: Cast Eisodos Cam on Kouzina Display when Eksoporta is opened
@@ -1432,35 +1469,48 @@
     entity_id: binary_sensor.eksoporta
     platform: device
     type: opened
-  - device_id: 81c541cd5def41758eaf49be76d6fa50
-    domain: binary_sensor
-    entity_id: binary_sensor.openclose_16
-    platform: device
-    type: opened
   - type: opened
     platform: device
     device_id: 75507ad2be3148d0873972e425b1b309
     entity_id: binary_sensor.kuria_eisodos
     domain: binary_sensor
+  - type: motion
+    platform: device
+    device_id: 602a3e8ede4d415224ee4f656661eff2
+    entity_id: binary_sensor.eisodos_person_motion
+    domain: binary_sensor
   condition:
-  - after: '18:00:00'
-    before: 04:00:00
+  - after: '23:00'
+    before: 04:00
     condition: time
   action:
-  - service: media_player.volume_mute
+  - service: media_player.volume_set
+    target:
+      entity_id: media_player.kouzina_display
     data:
-      is_volume_muted: 'no'
-    entity_id: media_player.kouzina_display
-  - data:
-      media_content_id: http://192.168.1.249:8889/
-      media_content_type: image/jpg
-    entity_id: media_player.kouzina_display
-    service: media_player.play_media
-  - delay: 00:01:30
+      volume_level: 0.02
+  - service: camera.play_stream
+    target:
+      entity_id: camera.eisodos
+    data:
+      media_player: media_player.kouzina_display
+  - delay:
+      hours: 0
+      minutes: 1
+      seconds: 0
+      milliseconds: 0
   - data: {}
     entity_id: media_player.kouzina_display
     service: media_player.turn_off
-  mode: single
+  - delay:
+      hours: 0
+      minutes: 0
+      seconds: 10
+      milliseconds: 0
+  - data: {}
+    entity_id: media_player.kouzina_display
+    service: media_player.turn_off
+  mode: restart
 - id: '1600031107502'
   alias: Φως Πόρτας Σπιτιού ΟΝ
   description: ''
@@ -1804,7 +1854,7 @@
   - service: mqtt.publish
     data:
       topic: homeassistant/start
-      payload: '{{ now()|as_timestamp }}'
+      payload: '{{ now().isoformat()|as_timestamp }}'
       retain: true
   mode: single
 - id: '1606933243846'
@@ -1818,7 +1868,7 @@
   - service: mqtt.publish
     data:
       topic: homeassistant/shutdown
-      payload: '{{ now()|as_timestamp }}'
+      payload: '{{ now().isoformat()|as_timestamp }}'
       retain: true
   mode: single
 - id: '1607276664774'
@@ -1845,11 +1895,10 @@
     data:
       entity_id: media_player.kouzina_display
     data_template:
-      media_content_id: '{{ ["https://192.168.1.250:8123/local/audio/xmas/1.mp3",
-        "https://192.168.1.250:8123/local/audio/xmas/2.mp3", "https://192.168.1.250:8123/local/audio/xmas/3.mp3",
-        "https://192.168.1.250:8123/local/audio/xmas/4.mp3", "https://192.168.1.250:8123/local/audio/xmas/5.mp3",
-        "https://192.168.1.250:8123/local/audio/xmas/6.mp3", "https://192.168.1.250:8123/local/audio/xmas/7.mp3"]
-        | random}}'
+      media_content_id: '{{ ["http://192.168.1.250:8123/local/audio/xmas/1.mp3", "http://192.168.1.250:8123/local/audio/xmas/2.mp3",
+        "http://192.168.1.250:8123/local/audio/xmas/3.mp3", "http://192.168.1.250:8123/local/audio/xmas/4.mp3",
+        "http://192.168.1.250:8123/local/audio/xmas/5.mp3", "http://192.168.1.250:8123/local/audio/xmas/6.mp3",
+        "http://192.168.1.250:8123/local/audio/xmas/7.mp3"] | random}}'
       media_content_type: audio/mp3
   mode: queued
   max: 10
@@ -2040,15 +2089,39 @@
     path: bergstrom/mi-magic-cube-deconz-45-actions.yaml
     input:
       remote: cc78b14cb76940ecb72f8ec6e02f976a
-      one_side_slide: true
-      cube_one_side_slide:
-      - type: turn_on
-        device_id: 7fb24f3e36664ac8b916aa4f631d012e
-        entity_id: light.portas_spitiou
+      one_side_slide: false
+      cube_one_side_slide: []
+      double_tap_any_side: false
+      cube_double_tap_any: []
+      rotate_clockwise:
+      - service: media_player.volume_up
+        target:
+          entity_id: media_player.home_echo
+      rotate_counter_clockwise:
+      - service: media_player.volume_down
+        target:
+          entity_id: media_player.home_echo
+      one_to_one:
+      - service: media_player.media_play_pause
+        target:
+          entity_id: media_player.home_echo
+      two_to_two:
+      - type: toggle
+        device_id: deb2526f1a3d9f487aa31dde3081aba9
+        entity_id: light.yeelight_color4_0x0000000017799b6b
         domain: light
-        brightness_pct: 100
+      slide_on_two:
+      - device_id: deb2526f1a3d9f487aa31dde3081aba9
+        domain: light
+        entity_id: light.yeelight_color4_0x0000000017799b6b
+        type: brightness_increase
+      two_to_one:
+      - device_id: deb2526f1a3d9f487aa31dde3081aba9
+        domain: light
+        entity_id: light.yeelight_color4_0x0000000017799b6b
+        type: brightness_decrease
 - id: '1614174553868'
-  alias: deCONZ - Aqara Opple - Wireless Scene Switch 6 Button
+  alias: OPPLE Κουζίνα
   description: ''
   use_blueprint:
     path: Savjee/deconz-aqara-opple-wireless-scene-switch-6-button.yaml
@@ -2083,6 +2156,11 @@
       - service: switch.toggle
         target:
           entity_id: switch.provoleas_led
+      button_middle_left_single_press:
+      - type: toggle
+        device_id: 091b584f0739497abd50181042a5ce94
+        entity_id: switch.sonoff_mini_kouzina_relay
+        domain: switch
 - id: '1614177108362'
   alias: Couch Blue Switch
   description: Toggling Couch Light and its automations
@@ -2121,7 +2199,7 @@
       twilio_flow: FWc0a2e8c66777232e1da11c47463e8246
   mode: single
 - id: '1614293120714'
-  alias: New Automation
+  alias: UPS Alert
   description: ''
   trigger: []
   condition: []
@@ -2167,10 +2245,8 @@
         type: announce
       message: <amazon:emotion name="excited" intensity="high"> RAM reaching  dangerous
         levels at {{states('sensor.memory_use_percent')}}%!</amazon:emotion> Home
-        Assitant will now restart!
-  - service: hassio.addon_restart
-    data:
-      addon: 40817795_vscode-remote
+        Assistant will now restart!
+  - service: homeassistant.restart
   mode: single
 - id: '1615070890445'
   alias: Test
@@ -2229,7 +2305,7 @@
   - platform: event
     event_type: nut.ups_event
     event_data:
-      notify_msg: UPS APC_RS_1000@localhost is unavailable
+      notify_msg: UPS myups@localhost is unavailable
   condition: []
   action:
   - service: hassio.addon_restart
@@ -2468,11 +2544,11 @@
       message: Test
   mode: single
 - id: '1620591408436'
-  alias: Frigate Person in Veranda
+  alias: Frigate Person in Veranda (Saloni)
   description: Turn light on in Veranda if it's too dark and person is detected
   trigger:
   - platform: state
-    entity_id: binary_sensor.veranda_person_motion
+    entity_id: binary_sensor.mouria_person_motion
     to: 'on'
   condition:
   - type: is_illuminance
@@ -2484,7 +2560,8 @@
   action:
   - service: light.turn_on
     target:
-      entity_id: light.veranda_mesaio
+      entity_id:
+      - light.veranda_mesaio
     data:
       transition: 20
       brightness_pct: 100
@@ -2495,7 +2572,8 @@
       milliseconds: 0
   - service: light.turn_off
     target:
-      entity_id: light.veranda_mesaio
+      entity_id:
+      - light.veranda_mesaio
     data:
       transition: 60
   mode: restart
@@ -2509,4 +2587,818 @@
   condition: []
   action:
   - service: homeassistant.restart
+  mode: single
+- id: '1620912550412'
+  alias: Publish hours at work to MQTT sensor
+  description: ''
+  trigger:
+  - platform: zone
+    entity_id: device_tracker.redmi9
+    zone: zone.home
+    event: enter
+  condition: []
+  action:
+  - service: mqtt.publish
+    data:
+      topic: work/daily_hours
+      payload_template: '{{states(''sensor.douleia_emeras'')}}'
+  mode: single
+- id: '1620914211100'
+  alias: Revert Restart Boolean
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: input_boolean.restart_home_assistant
+    to: 'on'
+  condition: []
+  action:
+  - service: input_boolean.turn_off
+    target:
+      entity_id: input_boolean.restart_home_assistant
+  mode: single
+- id: '1621091495450'
+  alias: 'Frigate Person Notification  '
+  description: ''
+  use_blueprint:
+    path: hunterjm/frigate_notification.yaml
+    input:
+      camera: eisodos
+      notify_device: db09068695e85ab8aac8bc388ce28b9e
+      base_url: !secret base_url
+- id: '1621698683913'
+  alias: Notify of events video
+  description: ''
+  trigger:
+  - platform: mqtt
+    topic: frigate/events
+  condition:
+  - condition: template
+    value_template: '{{ trigger.payload_json["type"] == "end" }}'
+  action:
+  - service: telegram_bot.send_video
+    data_template:
+      target: 627190871
+      timeout: 3000
+      url: http://192.168.1.245:5000/clips/{{trigger.payload_json["after"]["camera"]}}-{{trigger.payload_json["after"]["id"]}}.mp4
+      caption: A {{trigger.payload_json["after"]["label"]}} was detected on {{ trigger.payload_json["after"]["camera"]
+        }} camera
+  mode: single
+- id: '1621699151815'
+  alias: Notify of events
+  description: ''
+  trigger:
+  - platform: mqtt
+    topic: frigate/events
+  condition:
+  - condition: template
+    value_template: '{{ trigger.payload_json["type"] == "end" }}'
+  action:
+  - service: notify.thanasis_tel
+    data_template:
+      message: A {{trigger.payload_json["after"]["label"]}} was detected.
+      data:
+        photo:
+        - url: !secret frigate_snapshots
+          caption: A {{trigger.payload_json["after"]["label"]}} was detected on {{
+            trigger.payload_json["after"]["camera"] }} camera
+  mode: single
+- id: '1622236152619'
+  alias: Telegram Bot Test
+  description: ''
+  trigger:
+  - platform: homeassistant
+    event: start
+  condition: []
+  action:
+  - service: telegram_bot.send_message
+    data:
+      message: '{{ states(''sensor.restart_time'')}}'
+  mode: single
+- id: '1623405047259'
+  alias: Veranda Mesaio Auto Turn Off
+  description: ''
+  trigger:
+  - platform: device
+    type: turned_on
+    device_id: 334cd8e45af24c85a7ecf73b50fa47f4
+    entity_id: light.veranda_mesaio
+    domain: light
+  condition:
+  - above: '1500'
+    condition: numeric_state
+    entity_id: sensor.lightlevel
+  action:
+  - type: turn_off
+    device_id: 334cd8e45af24c85a7ecf73b50fa47f4
+    entity_id: light.veranda_mesaio
+    domain: light
+  mode: single
+- id: '1625333308185'
+  alias: OPPLE Βεράντα
+  description: ''
+  use_blueprint:
+    path: Savjee/deconz-aqara-opple-wireless-scene-switch-6-button.yaml
+    input:
+      remote: f8b3ac8590a991d403fdc676b418cf09
+      button_top_left_single_press:
+      - service: switch.toggle
+        target:
+          entity_id: switch.provoleas_aristera
+      button_top_right_single_press:
+      - service: switch.toggle
+        target:
+          entity_id: switch.provoleas_led
+      button_middle_left_single_press:
+      - type: toggle
+        device_id: 334cd8e45af24c85a7ecf73b50fa47f4
+        entity_id: light.veranda_mesaio
+        domain: light
+      button_middle_left_hold_in:
+      - device_id: 334cd8e45af24c85a7ecf73b50fa47f4
+        domain: light
+        entity_id: light.veranda_mesaio
+        type: brightness_decrease
+      button_bottom_left_single_press:
+      - service: media_player.volume_down
+        target:
+          entity_id: media_player.nad
+      button_bottom_right_single_press:
+      - service: media_player.volume_up
+        target:
+          entity_id: media_player.nad
+      button_bottom_left_hold_in:
+      - service: media_player.turn_on
+        target:
+          entity_id: media_player.nad
+      - service: media_player.media_play_pause
+        target:
+          entity_id: media_player.office
+- id: '1625396320082'
+  alias: AC Current Temperature Update
+  trigger: []
+  action:
+  - service: esphome.ac_ir_remote_set_current_tempareture
+    data:
+      temp: '{{ states(''sensor.temperature_inside'') | float }}'
+  mode: queued
+  max: 10
+- id: '1625439455563'
+  alias: HASP Core functionality - DESK
+  description: ''
+  use_blueprint:
+    path: HASwitchPlate/hasp_Core_Functionality.yaml
+    input:
+      page3font_select: 6 - Noto Sans 32
+      haspdevice: bdd6e03da8a3fd055a5af8097cccf7cf
+      reset_hasp: false
+      page3text: MUSIC
+      page1font_select: 6 - Noto Sans 32
+      page_scroll: false
+      page2font_select: 6 - Noto Sans 32
+      page2page: 6
+      page2text: A/C
+      page3page: 8
+- id: '1625439882350'
+  alias: 'HASP p[x].b[y] displays a clock with a clock icon - DESK '
+  description: ''
+  use_blueprint:
+    path: HASwitchPlate/hasp_Display_Clock_with_Icon.yaml
+    input:
+      haspdevice: bdd6e03da8a3fd055a5af8097cccf7cf
+      hour24: true
+      haspbutton: 4
+- id: '1625440085802'
+  alias: HASP p[6].b[all] Page 6 displays Heatpump controls -DESK
+  description: ''
+  use_blueprint:
+    path: HASwitchPlate/hasp_Display_Heatpump_Control_page6.yaml
+    input:
+      suffix_select: °C
+      haspdevice: bdd6e03da8a3fd055a5af8097cccf7cf
+      heatpump: climate.hall_ac
+      roundtemp: false
+- id: '1625440646687'
+  alias: HASP p[8].b[all] Page 8 displays media controls - DESK
+  description: ''
+  use_blueprint:
+    path: HASwitchPlate/hasp_Display_Media_Control_page8.yaml
+    input:
+      haspdevice: bdd6e03da8a3fd055a5af8097cccf7cf
+      mediaplayer: media_player.home_echo
+- id: '1625921421276'
+  alias: HASP Kouzina  Temperature Outside
+  description: ''
+  use_blueprint:
+    path: HASwitchPlate/hasp_Display_Temperature_with_Icon_and_Colors.yaml
+    input:
+      suffix_select: °C
+      haspdevice: bdd6e03da8a3fd055a5af8097cccf7cf
+      temperature_sensor: sensor.temperature_outside
+      weather_provider: weather.dark_sky
+      roundtemp: false
+      colortemp: true
+      haspbutton: 7
+      thermometer_half_threshold: 20
+      thermometer_three_quarter_threshold: 25
+      thermometer_full_threshold: 30
+      thermometer_quarter_threshold: 15
+- id: '1625955868371'
+  alias: HASP dimming
+  description: ''
+  trigger:
+  - type: motion
+    platform: device
+    device_id: 3aa093b0cdf229276fd592425a7492d4
+    entity_id: binary_sensor.kouzina_pir
+    domain: binary_sensor
+  condition: []
+  action:
+  - service: light.turn_on
+    target:
+      entity_id: light.plate01_backlight
+    data:
+      brightness_step_pct: 5
+      kelvin: 3000
+  mode: single
+- id: '1625955924784'
+  alias: HASP off
+  description: ''
+  trigger:
+  - type: no_motion
+    platform: device
+    device_id: 3aa093b0cdf229276fd592425a7492d4
+    entity_id: binary_sensor.kouzina_pir
+    domain: binary_sensor
+    for:
+      hours: 0
+      minutes: 5
+      seconds: 0
+      milliseconds: 0
+  condition: []
+  action:
+  - service: light.turn_off
+    target:
+      entity_id: light.plate01_backlight
+    data:
+      transition: 60
+  mode: single
+- id: '1626044269074'
+  alias: 3D printing finished and bed temperatured down to ambient
+  description: ''
+  trigger:
+  - platform: numeric_state
+    entity_id: sensor.octoprint_actual_bed_temp
+    below: '32'
+  condition: []
+  action:
+  - service: telegram_bot.send_message
+    data:
+      message: Print is ready! Turning off printer
+  - service: switch.turn_off
+    target:
+      entity_id: switch.3d_printer_2
+  mode: single
+- id: '1626950127256'
+  alias: Water Leak in the garage
+  description: ''
+  trigger:
+  - type: moist
+    platform: device
+    device_id: f8983c5e47aa4aa67772a8a0242c7760
+    entity_id: binary_sensor.water_leak_garage
+    domain: binary_sensor
+  condition: []
+  action:
+  - device_id: fa966ced71ec4240b5bcd839ab3b0bfc
+    domain: mobile_app
+    type: notify
+    title: Διαρροή Νερού
+    message: Ανιχνεύθηκε νερό στην αποθήκη κοντά στην γκαραζόπορτα!
+  - device_id: 5929c74039350b1dd8ce91ab8bfbc44e
+    domain: mobile_app
+    type: notify
+    message: Ανιχνεύθηκε νερό στην αποθήκη κοντά στην γκαραζόπορτα!
+    title: Διαρροή Νερού
+  - device_id: adb10797c927406ebb28eb71b267a8d5
+    domain: mobile_app
+    type: notify
+    title: Διαρροή Νερού
+    message: Ανιχνεύθηκε νερό στην αποθήκη κοντά στην γκαραζόπορτα!
+  - device_id: 68dacbadc2db4c238fc344ae6dfc24bd
+    domain: mobile_app
+    type: notify
+    title: Διαρροή Νερού
+    message: Ανιχνεύθηκε νερό στην αποθήκη κοντά στην γκαραζόπορτα!
+  - device_id: db09068695e85ab8aac8bc388ce28b9e
+    domain: mobile_app
+    type: notify
+    title: Διαρροή Νερού
+    message: Ανιχνεύθηκε νερό στην αποθήκη κοντά στην γκαραζόπορτα!
+  mode: single
+- id: '1627821124629'
+  alias: Alarm trigger
+  description: ''
+  trigger:
+  - platform: device
+    device_id: fdb7af3adfb281da8b12e55877b647c7
+    domain: alarm_control_panel
+    entity_id: alarm_control_panel.alarmo
+    type: triggered
+  condition: []
+  action:
+  - service: yeelight.start_flow
+    target:
+      entity_id: light.yeelight_color4_0x0000000017799b6b
+    data:
+      transitions: Police2
+  - service: lifx.effect_pulse
+    target:
+      entity_id: light.saloni
+    data:
+      mode: blink
+      brightness: 255
+      color_name: red
+      cycles: 100
+  mode: single
+- id: '1628175745284'
+  alias: Frigate Person in Veranda (Trapezaria)
+  description: Turn light on in Veranda if it's too dark and person is detected
+  trigger:
+  - platform: state
+    entity_id: binary_sensor.trapezaria_person_motion
+    to: 'on'
+  condition:
+  - type: is_illuminance
+    condition: device
+    device_id: 91b241e6a78f4ff0a6d4ee61854f3bd4
+    entity_id: sensor.lightlevel
+    domain: sensor
+    below: 20
+  action:
+  - service: light.turn_on
+    data:
+      transition: 20
+      brightness_pct: 100
+    target:
+      entity_id: light.trapezaria_mesaio
+  - delay:
+      hours: 0
+      minutes: 5
+      seconds: 0
+      milliseconds: 0
+  - service: light.turn_off
+    target:
+      entity_id:
+      - light.trapezaria_mesaio
+    data:
+      transition: 60
+  mode: restart
+- id: '1628248980830'
+  alias: Water leak test
+  description: ''
+  trigger:
+  - type: moist
+    platform: device
+    device_id: 676e4db9871bdfbc180bf9d7a341ea29
+    entity_id: binary_sensor.water_leak_water_heater
+    domain: binary_sensor
+  condition: []
+  action:
+  - device_id: 270563f49c8e4495ac344958479f3da6
+    domain: light
+    entity_id: light.kouzina
+    type: flash
+  mode: single
+- id: '1628855357975'
+  alias: Tariff Change
+  description: ''
+  trigger:
+  - platform: time
+    at: '23:00'
+  - platform: time
+    at: 07:00
+  condition: []
+  action:
+  - service: utility_meter.next_tariff
+    target:
+      entity_id:
+      - utility_meter.phase_all_monthly
+      - utility_meter.phase_l1_monthly
+      - utility_meter.phase_l2_monthly
+      - utility_meter.phase_l3_monthly
+  mode: single
+- id: '1628957873151'
+  alias: Stream Camera when Frigate sees Person on Kouzina Display
+  description: ''
+  trigger:
+  - type: motion
+    platform: device
+    device_id: 749a677a5d2ca3996f07fb6a8b0491d7
+    entity_id: binary_sensor.eisodos_person_motion
+    domain: binary_sensor
+  - type: motion
+    platform: device
+    device_id: a33ea83280d5ad57d6b29bedeb60d939
+    entity_id: binary_sensor.kouzina_person_motion
+    domain: binary_sensor
+  - type: motion
+    platform: device
+    device_id: 33f1e0c087bb2cad4fe5eaf28f0d60d3
+    entity_id: binary_sensor.veranda_person_motion
+    domain: binary_sensor
+  - type: motion
+    platform: device
+    device_id: 01b9864d661e7ca8e94153927e99fe7a
+    entity_id: binary_sensor.kipos_person_motion
+    domain: binary_sensor
+  condition: []
+  action:
+  - service: camera.play_stream
+    data:
+      media_player: media_player.kouzina_display
+    target:
+      entity_id: "{% if trigger.to_state.attributes.friendly_name == 'Eisodos Person\
+        \ Motion' %}  \n  camera.eisodos \n{% elif trigger.to_state.attributes.friendly_name\
+        \ == 'Veranda Person Motion' %} \n  camera.veranda \n{% elif trigger.to_state.attributes.friendly_name\
+        \ == 'Kouzina Person Motion' %}\n  camera.kouzina \n{% elif trigger.to_state.attributes.friendly_name\
+        \ == 'Kipos Person Motion' %} \n  camera.kipos \n{% endif %}"
+  - delay:
+      hours: 0
+      minutes: 1
+      seconds: 0
+      milliseconds: 0
+  - service: media_player.turn_off
+    target:
+      entity_id: media_player.kouzina_display
+  - delay:
+      hours: 0
+      minutes: 0
+      seconds: 10
+      milliseconds: 0
+  - service: media_player.turn_off
+    target:
+      entity_id: media_player.kouzina_display
+  mode: single
+- id: '1628965686363'
+  alias: Stream Camera when Frigate sees Person on TV
+  description: ''
+  trigger:
+  - type: motion
+    platform: device
+    device_id: 602a3e8ede4d415224ee4f656661eff2
+    entity_id: binary_sensor.eisodos_person_motion
+    domain: binary_sensor
+  - type: motion
+    platform: device
+    device_id: fe9169bc5621132560baec53797669a3
+    entity_id: binary_sensor.kouzina_person_motion
+    domain: binary_sensor
+  - type: motion
+    platform: device
+    device_id: f25e039ab28103309cd011efdb95c32e
+    entity_id: binary_sensor.veranda_person_motion
+    domain: binary_sensor
+  - type: motion
+    platform: device
+    device_id: 81e4cac94ffbe402507a8a946bfbe6f9
+    entity_id: binary_sensor.kipos_person_motion
+    domain: binary_sensor
+  condition: []
+  action:
+  - service: camera.play_stream
+    data:
+      media_player: media_player.tv_box
+    target:
+      entity_id: '{% if trigger.to_state.attributes.friendly_name == ''Eisodos Person
+        Motion'' %}  camera.eisodos {% elif trigger.to_state.attributes.friendly_name
+        == ''Veranda Person Motion'' %} camera.veranda {% elif trigger.to_state.attributes.friendly_name
+        == ''Kouzina Person Motion'' %} camera.kouzina {% elif trigger.to_state.attributes.friendly_name
+        == ''Kipos Person Motion'' %} camera.kipos {% endif %}'
+  mode: single
+- id: '1629734075235'
+  alias: HASP Kouzina LED Kipos
+  description: ''
+  use_blueprint:
+    path: HASwitchPlate/hasp_Display_Toggle.yaml
+    input:
+      ycen_select: 1 - Centered
+      haspdevice: bdd6e03da8a3fd055a5af8097cccf7cf
+      haspbutton: 5
+      entity: switch.provoleas_led
+      action_on:
+      - service: switch.turn_on
+        target:
+          entity_id: switch.provoleas_led
+      action_off:
+      - service: switch.turn_off
+        target:
+          entity_id: switch.provoleas_led
+      text_on: Provoleas ΟΝ
+      text_off: Provoleas OFF
+- id: '1630075249922'
+  alias: Turn on Printer
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: sensor.hp_laserjet_cp_1025
+    attribute: state_message
+    to: Waiting for printer to become available.
+    for:
+      hours: 0
+      minutes: 0
+      seconds: 2
+      milliseconds: 0
+  - platform: state
+    entity_id: sensor.hp_laserjet_cp1025_hpcups_3_18_12_requires_proprietary_plugin
+    attribute: state_message
+    to: Waiting for printer to become available.
+    for:
+      hours: 0
+      minutes: 0
+      seconds: 2
+      milliseconds: 0
+  condition: []
+  action:
+  - service: switch.turn_on
+    target:
+      entity_id: switch.switchbot_2
+  mode: single
+- id: '1630092681728'
+  alias: Turn ON TV if COSMOTE turns ON
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: media_player.android_tv
+    from: 'off'
+    to: idle
+    for:
+      hours: 0
+      minutes: 0
+      seconds: 5
+      milliseconds: 0
+  - platform: state
+    entity_id: media_player.android_tv
+    to: 'off'
+    for:
+      hours: 0
+      minutes: 0
+      seconds: 5
+      milliseconds: 0
+  condition: []
+  action:
+  - service: esphome.bw_rc1_transmit_raw
+    data:
+      code:
+      - 887
+      - -873
+      - 1809
+      - -897
+      - 887
+      - -871
+      - 911
+      - -870
+      - 913
+      - -868
+      - 914
+      - -1772
+      - 1783
+      - -871
+      - 913
+      - -1745
+      - 914
+      - -873
+      - 1810
+      - -896
+      - 887
+  mode: single
+- id: '1630872376815'
+  alias: Basement Light ON
+  description: Turns ON basement light when garage door opens
+  trigger:
+  - type: opened
+    platform: device
+    device_id: 1bbb0efcba7c4986b118bd8b802030dc
+    entity_id: binary_sensor.openclose_18
+    domain: binary_sensor
+    for:
+      hours: 0
+      minutes: 0
+      seconds: 30
+      milliseconds: 0
+  condition: []
+  action:
+  - type: turn_on
+    device_id: 0292d690632b5d343b52b6d3080dc460
+    entity_id: switch.basement_light
+    domain: switch
+  mode: single
+- id: '1630872554125'
+  alias: Basement Light OFF
+  description: Turns OFF basement light of garage door has been closed for more than
+    5mins
+  trigger:
+  - type: not_opened
+    platform: device
+    device_id: 1bbb0efcba7c4986b118bd8b802030dc
+    entity_id: binary_sensor.openclose_18
+    domain: binary_sensor
+    for:
+      hours: 0
+      minutes: 5
+      seconds: 0
+      milliseconds: 0
+  condition: []
+  action:
+  - type: turn_off
+    device_id: 0292d690632b5d343b52b6d3080dc460
+    entity_id: switch.basement_light
+    domain: switch
+  mode: single
+- id: '1631874810062'
+  alias: Trapezaria Mesaio Auto Turn Off
+  description: ''
+  trigger:
+  - platform: device
+    type: turned_on
+    device_id: 7157d079c57dc0fcef2ee7dcd39f7feb
+    entity_id: light.trapezaria_mesaio
+    domain: light
+  condition:
+  - above: '1500'
+    condition: numeric_state
+    entity_id: sensor.lightlevel
+  action:
+  - type: turn_off
+    device_id: 7157d079c57dc0fcef2ee7dcd39f7feb
+    entity_id: light.trapezaria_mesaio
+    domain: light
+  mode: single
+- id: '1632070547185'
+  alias: Tariff Change Helper Kanoniko
+  description: ''
+  trigger:
+  - platform: time
+    at: 07:00
+  condition: []
+  action:
+  - service: input_number.set_value
+    target:
+      entity_id: input_number.deh_xreosi
+    data:
+      value: 0.11065
+  mode: single
+- id: '1632070669974'
+  alias: Tariff Change Helper Nixterino
+  description: ''
+  trigger:
+  - platform: time
+    at: '23:00'
+  condition: []
+  action:
+  - service: input_number.set_value
+    target:
+      entity_id: input_number.deh_xreosi
+    data:
+      value: 0.079
+  mode: single
+- id: '1633784079012'
+  alias: New Automation
+  description: ''
+  trigger:
+  - platform: device
+    type: turned_on
+    device_id: 693b52e1f9b9680dfdc0922be65952e5
+    entity_id: switch.sprinkler_system_relay_1
+    domain: switch
+  condition: []
+  action:
+  - service: timer.start
+    data:
+      duration: 00:{{states('input_number.test_2')|int}}:00
+    target:
+      entity_id: timer.test
+  - delay:
+      minutes: '{{states(''input_number.test_2'')|int}}'
+  - service: switch.turn_off
+    target:
+      entity_id: switch.sprinkler_system_relay_1
+  mode: single
+- id: '1634071734888'
+  alias: Double Take
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: sensor.double_take_eisodos
+  - platform: state
+    entity_id: sensor.double_take_veranda
+  - platform: state
+    entity_id: sensor.double_take_kouzina
+  - platform: state
+    entity_id: sensor.double_take_unknown
+  condition:
+  - condition: template
+    value_template: '{{ trigger.to_state.state != trigger.from_state.state }}'
+  action:
+  - service: notify.mobile_app_thanasis
+    data:
+      message: "{% if trigger.to_state.attributes.match is defined %}\n  {{trigger.to_state.attributes.friendly_name}}\
+        \ is near the {{trigger.to_state.state}} @ {{trigger.to_state.attributes.match.confidence}}%\
+        \ by {{trigger.to_state.attributes.match.detector}}:{{trigger.to_state.attributes.match.type}}\
+        \ taking {{trigger.to_state.attributes.attempts}} attempt(s) @ {{trigger.to_state.attributes.duration}}\
+        \ sec\n{% elif trigger.to_state.attributes.unknown is defined %}\n  unknown\
+        \ is near the {{trigger.to_state.state}} @ {{trigger.to_state.attributes.unknown.confidence}}%\
+        \ by {{trigger.to_state.attributes.unknown.detector}}:{{trigger.to_state.attributes.unknown.type}}\
+        \ taking {{trigger.to_state.attributes.attempts}} attempt(s) @ {{trigger.to_state.attributes.duration}}\
+        \ sec\n{% endif %}"
+      data:
+        attachment:
+          url: "{% if trigger.to_state.attributes.match is defined %}\n  http://192.168.1.245:3000/api/storage/matches/{{trigger.to_state.attributes.match.filename}}?box=true&token={{trigger.to_state.attributes.token}}\n\
+            {% elif trigger.to_state.attributes.unknown is defined %}\n   http://192.168.1.245:3000/api/storage/matches/{{trigger.to_state.attributes.unknown.filename}}?box=true&token={{trigger.to_state.attributes.token}}\n\
+            {% endif %}"
+        actions:
+        - action: URI
+          title: View Image
+          uri: "{% if trigger.to_state.attributes.match is defined %}\n  http://192.168.1.245:3000/api/storage/matches/{{trigger.to_state.attributes.match.filename}}?box=true&token={{trigger.to_state.attributes.token}}\n\
+            {% elif trigger.to_state.attributes.unknown is defined %}\n   http://192.168.1.245:3000/api/storage/matches/{{trigger.to_state.attributes.unknown.filename}}?box=true&token={{trigger.to_state.attributes.token}}\n\
+            {% endif %}"
+  mode: parallel
+  max: 10
+- id: '1634674270534'
+  alias: New Automation
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: light.trapezaria_mesaio
+    to: 'on'
+  condition: []
+  action:
+  - service: telegram_bot.send_message
+    data:
+      message: Άναψε το φως
+  mode: single
+- id: '1635261520452'
+  alias: Θάλεια στο χωριό
+  description: ''
+  trigger:
+  - platform: zone
+    entity_id: device_tracker.eretria_thalias_iphone
+    zone: zone.home
+    event: enter
+  condition: []
+  action:
+  - device_id: fa966ced71ec4240b5bcd839ab3b0bfc
+    domain: mobile_app
+    type: notify
+    message: Η αδερφή στα πάτρια εδάφη !
+  mode: single
+- id: '1635531714937'
+  alias: Frigate Provoleas ON if Person on Kipos
+  description: ''
+  trigger:
+  - type: motion
+    platform: device
+    device_id: 01b9864d661e7ca8e94153927e99fe7a
+    entity_id: binary_sensor.kipos_person_motion
+    domain: binary_sensor
+  condition:
+  - type: is_illuminance
+    condition: device
+    device_id: 91b241e6a78f4ff0a6d4ee61854f3bd4
+    entity_id: sensor.lightlevel
+    domain: sensor
+    below: 200
+  action:
+  - service: switch.turn_on
+    target:
+      entity_id: switch.provoleas_led
+  - delay:
+      hours: 0
+      minutes: 10
+      seconds: 0
+      milliseconds: 0
+  - service: switch.turn_off
+    target:
+      entity_id: switch.provoleas_led
+  - delay:
+      hours: 0
+      minutes: 0
+      seconds: 10
+      milliseconds: 0
+  - service: switch.turn_off
+    target:
+      entity_id: switch.provoleas_led
+  mode: restart
+- id: '1635860867468'
+  alias: Nest Motion
+  description: ''
+  trigger:
+  - platform: device
+    device_id: bf1cba9cb9de716e9d7c495c363af861
+    domain: nest
+    type: camera_motion
+  condition: []
+  action:
+  - service: notify.thanasis_tel
+    data:
+      message: Nest Motion
   mode: single
