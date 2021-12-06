@@ -1,22 +1,35 @@
-- platform: snmp
-  name: Temperature Thanasis Camera
-  host: 192.168.1.107
-  baseoid: iso.3.6.1.4.1.8072.1.3.2.4.1.2.9.71.86.45.66.88.50.55.48.48.5
-  username: geovision2020
-  auth_key: H%bASm%e#fC4+QP
-  auth_protocol: hmac-md5
-  version: '3'
-  value_template: '{{ value | regex_findall_index("(\d+.\d+)")}}'
-  unit_of_measurement: '°C'
-  accept_errors: true
+# - platform: snmp
+#   name: Temperature Kipos Camera
+#   host: 192.168.1.101
+#   baseoid: iso.3.6.1.4.1.8072.1.3.2.4.1.2.16.57.119.85.101.33.117.51.54.53.65.67.86.65.71.94.36.5
+#   username: !secret snmp_username
+#   auth_key: !secret snmp_auth_key_101
+#   auth_protocol: hmac-md5
+#   version: '3'
+#   # value_template: '{{ value | regex_findall_index("(\d+.\d+)")}}'
+#   value_template: '{{ value | regex_findall_index("\[(\w+.\w+)")| round(1)}}'
+#   unit_of_measurement: '°C'
+#   accept_errors: true
 
 # - platform: snmp
 #   name: Temperature Veranda Camera
 #   host: 192.168.1.106
-#   baseoid: iso.3.6.1.4.1.8072.1.3.2.4.1.2.7.86.101.114.97.110.100.97.5
-          
-#   username: geovision2020
-#   auth_key: 9wUe!u365ACVAG^$
+#   baseoid: iso.3.6.1.4.1.8072.1.3.2.4.1.2.16.57.119.85.101.33.117.51.54.53.65.67.86.65.71.94.36.5
+#   username: !secret snmp_username
+#   auth_key: !secret snmp_auth_key_106
+#   auth_protocol: hmac-md5
+#   version: '3'
+#   value_template: '{{ value | regex_findall_index("(\d+.\d+)")}}'
+#   # value_template: '{{ value | regex_findall_index("\[(\w+.\w+)") | round(1)}}'
+#   unit_of_measurement: '°C'
+#   accept_errors: true
+
+# - platform: snmp
+#   name: Temperature Eisodos Camera
+#   host: 192.168.1.108
+#   baseoid: iso.3.6.1.4.1.8072.1.3.2.4.1.2.7.69.105.115.111.100.111.115.5
+#   username: !secret snmp_username
+#   auth_key: !secret snmp_auth_key_108
 #   auth_protocol: hmac-md5
 #   version: '3'
 #   value_template: '{{ value | regex_findall_index("(\d+.\d+)")}}'
@@ -27,8 +40,8 @@
 #   name: Temperature Veranda Camera Raw
 #   host: 192.168.1.106
 #   baseoid: 3.6.1.4.1.8072.1.3.2.4.1.2
-#   username: geovision2020
-#   auth_key: 9wUe!u365ACVAG^$
+#   username: !secret snmp_username
+#   auth_key: !secret snmp_auth_kay_106
 #   auth_protocol: hmac-md5
 #   version: '3'
   # accept_errors: true
@@ -36,8 +49,8 @@
 #   name: Test
 #   host: 192.168.1.103
 #   baseoid: 
-#   username: geovision2020
-#   auth_key: P7Cwt9u!^T2wvyt!
+#   username: !secret snmp_username
+#   auth_key: !secret snmp_auth_key_103
 #   auth_protocol: hmac-md5
 #   version: '3'
 #   value_template: '{{ value | regex_findall_index("(\d+.\d+)")}}'
@@ -46,8 +59,8 @@
 #   name: Test
 #   host: 192.168.1.102
 #   baseoid: 
-#   username: geovision2020
-#   auth_key: 5_rJTS=hAPuQDmYU
+#   username: !secret snmp_username
+#   auth_key: !secret snmp_auth_key_102
 #   auth_protocol: hmac-md5
 #   version: '3'
 #   value_template: '{{ value | regex_findall_index("(\d+.\d+)")}}'
@@ -57,7 +70,7 @@
 #   host: 192.168.1.101
 #   baseoid: 
 #   username: geovision2020
-#   auth_key: W5V_fzHjm=KQ9=?X
+#   auth_key: !secret snmp_auth_key_101v2
 #   auth_protocol: hmac-md5
 #   version: '3'
 #   value_template: '{{ value | regex_findall_index("(\d+.\d+)")}}'
