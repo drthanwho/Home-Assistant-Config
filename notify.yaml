@@ -32,3 +32,6 @@
   name: entity_log
   filename: /config/www/entity_log.txt
   timestamp: false
+# - platform: nfandroidtv
+#   name: Android TV
+#   host: 192.168.1.5
