@@ -7,6 +7,7 @@ esphome:
   name: $devicename
   platform: ESP32
   board: esp-wrover-kit
+  # arduino_version: 1.0.2
 
 packages:
   wifi: !include common_substitutions/wifi.yaml
@@ -21,7 +22,7 @@ binary_sensor:
   - platform: gpio
     pin:
       number: GPIO34
-      mode: INPUT_PULLUP
+      # mode: INPUT_PULLUP
       inverted: True
     name: $friendly_name Button
 
@@ -44,6 +45,7 @@ binary_sensor:
   #   internal: true
 
 esp32_camera:
+  internal: false
   name: $friendly_name Camera
   external_clock:
     pin: GPIO32
@@ -85,14 +87,14 @@ i2c:
 #     id: font3
 #     size: 14
 
-time:
-  - platform: homeassistant
-    id: homeassistant_time
-    on_time:
-      # Every 30 minutes
-      - minutes: 30
-        then:
-          - switch.toggle: restart_switch
+# time:
+#   - platform: homeassistant
+#     id: homeassistant_time
+#     on_time:
+#       # Every 30 minutes
+#       - minutes: 30
+#         then:
+#           - switch.toggle: restart_switch
 
 # display:
 #   - platform: ssd1306_i2c

@@ -1,0 +1,37 @@
+substitutions:
+  devicename: test
+  upper_devicename: test
+
+esphome:
+  name: $devicename
+  platform: ESP8266
+  board: nodemcuv2
+
+packages:
+  wifi: !include common_substitutions/wifi.yaml
+  device_base: !include common_substitutions/device_base.yaml
+
+status_led:
+    pin: 16
+
+sensor:
+  - platform: ultrasonic
+    trigger_pin: GPIO1
+    echo_pin: GPIO3
+    name: "Ultrasonic Sensor"
+    # timeout: 8m
+    update_interval: 20s
+    filters:
+      - lambda: return ((((x*100)-33)-(68-33))/(68-33))*-100;
+      - filter_out: nan
+  - platform: ultrasonic
+    trigger_pin: GPIO1
+    echo_pin: GPIO3
+    update_interval: 20s
+    name: 'Water Tank Volume'
+    unit_of_measurement: 'l'
+    accuracy_decimals: 2
+    icon: mdi:water
+    filters:
+      - lambda: return ((((x*100)-33)-(68-33))/(68-33))*-1000;
+      - filter_out: nan

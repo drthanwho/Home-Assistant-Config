@@ -1,0 +1,32 @@
+substitutions:
+  devicename: fridge
+  upper_devicename: fridge
+
+esphome:
+  name: $devicename
+  platform: ESP8266
+  board: nodemcuv2
+
+packages:
+  wifi: !include common_substitutions/wifi.yaml
+  device_base: !include common_substitutions/device_base.yaml
+
+status_led:
+    pin: 16
+    
+
+# dallas:
+#   - pin: GPIO5
+#     id: 'fridge'
+#   - pin: GPIO4
+#     id: 'freezer'
+
+# sensor:
+#   - platform: dallas
+#     address: 0x220000000107CC28
+#     name: "Temperature Fridge"
+#     dallas_id: fridge
+#   - platform: dallas
+#     address: 0x0100000001077328
+#     name: "Temperature Freezer"
+#     dallas_id: freezer

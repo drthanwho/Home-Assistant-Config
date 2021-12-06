@@ -1,0 +1,156 @@
+esphome:
+  name: $devicename
+  platform: ESP32
+  board: esp32dev
+  # includes: 
+  #   - gree_ir.h
+  # libraries:
+  #   - IRremoteESP8266
+
+logger:
+  logs:
+    text_sensor: NONE
+    sensor: NONE
+
+substitutions:
+  devicename: ac-ir-remote
+  upper_devicename: IR Remote
+  
+# output:
+#   - platform: ledc
+#     pin: GPIO5
+#     id: rtttl_out
+    
+remote_transmitter:
+  pin: GPIO4
+  carrier_duty_percent: 100%
+
+# rtttl:
+#   output: rtttl_out
+
+# api:
+#   services:
+    # - service: play_rtttl
+    #   variables:
+    #     song_str: string
+    #   then:
+    #     - rtttl.play:
+    #         rtttl: !lambda 'return song_str;'
+
+    # - service: transmit_rc_switch_raw
+    #   variables:
+    #     code: int
+    #     protocol: string
+    #   then:
+    #     - remote_transmitter.transmit_rc_switch_raw:
+    #         code: !lambda 'return code;'
+    #         protocol: !lambda 'return protocol;'
+switch:
+  - platform: template
+    name: Round 1 Key Button Switch
+    icon: "mdi:remote"
+    id: round_1_key_button_switch
+    turn_on_action:
+      - remote_transmitter.transmit_rc_switch_raw:
+          code: '01011000111111101101001110'
+          protocol: 2
+          repeat: 10
+
+  - platform: template
+    name: Round 1 Key Button
+    icon: "mdi:remote"
+    turn_on_action:
+    - switch.turn_on: round_1_key_button_switch
+    - delay: 250ms
+    - switch.turn_off: round_1_key_button_switch
+            
+packages:
+  wifi: !include common_substitutions/wifi.yaml
+  device_base: !include common_substitutions/device_base.yaml
+
+# remote_receiver:
+#   pin: GPIO32
+#   dump:
+#     - rc_switch
+#   tolerance: 60%
+#   filter: 4us
+#   idle: 4ms
+
+# remote_transmitter:
+#   pin: 
+#     number: GPIO2
+#     inverted : false
+#   carrier_duty_percent: 50%
+#   id: trsr
+
+status_led:
+    pin: 
+      number: GPIO2
+      inverted : true
+
+# climate:
+# - platform: custom
+#   lambda: |-
+#     auto my_ac = new GreeAC();
+#     App.register_component(my_ac);
+#     return {my_ac};
+
+#   climates:
+#     - name: "My AC"
+
+# binary_sensor:
+#   - platform: custom
+#     lambda: |-
+#       auto gree_binary_sensor = new GreeSensor();
+#       App.register_component(gree_binary_sensor);
+#       return {gree_binary_sensor};
+#     binary_sensors:
+#       name: "Bedroom AC light"
+# api:
+#   services:
+#     - service: transmit_nec
+#       variables:
+#         address: int
+#         command: int
+#       then:
+#         - remote_transmitter.transmit_nec:
+#             address: !lambda 'return address;'
+#             command: !lambda 'return command;'
+#     # I'm not sure how to use jinja {% if %} statements and return an int,
+#     # So instead I'm using an alternate method that accepts a string for command
+#     - service: transmit_nec_string
+#       variables:
+#         address: int
+#         command: string
+#       then:
+#         - remote_transmitter.transmit_nec:
+#             address: !lambda 'return address;'
+#             command: !lambda 'return (int)strtol(command.c_str(), NULL, 16);'
+#     - service: transmit_raw
+#       variables:
+#         code: int[]
+#       then:
+#         - remote_transmitter.transmit_raw:
+#             code: !lambda 'return code;'
+#             carrier_frequency: 38kHz
+#     - service: transmit_raw_repeat
+#       variables:
+#         code: int[]
+#         carrier_frequency: float
+#         repeat_times: int
+#         repeat_wait_time_us: int
+#       then:
+#         - remote_transmitter.transmit_raw:
+#             code: !lambda 'return code;'
+#             carrier_frequency: !lambda 'return carrier_frequency;'
+#             repeat:
+#               times: !lambda 'return repeat_times;'
+#               wait_time: !lambda 'return repeat_wait_time_us;'
+#     - service: transmit_lg
+#       variables:
+#         data: int
+#         nbits: int
+#       then:
+#         - remote_transmitter.transmit_lg:
+#             data: !lambda 'return data;'
+#             nbits: !lambda 'return nbits;'

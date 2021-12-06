@@ -1,0 +1,197 @@
+substitutions:
+  devicename: door-wemos
+  upper_devicename: Door Wemos
+
+esphome:
+  name: $devicename
+  platform: ESP32
+  board: wemos_d1_mini32
+
+status_led:
+  pin:
+    number: GPIO2
+    inverted: true
+
+logger:
+  # baud_rate: 0
+  hardware_uart: UART1
+  # level: DEBUG
+  # logs:
+  #   text_sensor: NONE
+  #   sensor: NONE
+
+packages:
+  wifi: !include common_substitutions/wifi.yaml
+  device_base: !include common_substitutions/device_base.yaml
+
+# Example configuration entry
+uart:
+  rx_pin: GPIO3
+  tx_pin: GPIO1
+  baud_rate: 57600
+
+# Declare Grow Fingerprint Reader
+fingerprint_grow:
+  sensing_pin: GPIO26
+  on_finger_scan_matched:
+    - text_sensor.template.publish:
+        id: fingerprint_state
+        state: !lambda 'return "Authorized finger " + to_string(finger_id) + ", confidence " + to_string(confidence);'
+  # Pushing a tag_scanned event based on finger_id only if confidence is greater than 50
+    - fingerprint_grow.aura_led_control:
+        state: FLASHING
+        speed: 25
+        color: PURPLE
+        count: 2
+    - if:
+        condition:
+          lambda: 'return confidence > 50;'
+        then:
+          - homeassistant.tag_scanned: !lambda |-
+              switch (finger_id) {
+                case 0:
+                  return "Thanasis";
+                case 1:
+                  return "Pavlina";
+                default:
+                  return "Unknown";
+              }
+    - switch.turn_on: gate
+    - delay: 500ms
+    - switch.turn_off: gate
+  on_finger_scan_unmatched:
+    - text_sensor.template.publish:
+        id: fingerprint_state
+        state: "Unauthorized finger"
+    - fingerprint_grow.aura_led_control:
+        state: FLASHING
+        speed: 25
+        color: RED
+        count: 2
+  on_enrollment_scan:
+    - text_sensor.template.publish:
+        id: fingerprint_state
+        state: !lambda 'return "Enrolling into slot " + to_string(finger_id) + ", scanned " + to_string(scan_num) + " time(s)";'
+    - fingerprint_grow.aura_led_control:
+        state: FLASHING
+        speed: 25
+        color: BLUE
+        count: 2
+    - fingerprint_grow.aura_led_control:
+        state: ALWAYS_ON
+        speed: 10
+        color: PURPLE
+        count: 1
+  on_enrollment_done:
+    - text_sensor.template.publish:
+        id: fingerprint_state
+        state: !lambda 'return "Enrolled into slot " + to_string(finger_id);'
+    - fingerprint_grow.aura_led_control:
+        state: BREATHING
+        speed: 100
+        color: BLUE
+        count: 2
+  on_enrollment_failed:
+    - text_sensor.template.publish:
+        id: fingerprint_state
+        state: !lambda 'return "Failed to enroll into slot " + to_string(finger_id);'
+    - delay: 3s
+    - text_sensor.template.publish:
+        id: fingerprint_state
+        state: !lambda 'return "Retrying enrollment into slot " + to_string(finger_id) + " in 3 seconds...";'
+    - delay: 3s
+    - fingerprint_grow.enroll: !lambda 'return finger_id;'
+    - fingerprint_grow.aura_led_control:
+        state: FLASHING
+        speed: 25
+        color: RED
+        count: 4
+ 
+ota:
+  on_begin:
+    then:
+      - fingerprint_grow.aura_led_control:
+          state: FLASHING
+          speed: 50
+          color: PURPLE
+          count: 2
+  # on_progress:
+  #   then:
+  #     - fingerprint_grow.aura_led_control:
+  #         state: FLASHING
+  #         speed: 100
+  #         color: PURPLE
+  #         count: 1
+  on_end:
+    then:
+      - fingerprint_grow.aura_led_control:
+          state: FLASHING
+          speed: 50
+          color: PURPLE
+          count: 2
+  on_error:
+    then:
+      - fingerprint_grow.aura_led_control:
+          state: FLASHING
+          speed: 80
+          color: RED
+          count: 2
+
+api:
+  services:
+  - service: enroll
+    variables:
+      finger_id: int
+      num_scans: int
+    then:
+      - fingerprint_grow.enroll:
+          finger_id: !lambda 'return finger_id;'
+          num_scans: !lambda 'return num_scans;'
+      - text_sensor.template.publish:
+          id: fingerprint_state
+          state: "Place a finger on the reader"
+  - service: cancel_enroll
+    then:
+      - fingerprint_grow.cancel_enroll:
+  - service: delete
+    variables:
+      finger_id: int
+    then:
+      - fingerprint_grow.delete:
+          finger_id: !lambda 'return finger_id;'
+  - service: delete_all
+    then:
+      - fingerprint_grow.delete_all:
+
+# Optional template text sensor for visual feedback
+text_sensor:
+  - platform: template
+    id: fingerprint_state
+    name: "Fingerprint State"
+
+# Optional component (GPIO switch, lock etc.) to control in on_finger_scan_matched trigger
+switch:
+  - platform: gpio
+    pin: GPIO14
+    id: gate
+
+# Optional sensors
+binary_sensor:
+  - platform: fingerprint_grow
+    id: fingerprint_enrolling
+    name: "Fingerprint Enrolling"
+
+sensor:
+  - platform: fingerprint_grow
+    fingerprint_count:
+      name: "Fingerprint Count"
+    last_finger_id:
+      name: "Fingerprint Last Finger ID"
+    last_confidence:
+      name: "Fingerprint Last Confidence"
+    status:
+      name: "Fingerprint Status"
+    capacity:
+      name: "Fingerprint Capacity"
+    security_level:
+      name: "Fingerprint Security Level"

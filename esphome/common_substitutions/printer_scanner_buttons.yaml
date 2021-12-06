@@ -3,7 +3,7 @@ binary_sensor:
     id: pavlina_email
     name: Pavlina Email Scan
     pin:
-      number: GPIO12
+      number: GPIO16
       mode: INPUT_PULLUP
       inverted: true
     on_press:
@@ -21,7 +21,7 @@ binary_sensor:
     id: makis_email
     name: Makis Email Scan
     pin:
-      number: GPIO2
+      number: GPIO4
       mode: INPUT_PULLUP
       inverted: true
     on_press:
@@ -39,7 +39,7 @@ binary_sensor:
     id: thanasis_email
     name: Thanasis Email Scan
     pin:
-      number: GPIO3
+      number: GPIO19
       mode: INPUT_PULLUP
       inverted: true
     on_press:
@@ -57,7 +57,7 @@ binary_sensor:
     id: print
     name: Print
     pin:
-      number: GPIO1
+      number: GPIO14
       mode: INPUT_PULLUP
       inverted: true
     on_press:
@@ -71,3 +71,12 @@ binary_sensor:
             service: switch.turn_off
             data:
               entity_id: switch.pdf2print_makis
+        # - homeassistant.service:
+        #     service: switch.turn_on
+        #     data:
+        #       entity_id: switch.switchbot
+        # - delay: 1s
+        # - homeassistant.service:
+        #     service: switch.turn_off
+        #     data:
+        #       entity_id: switch.switchbot

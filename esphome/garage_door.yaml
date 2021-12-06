@@ -4,8 +4,8 @@ substitutions:
 
 esphome:
   name: $devicename
-  platform: ESP8266
-  board: nodemcuv2
+  platform: ESP32
+  board: esp-wrover-kit
 
 packages:
   wifi: !include common_substitutions/wifi.yaml
@@ -13,12 +13,39 @@ packages:
 
 status_led:
     pin: 16
+    
+logger:
+  level: DEBUG
+  logs:
+    text_sensor: NONE
+    sensor: NONE
 
-sensor:    
+# sensor:    
+#   - platform: adc
+#     pin: A0
+#     name: "TEMT6000 Illuminance"
+#     unit_of_measurement: lx
+#     filters:
+#       - lambda: |-
+#           return (x / 10000.0) * 2000000.0;
+
+#       - lambda: |-
+#           return (( 0.25-( 0.000244140625 * x ))/(0.0048828125-x));
+
+sensor:
   - platform: adc
-    pin: A0
-    name: "TEMT6000 Illuminance"
-    unit_of_measurement: lx
-    filters:
-      - lambda: |-
-          return (x / 10000.0) * 2000000.0;
+    pin: GPIO32
+    name: "Makis Petrelaio"
+    update_interval: 30s
+  - platform: adc
+    pin: GPIO33 
+    name: "Makis Petrelaio"
+    update_interval: 30s
+  - platform: adc
+    pin: GPIO35
+    name: "Makis Petrelaio"
+    update_interval: 30s
+    attenuation: 11db
+    # filters:
+    #   - lambda: |-
+    #       return (( 0.25-( 0.000244140625 * x ))/(0.0048828125-x));

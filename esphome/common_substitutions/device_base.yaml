@@ -11,14 +11,35 @@ captive_portal:
 sensor:
   - platform: wifi_signal
     name: $upper_devicename WiFi Signal
-    update_interval: 15s
+    update_interval: 5s
     filters:
       - sliding_window_moving_average:
           window_size: 15
           send_every: 15
           send_first_at: 15
+
   - platform: uptime
-    name: $upper_devicename Uptime
+    name: $upper_devicename Uptime Sensor
+    id: uptime_sensor
+    update_interval: 5s
+    on_raw_value:
+      then:
+        - text_sensor.template.publish:
+            id: uptime_human
+            state: !lambda |-
+              int seconds = round(id(uptime_sensor).raw_state);
+              int days = seconds / (24 * 3600);
+              seconds = seconds % (24 * 3600);
+              int hours = seconds / 3600;
+              seconds = seconds % 3600;
+              int minutes = seconds /  60;
+              seconds = seconds % 60;
+              return (
+                (days ? String(days) + "d " : "") +
+                (hours ? String(hours) + "h " : "") +
+                (minutes ? String(minutes) + "m " : "") +
+                (String(seconds) + "s")
+              ).c_str();
 
 binary_sensor:
   - platform: status
@@ -34,3 +55,8 @@ text_sensor:
   - platform: wifi_info
     ip_address:
       name: $upper_devicename  IP
+
+  - platform: template
+    name: $upper_devicename Uptime Human Readable
+    id: uptime_human
+    icon: mdi:clock-start

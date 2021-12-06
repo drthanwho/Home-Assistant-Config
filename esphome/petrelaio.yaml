@@ -1,0 +1,80 @@
+substitutions:
+  devicename: petrelaio
+  upper_devicename: Petrelaio
+
+esphome:
+  name: $devicename
+  platform: ESP8266
+  board: nodemcuv2
+  on_loop:
+    then:
+      - lambda: delay(5);
+
+packages:
+  wifi: !include common_substitutions/wifi.yaml
+  device_base: !include common_substitutions/device_base.yaml
+
+sensor:
+  - platform: ultrasonic
+    trigger_pin: GPIO1
+    echo_pin: GPIO3
+    name: "Water Tank Level"
+    unit_of_measurement: "%"
+    accuracy_decimals: 0
+    update_interval: 30min
+    filters:
+      - lambda: return ((((x*100)-20)-(123-20))/(123-20))*-100;
+      - filter_out: nan
+  - platform: dallas
+    address: 0x0F00000000F7EA28
+    name: "Temperature Water Heater"
+      
+dallas:
+  - pin: GPIO5
+    
+  # - platform: ultrasonic
+  #   trigger_pin: GPIO1
+  #   echo_pin: GPIO3
+  #   update_interval: 30min
+  #   name: "Water Tank Volume"
+  #   unit_of_measurement: "l"
+  #   accuracy_decimals: 0
+  #   filters:
+  #     - lambda: return ((((x*100)-20)-(123-20))/(123-20))*-1000;
+  #     - filter_out: nan
+
+# Tank Depth = TD al the way from the cover where the sensor is mounted to the bottom
+# Sensor Value = x this is will stay the same as this is the reading from the sensor
+# Excluded Distance = EX which is the distance I have on top from the sensor which is mounted to the cover to the highest level the water can reach
+#     return ((((x*100)-EX)-(TD-EX))/(TD-EX))*-100
+
+# same for the Water Tank Equation but you have the Tank Capacity in Liters = TC as for mine I have a 1000 Liters tank.
+#     return ((((x*100)-EX)-(TD-EX))/(TD-EX))*-TC
+
+  # - platform: pulse_counter
+  #   pin: GPIO14
+  #   name: “Pulse Counter”
+  #   update_interval: 5s
+  #   id: water_pulse
+  #   internal: true
+  #   filters:
+  #     lambda: |-
+  #       static float total_pulses = 0.0;
+  #       total_pulses += x * 1 / 60.0;
+  #       id(lifetime_counter).publish_state(total_pulses / 27);
+  #       return x ;
+    
+  # - platform: template
+  #   id: lifetime_counter
+  #   name: “Water Total”
+  #   unit_of_measurement: L
+  #   accuracy_decimals: 4
+
+  # - platform: template
+  #   id: water_flow_rate
+  #   name: “Water Flow Rate”
+  #   accuracy_decimals: 4
+  #   icon: 'mdi:water'
+  #   lambda: “return (id(water_pulse).state /27);”
+  #   unit_of_measurement: L/min
+  #   update_interval: 5s

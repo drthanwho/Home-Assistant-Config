@@ -1,0 +1,137 @@
+substitutions:
+  devicename: pzem 
+  upper_devicename: PZEM
+
+esphome:
+  name: $devicename
+  platform: ESP8266
+  board: esp12e
+  
+status_led:
+  pin: GPIO2
+
+packages:
+  wifi: !include common_substitutions/wifi.yaml
+  device_base: !include common_substitutions/device_base.yaml
+  
+# dallas:
+#   - pin: GPIO32
+#     update_interval: 20s
+
+logger:
+  baud_rate: 0  #needs 0, because info & data goes thru one line.
+
+uart:
+  - id: ubus_1
+    tx_pin: GPIO1
+    rx_pin: GPIO3
+    baud_rate: 9600
+    stop_bits: 1
+  # - id: ubus_2
+  #   tx_pin: GPIO17
+  #   rx_pin: GPIO16
+  #   baud_rate: 9600
+  #   stop_bits: 2
+  # - id: ubus_3
+  #   tx_pin: GPIO14
+  #   rx_pin: GPIO25
+  #   baud_rate: 9600
+  #   stop_bits: 2
+
+modbus:
+  - id: mbus_1
+    uart_id: ubus_1
+  # - id: mbus_2
+  #   uart_id: ubus_2
+  # - id: mbus_3
+  #   uart_id: ubus_3
+
+switch:
+  - platform: gpio
+    name: "Relay"
+    pin: GPIO15
+
+sensor:
+#   - platform: dallas
+#     address: 0x0F00000000F7EA28
+#     name: "Boiler Temperature 1"
+#   - platform: dallas
+#     address: 0x510000000147AF28
+#     name: "Boiler Temperature 2"
+#   - platform: dallas
+#     address: 0x0100000001077328
+#     name: "Boiler Temperature 3"
+#   - platform: dallas
+#     address: 0x220000000107CC28
+#     name: "Boiler Temperature 4"
+  - platform: ultrasonic
+    trigger_pin: GPIO1
+    echo_pin: GPIO3
+    name: "Water Tank Level"
+    unit_of_measurement: "%"
+    accuracy_decimals: 0
+    update_interval: 30min
+    filters:
+      - lambda: return ((((x*100)-20)-(123-20))/(123-20))*-100;
+      - filter_out: nan
+
+  - platform: pzemac
+    modbus_id: mbus_1
+    address: 3
+    voltage:
+      name: "PZEM L1 Voltage"
+      unit_of_measurement: V
+    current:
+      name: "PZEM L1 Current"
+      unit_of_measurement: A
+    energy:
+      name: "PZEM L1 Energy"
+    power:
+      name: "PZEM L1 Power"
+      unit_of_measurement: W
+    frequency:
+      name: "PZEM L1 Frequency"
+      # unit_of_measurement: hz
+    power_factor:
+      name: "PZEM L1 Power Factor"
+    update_interval: 5s
+  - platform: pzemac
+    modbus_id: mbus_1
+    address: 1
+    voltage:
+      name: "PZEM L2 Voltage"
+      unit_of_measurement: V
+    current:
+      name: "PZEM L2 Current"
+      unit_of_measurement: A
+    energy:
+      name: "PZEM L2 Energy"
+    power:
+      name: "PZEM L2 Power"
+      unit_of_measurement: W
+    frequency:
+      name: "PZEM L2 Frequency"
+      # unit_of_measurement: hz
+    power_factor:
+      name: "PZEM L2 Power Factor"
+    update_interval: 5s
+  - platform: pzemac
+    modbus_id: mbus_1
+    address: 2
+    voltage:
+      name: "PZEM L3 Voltage"
+      unit_of_measurement: V
+    current:
+      name: "PZEM L3 Current"
+      unit_of_measurement: A
+    energy:
+      name: "PZEM L3 Energy"
+    power:
+      name: "PZEM L3 Power"
+      unit_of_measurement: W
+    frequency:
+      name: "PZEM L3 Frequency"
+      # unit_of_measurement: hz
+    power_factor:
+      name: "PZEM L3 Power Factor"
+    update_interval: 5s

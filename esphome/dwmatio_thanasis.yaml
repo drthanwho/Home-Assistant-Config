@@ -4,9 +4,11 @@ substitutions:
 
 esphome:
   name: $devicename
-  platform: ESP8266
-  board: nodemcuv2
-  comment: "Room motion sensor and scanner/printer buttons to automate scanning documents and sent to email or to printer"
+  platform: ESP32
+  board: esp-wrover-kit
+  comment: "Motion sensor & scanner/printer buttons"
+
+esp32_ble_tracker:
 
 packages:
   wifi: !include common_substitutions/wifi.yaml

@@ -1,0 +1,30 @@
+substitutions:
+  devicename: sprinkler-system
+  upper_devicename: Sprinkler System
+
+esphome:
+  name: $devicename
+  platform: ESP32
+  board: esp-wrover-kit
+  
+status_led:
+  pin: GPIO2
+
+packages:
+  wifi: !include common_substitutions/wifi.yaml
+  device_base: !include common_substitutions/device_base.yaml
+
+esp32_ble_tracker:
+
+binary_sensor:
+  - platform: gpio
+    pin: GPIO34
+    name: "Door"
+    device_class: door
+
+  - platform: gpio
+    pin: GPIO35
+    name: "Living Room Window"
+    device_class: window
+    # mode: INPUT_PULLUP #για αρχή δεν χρειάζεται αλλά μπορει να το χρειστούν κάποια GPIO αν δεν δουλεύουν μόνα τους
+    # inverted: True θα εξαρτηθεί από τα reed switch αν είναι normally closed or normaly open

@@ -4,8 +4,8 @@ substitutions:
 
 esphome:
   name: $devicename
-  platform: ESP8266
-  board: nodemcuv2
+  platform: ESP32
+  board: esp-wrover-kit
   on_loop:
     then:
       - lambda: delay(5);
@@ -14,23 +14,57 @@ packages:
   wifi: !include common_substitutions/wifi.yaml
   device_base: !include common_substitutions/device_base.yaml
 
+
+esp32_ble_tracker:
+
+sensor:
+  # - platform: adc
+  #   pin: GPIO32
+  #   name: "$devicename Illuminance"
+  #   unit_of_measurement: lx
+  #   attenuation: 11db
+  #   filters:
+  #     - lambda: |-
+  #         return (x / 10000.0) * 2000000.0;
+  - platform: xiaomi_lywsd03mmc
+    mac_address: "A4:C1:38:C1:37:3C"
+    bindkey: "2095c002889cf242a11625f856cbe59d"
+    temperature:
+      name: "Kouzina Temperature"
+    humidity:
+      name: "Kouzina Ηumidity"
+    battery_level:
+      name: "Kouzina Battery Level"
+
+status_led:
+  pin: GPIO2
+
 # Sync time with Home Assistant.
 time:
   - platform: homeassistant
     id: homeassistant_time
-  
+
 binary_sensor:
   - platform: gpio
     pin: 13
     name: "$upper_devicename PIR"
     device_class: motion
 
-#i2c:
-#  sda: GPIO0
-#  scl: GPIO2
-#  scan: True
-#  id: bus_a
+output:
+  - platform: ledc
+    pin: GPIO32
+    id: rtttl_out
+rtttl:
+  output: rtttl_out
 
+api:
+  services:
+    - service: play_rtttl
+      variables:
+        song_str: string
+      then:
+        - rtttl.play:
+            rtttl: !lambda 'return song_str;'
 # sensor:
 #  - platform: bme280
 #    temperature:
