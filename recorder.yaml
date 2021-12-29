@@ -88,6 +88,9 @@ include:
     - utility_meter.*
     - sensor.3phase*
     - sensor.*_cost
+    - sensor.*_power
+    - sensor.power_*
+
   entities:
     - sensor.test_template_none
     - sensor.ultrasonic_sensor
@@ -98,9 +101,6 @@ include:
     - utility_meter.fridge
     - sensor.coral_inference_speed
     - sensor.soldering_ion
-    - sensor.saloni_corner_power
-    - sensor.power_32
-    - sensor.power_34
     - switch.sofia_lamp
     - sensor.influxdb_db_size
     - sensor.douleia_ebdomadas
