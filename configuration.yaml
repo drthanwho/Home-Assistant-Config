@@ -203,9 +203,9 @@ tts:
 #     port: 502
 #     sensors: !include_dir_merge_list Siemens_Sentron_PAC3200/
 
-# eufy:
-#   username: !secret thanasis_email
-#   password: !secret eufy_password
+eufy:
+  username: !secret thanasis_email
+  password: !secret eufy_password
 
 # irrigation_unlimited:!include irrigation_unlimited.yaml
 
