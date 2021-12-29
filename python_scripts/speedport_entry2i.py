@@ -24,7 +24,7 @@ import xml.etree.ElementTree as ET
 from xml.etree.ElementTree import ParseError
 
 # Default base url and Argument handling
-speedport_base_url = "http://192.168.1.1"
+speedport_base_url = "http://192.168.0.1"
 
 if len(sys.argv) > 1 and sys.argv[1].startswith("http"):
     speedport_base_url = sys.argv[1]

@@ -1,7 +1,7 @@
 - platform: command_line
   name: Speedport Entry2i status
   scan_interval: 60
-  command: 'python3 /config/python_scripts/speedport_entry2i.py "http://192.168.1.1"'
+  command: 'python3 /config/python_scripts/speedport_entry2i.py "http://192.168.0.1"'
   value_template: '{{ value_json.dsl_link_status }}'
   json_attributes:
     - vdsl_atnu
