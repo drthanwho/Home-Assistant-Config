@@ -29,6 +29,7 @@ ip_bans.yaml
 scripts.yaml
 secrets.yaml
 known_devices.yaml
+/nest/*
 /image/
 /secrets.yaml
 /esphome/secrets.yaml
