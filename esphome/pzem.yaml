@@ -14,9 +14,9 @@ packages:
   wifi: !include common_substitutions/wifi.yaml
   device_base: !include common_substitutions/device_base.yaml
   
-# dallas:
-#   - pin: GPIO32
-#     update_interval: 20s
+dallas:
+  - pin: GPIO12
+    update_interval: 20s
 
 logger:
   baud_rate: 0  #needs 0, because info & data goes thru one line.
@@ -52,29 +52,6 @@ switch:
     pin: GPIO15
 
 sensor:
-#   - platform: dallas
-#     address: 0x0F00000000F7EA28
-#     name: "Boiler Temperature 1"
-#   - platform: dallas
-#     address: 0x510000000147AF28
-#     name: "Boiler Temperature 2"
-#   - platform: dallas
-#     address: 0x0100000001077328
-#     name: "Boiler Temperature 3"
-#   - platform: dallas
-#     address: 0x220000000107CC28
-#     name: "Boiler Temperature 4"
-  - platform: ultrasonic
-    trigger_pin: GPIO1
-    echo_pin: GPIO3
-    name: "Water Tank Level"
-    unit_of_measurement: "%"
-    accuracy_decimals: 0
-    update_interval: 30min
-    filters:
-      - lambda: return ((((x*100)-20)-(123-20))/(123-20))*-100;
-      - filter_out: nan
-
   - platform: pzemac
     modbus_id: mbus_1
     address: 3
@@ -91,7 +68,6 @@ sensor:
       unit_of_measurement: W
     frequency:
       name: "PZEM L1 Frequency"
-      # unit_of_measurement: hz
     power_factor:
       name: "PZEM L1 Power Factor"
     update_interval: 5s
@@ -111,7 +87,6 @@ sensor:
       unit_of_measurement: W
     frequency:
       name: "PZEM L2 Frequency"
-      # unit_of_measurement: hz
     power_factor:
       name: "PZEM L2 Power Factor"
     update_interval: 5s
@@ -131,7 +106,70 @@ sensor:
       unit_of_measurement: W
     frequency:
       name: "PZEM L3 Frequency"
-      # unit_of_measurement: hz
     power_factor:
       name: "PZEM L3 Power Factor"
     update_interval: 5s
+    
+  - platform: dallas
+    address: 0x0F00000000F7EA28
+    name: "Boiler Temperature 1"
+  - platform: dallas
+    address: 0x510000000147AF28
+    name: "Boiler Temperature 2"
+  - platform: dallas
+    address: 0x0100000001077328
+    name: "Boiler Temperature 3"
+  - platform: dallas
+    address: 0x220000000107CC28
+    name: "Boiler Temperature 4"
+# - platform: ultrasonic
+#   trigger_pin: GPIO1
+#   echo_pin: GPIO3
+#   name: "Water Tank Level"
+#   unit_of_measurement: "%"
+#   accuracy_decimals: 0
+#   update_interval: 30min
+#   filters:
+#     - lambda: return ((((x*100)-20)-(123-20))/(123-20))*-100;
+#     - filter_out: nan
+
+
+binary_sensor:
+  - platform: gpio
+    pin:
+      number: GPIO4
+      inverted: true
+    on_press:
+      then:
+        - light.turn_on: 
+            id: burner_fault_status
+            effect: "Fast Pulse"
+    on_release:
+      then:
+        - light.turn_off: burner_fault_status
+    name: "Σφάλμα Καυστήρα"
+    id: burner_fault
+    
+light:
+  - platform: monochromatic
+    name: "Καυστήρας Σφάλμα"
+    id: burner_fault_status
+    output: output_component1
+    effects:
+      - random:
+          name: "My Fast Random Effect"
+          transition_length: 4s
+          update_interval: 5s
+      - pulse:
+          name: "Fast Pulse"
+          transition_length: 0.5s
+          update_interval: 0.5s
+      - pulse:
+          name: "Slow Pulse"
+          update_interval: 2s
+
+output:
+  - platform: esp8266_pwm
+    id: output_component1
+    pin: GPIO5
+
