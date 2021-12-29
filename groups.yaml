@@ -47,3 +47,10 @@ echos:
     - media_player.office
     - media_player.bathroom
     - media_player.bedroom
+
+nest_speakers:
+  name: Nest Speakers
+  entities: 
+    - media_player.kouzina_display
+    - media_player.kouzina_hub
+    - media_player.saloni_speaker
