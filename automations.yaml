@@ -735,11 +735,11 @@
       entity_id: group.couch_blue
   mode: single
 - id: '1578773460358'
-  alias: Humidity below 58%
-  description: 'Turn dehumidifier off if humidity is below 58% for more than 10mins '
+  alias: Humidity below 60%
+  description: 'Turn dehumidifier off if humidity is below 60% for more than 10mins '
   trigger:
-  - below: '58'
-    entity_id: sensor.dehumidifier_current_humidity
+  - below: '60'
+    entity_id: sensor.humidity_veranda
     for: 00:10:00
     platform: numeric_state
   condition: []
@@ -765,13 +765,13 @@
       entity_id: humidifier.midea_dehumidifier_18691697727728
   mode: single
 - id: '1578393488643'
-  alias: Humidity above 73%
-  description: Turn on dehumidifier if humidity is above 73% for more than 5 mins
+  alias: Humidity above 75%
+  description: Turn on dehumidifier if humidity is above 75% for more than 5 mins
   trigger:
-  - above: '73'
-    entity_id: sensor.dehumidifier_current_humidity
+  - entity_id: sensor.humidity_veranda
     for: 00:05:00
     platform: numeric_state
+    above: '75'
   condition: []
   action:
   - service: humidifier.turn_on
@@ -1889,11 +1889,15 @@
   action:
   - service: media_player.volume_set
     data:
-      volume_level: 0.7
-    entity_id: media_player.kouzina_display
+      volume_level: 0.6
+    target:
+      entity_id:
+      - media_player.saloni_speaker
+      - media_player.kouzina_hub
+      - media_player.kouzina_display
   - service: media_player.play_media
     data:
-      entity_id: media_player.kouzina_display
+      entity_id: group.nest_speakers
     data_template:
       media_content_id: '{{ ["http://192.168.1.250:8123/local/audio/xmas/1.mp3", "http://192.168.1.250:8123/local/audio/xmas/2.mp3",
         "http://192.168.1.250:8123/local/audio/xmas/3.mp3", "http://192.168.1.250:8123/local/audio/xmas/4.mp3",
@@ -2158,7 +2162,7 @@
           entity_id: switch.provoleas_led
       button_middle_left_single_press:
       - type: toggle
-        device_id: 091b584f0739497abd50181042a5ce94
+        device_id: 2ae86062ab133b57bfd457501feb5678
         entity_id: switch.sonoff_mini_kouzina_relay
         domain: switch
 - id: '1614177108362'
@@ -2624,7 +2628,7 @@
     input:
       camera: eisodos
       notify_device: db09068695e85ab8aac8bc388ce28b9e
-      base_url: !secret base_url
+      base_url: '!secret base_url'
 - id: '1621698683913'
   alias: Notify of events video
   description: ''
@@ -2658,7 +2662,7 @@
       message: A {{trigger.payload_json["after"]["label"]}} was detected.
       data:
         photo:
-        - url: !secret frigate_snapshots
+        - url: '!secret frigate_snapshots'
           caption: A {{trigger.payload_json["after"]["label"]}} was detected on {{
             trigger.payload_json["after"]["camera"] }} camera
   mode: single
@@ -2856,7 +2860,7 @@
       message: Print is ready! Turning off printer
   - service: switch.turn_off
     target:
-      entity_id: switch.3d_printer_2
+      entity_id: switch.3d_printer
   mode: single
 - id: '1626950127256'
   alias: Water Leak in the garage
@@ -3022,6 +3026,15 @@
         \ == 'Veranda Person Motion' %} \n  camera.veranda \n{% elif trigger.to_state.attributes.friendly_name\
         \ == 'Kouzina Person Motion' %}\n  camera.kouzina \n{% elif trigger.to_state.attributes.friendly_name\
         \ == 'Kipos Person Motion' %} \n  camera.kipos \n{% endif %}"
+  - service: camera.play_stream
+    data:
+      media_player: media_player.kouzina_hub
+    target:
+      entity_id: "{% if trigger.to_state.attributes.friendly_name == 'Eisodos Person\
+        \ Motion' %}  \n  camera.eisodos \n{% elif trigger.to_state.attributes.friendly_name\
+        \ == 'Veranda Person Motion' %} \n  camera.veranda \n{% elif trigger.to_state.attributes.friendly_name\
+        \ == 'Kouzina Person Motion' %}\n  camera.kouzina \n{% elif trigger.to_state.attributes.friendly_name\
+        \ == 'Kipos Person Motion' %} \n  camera.kipos \n{% endif %}"
   - delay:
       hours: 0
       minutes: 1
@@ -3029,7 +3042,9 @@
       milliseconds: 0
   - service: media_player.turn_off
     target:
-      entity_id: media_player.kouzina_display
+      entity_id:
+      - media_player.kouzina_display
+      - media_player.kouzina_hub
   - delay:
       hours: 0
       minutes: 0
@@ -3037,7 +3052,9 @@
       milliseconds: 0
   - service: media_player.turn_off
     target:
-      entity_id: media_player.kouzina_display
+      entity_id:
+      - media_player.kouzina_display
+      - media_player.kouzina_hub
   mode: single
 - id: '1628965686363'
   alias: Stream Camera when Frigate sees Person on TV
@@ -3245,7 +3262,7 @@
     target:
       entity_id: input_number.deh_xreosi
     data:
-      value: 0.11065
+      value: 0.11058
   mode: single
 - id: '1632070669974'
   alias: Tariff Change Helper Nixterino
@@ -3259,7 +3276,7 @@
     target:
       entity_id: input_number.deh_xreosi
     data:
-      value: 0.079
+      value: 0.07896
   mode: single
 - id: '1633784079012'
   alias: New Automation
@@ -3401,4 +3418,137 @@
   - service: notify.thanasis_tel
     data:
       message: Nest Motion
+  mode: single
+- id: '1639771673558'
+  alias: New Automation
+  description: ''
+  trigger: []
+  condition: []
+  action:
+  - choose:
+    - conditions:
+      - condition: state
+        entity_id: humidifier.midea_dehumidifier_18691697727728
+        state: 'off'
+      sequence:
+      - service: humidifier.turn_on
+        target:
+          entity_id: humidifier.midea_dehumidifier_18691697727728
+    default:
+    - service: humidifier.turn_off
+      target:
+        entity_id: humidifier.midea_dehumidifier_18691697727728
+  mode: single
+- id: '1639953094433'
+  alias: Toggle Portatif
+  description: ''
+  trigger:
+  - device_id: c8a875ad54f5457294a7332f4eacd107
+    domain: deconz
+    platform: device
+    type: remote_button_long_press
+    subtype: turn_on
+  condition: []
+  action:
+  - type: turn_on
+    device_id: b0002942d8aaedeb87108ea518dfbf52
+    entity_id: light.color_temperature_light_15
+    domain: light
+    brightness_pct: 100
+  mode: single
+- id: '1640298771940'
+  alias: HASP Boiler Temperature
+  description: ''
+  use_blueprint:
+    path: HASwitchPlate/hasp_Display_Temperature_with_Icon_and_Colors.yaml
+    input:
+      suffix_select: °C
+      haspdevice: bdd6e03da8a3fd055a5af8097cccf7cf
+      haspbutton: 6
+      temperature_sensor: sensor.boiler_temperature_1
+      thermometer_quarter_threshold: 30
+      thermometer_half_threshold: 40
+      thermometer_three_quarter_threshold: 50
+      thermometer_full_threshold: 60
+      colortemp: true
+      roundtemp: false
+      weather_provider: weather.dark_sky
+- id: '1640355111524'
+  alias: Turning on lights when home
+  description: ''
+  trigger:
+  - type: motion
+    platform: device
+    device_id: 0a4ad8ee27b20ead13629217e717b1e9
+    entity_id: binary_sensor.saloni_pir
+    domain: binary_sensor
+  condition:
+  - condition: or
+    conditions:
+    - condition: zone
+      entity_id: device_tracker.redmi9
+      zone: zone.home
+    - condition: zone
+      entity_id: device_tracker.redmi_note_9_pro
+      zone: zone.home
+    - condition: zone
+      entity_id: device_tracker.thanasis
+      zone: zone.home
+  - condition: numeric_state
+    entity_id: sensor.lightlevel
+    below: '400'
+  action:
+  - type: turn_on
+    device_id: 408b594af83d0c41f302e374778a19fb
+    entity_id: switch.saloni_corner
+    domain: switch
+  - service: media_player.media_play
+    target:
+      entity_id: media_player.saloni_speaker
+  mode: single
+- id: '1640458593304'
+  alias: Toggle Xmas Lights
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: switch.smart_plug_8
+  condition: []
+  action:
+  - type: toggle
+    device_id: b81bfd4a7fd12232bb517cd32d9c59e4
+    entity_id: switch.smart_plug_1
+    domain: switch
+  mode: single
+- id: '1640651778141'
+  alias: Toggle Thanasis Light
+  description: ''
+  trigger:
+  - device_id: a895d11696d7cb6aebba404cb26abc71
+    domain: deconz
+    platform: device
+    type: remote_button_short_press
+    subtype: turn_on
+  condition: []
+  action:
+  - type: toggle
+    device_id: a2ea28211e53425a88267276ba3fcfb1
+    entity_id: light.thanasis_light
+    domain: light
+  mode: single
+- id: '1640739430220'
+  alias: Restart PZEM ESP if not all modules are reporting
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: sensor.pzem_l1_current
+    to: unknown
+  condition:
+  - condition: state
+    entity_id: sensor.pzem_l2_current
+    state: unknown
+  action:
+  - type: turn_on
+    device_id: 3a3c00f9913557b4b4216caca2a855fe
+    entity_id: switch.restart_pzem
+    domain: switch
   mode: single
