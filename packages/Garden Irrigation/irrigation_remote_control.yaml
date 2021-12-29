@@ -114,7 +114,7 @@ automation:
         entity_id: input_boolean.irrigation_remote_control
 
     action:
-      - service_template: >
+      - service: >
           automation.turn_{{ states('input_boolean.irrigation_remote_control') }}
         data_template:
           entity_id: >

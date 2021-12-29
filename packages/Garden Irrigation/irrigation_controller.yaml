@@ -73,5 +73,3 @@ automation:
         data:
           entity_id: input_text.irrigation_external_sensor_controller_wifi
           value: sensor.esphome_irrigation_controller_wifi_signal
-
-

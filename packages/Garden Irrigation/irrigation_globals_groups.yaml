@@ -220,4 +220,3 @@ automation:
                                                        boolean.object_id.endswith('_sun') %}
               {{ boolean.entity_id}}{% if not loop.last %}, {% endif %}
             {%- endfor %}
-
