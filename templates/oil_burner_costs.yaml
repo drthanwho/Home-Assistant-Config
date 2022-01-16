@@ -1,0 +1,96 @@
+- sensor:
+    - name: Cost Petrelaio Emeis
+      unit_of_measurement: EUR
+      unique_id: 31db6360-33d6-4e00-8ad5-f6011d8bebc0
+      state: >-
+        {% set a = (states('sensor.heating_emeis') | float(0) ) %}
+        {% set b = (states('sensor.heating_leonidas') | float(0) ) %}
+        {% set c = (states('sensor.heating_sofita') | float(0) ) %}
+        {% set K = (states('sensor.katanalosi_kaustira') | float(0) ) %}
+        {% set i = (states('input_number.oriaia_katanalose_kaustera') | float ) %}
+        {% set P = (states('input_number.time_petrelaiou') | float ) %}
+        {{'%0.2f'|format(i*P*a/(a+b+c))}}        
+      availability: >-
+        {% set sensors = ['binary_sensor.petrleaio_makis', 'binary_sensor.petelaio_leonidas', 'binary_sensor.petrelaio_sofita'] %}
+        {{ expand(sensors)|selectattr('state', 'in', ['unavailable', 'unknown'])|list|length == 0 }}
+- sensor:
+    - name: Cost Petrelaio Leonidas
+      unit_of_measurement: EUR
+      unique_id: 92996ccd-7ce3-472b-9771-5984405679f5
+      state: >-
+        {% set a = (states('sensor.heating_emeis') | float(0) ) %}
+        {% set b = (states('sensor.heating_leonidas') | float(0) ) %}
+        {% set c = (states('sensor.heating_sofita') | float(0) ) %}
+        {% set K = (states('sensor.katanalosi_kaustira') | float(0) ) %}
+        {% set i = (states('input_number.oriaia_katanalose_kaustera') | float ) %}
+        {% set P = (states('input_number.time_petrelaiou') | float ) %}
+        {{'%0.2f'|format(i*P*b/(a+b+c))}}  
+      availability: >-
+        {% set sensors = ['binary_sensor.petrleaio_makis', 'binary_sensor.petelaio_leonidas', 'binary_sensor.petrelaio_sofita'] %}
+        {{ expand(sensors)|selectattr('state', 'in', ['unavailable', 'unknown'])|list|length == 0 }}
+- sensor:
+    - name: Cost Petrelaio Sofita
+      unit_of_measurement: EUR
+      unique_id: c45875b5-e80e-4054-92f7-84e45c74e738
+      state: >-
+        {% set a = (states('sensor.heating_emeis') | float(0) ) %}
+        {% set b = (states('sensor.heating_leonidas') | float(0) ) %}
+        {% set c = (states('sensor.heating_sofita') | float(0) ) %}
+        {% set K = (states('sensor.katanalosi_kaustira') | float(0) ) %}
+        {% set i = (states('input_number.oriaia_katanalose_kaustera') | float ) %}
+        {% set P = (states('input_number.time_petrelaiou') | float ) %}
+        {{'%0.2f'|format(i*P*c/(a+b+c))}} 
+      availability: >-
+        {% set sensors = ['binary_sensor.petrleaio_makis', 'binary_sensor.petelaio_leonidas', 'binary_sensor.petrelaio_sofita'] %}
+        {{ expand(sensors)|selectattr('state', 'in', ['unavailable', 'unknown'])|list|length == 0 }} 
+# - sensor:
+#     - name: Cost Petrelaio Kaustiras
+#       unit_of_measurement: EUR
+#       unique_id: b887c6b7-5712-4aa6-ab61-7c904f2dcfe9
+#       state: >-
+#         {% set a = (states('sensor.heating_emeis') | float ) %}
+#         {% set b = (states('sensor.heating_leonidas') | float ) %}
+#         {% set c = (states('sensor.heating_sofita') | float ) %}
+#         {% set k = (states('heating_kaustiras') | float ) %}
+#         {% set L = (states('input_number.litra_petrelaiou') | float ) %}
+#         {% set C = (states('input_number.time_petrelaiou') | float ) %}
+#         {{'%0.2f'|format(L*C*(k-a-b-c)/k))}}
+    # xreosi_petrelaiou_emeis:
+    #   friendly_name: "Χρέωση Πετρελαίου Εμείς"
+    #   value_template: >-
+    #     {% set a = (states('sensor.petrelaio_makis') | float ) %}
+    #     {% set b = (states('sensor.petrelaio_leonidas') | float ) %}
+    #     {% set c = (states('sensor.petrelaio_sofita') | float ) %}
+    #     {% set K = (states('sensor.katanalosi_kaustira') | float ) %}
+    #     {% set i = (states('input_number.oriaia_katanalose_kaustera') | float ) %}
+    #     {% set P = (states('input_number.time_petrelaiou') | float ) %}
+    #     {{'%0.2f'|format(i*P*K*a/(a+b+c))}}
+    # xreosi_petrelaiou_leonidas:
+    #   friendly_name: "Χρέωση Πετρελαίου Λεωνίδας"
+    #   value_template: >-
+    #     {% set a = (states('sensor.petrelaio_makis') | float ) %}
+    #     {% set b = (states('sensor.petrelaio_leonidas') | float ) %}
+    #     {% set c = (states('sensor.petrelaio_sofita') | float ) %}
+    #     {% set K = (states('sensor.katanalosi_kaustira') | float ) %}
+    #     {% set i = (states('input_number.oriaia_katanalose_kaustera') | float ) %}
+    #     {% set P = (states('input_number.time_petrelaiou') | float ) %}
+    #     {{'%0.2f'|format(i*P*K*b/(a+b+c))}}
+    # xreosi_petrelaiou_sophita:
+    #   friendly_name: "Χρέωση Πετρελαίου Σοφίτα"
+    #   value_template: >-
+    #     {% set a = (states('sensor.petrelaio_makis') | float ) %}
+    #     {% set b = (states('sensor.petrelaio_leonidas') | float ) %}
+    #     {% set c = (states('sensor.petrelaio_sofita') | float ) %}
+    #     {% set K = (states('sensor.katanalosi_kaustira') | float ) %}
+    #     {% set i = (states('input_number.oriaia_katanalose_kaustera') | float ) %}
+    #     {% set P = (states('input_number.time_petrelaiou') | float ) %}
+    #     {{'%0.2f'|format(i*P*K*c/(a+b+c))}}
+    # xreosi_petrelaiou_emeis:
+    #   friendly_name: "Χρέωση Πετρελαίου Εμείς"
+    #   value_template: '{{ states.input_number.petrelaio_emeis.state | float * states.input_number.oriaia_katanalose_kaustera.state | round(2) | float * states.input_number.time_petrelaiou.state | float | round(1) }}'
+    # xreosi_petrelaiou_leonidas:
+    #   friendly_name: "Χρέωση Πετρελαίου Λεωνίδας"
+    #   value_template: '{{ states.input_number.petrelaio_leonidas.state | float * states.input_number.oriaia_katanalose_kaustera.state | round(2) | float * states.input_number.time_petrelaiou.state | float | round(1) }}'
+    # xreosi_petrelaiou_sophita:
+    #   friendly_name: "Χρέωση Πετρελαίου Σοφίτα"
+    #   value_template: '{{ states.input_number.petrelaio_sophita.state | float * states.input_number.oriaia_katanalose_kaustera.state | round(2) | float * states.input_number.time_petrelaiou.state | float | round(1) }}'
