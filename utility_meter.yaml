@@ -1,20 +1,15 @@
-  # heating_emeis:
-  #   source: sensor.petrelaio_makis
-  #   cycle: monthly
-  # heating_leonidas:
-  #   source: sensor.petrelaio_leonidas
-  #   cycle: monthly
-  # heating_sofita:
-  #   source: sensor.petrelaio_sofita
-  #   cycle: monthly
-  # fridge:
-  #   source: sensor.consumption_37
-  #   name: Fridge Cost
-  #   cycle: daily
-  #   tariffs:
-  #     - normal
-  #     - nixterino
-
+heating_emeis:
+  source: sensor.petrelaio_makis
+  cycle: yearly
+heating_leonidas:
+  source: sensor.petrelaio_leonidas
+  cycle: yearly
+heating_sofita:
+  source: sensor.petrelaio_sofita
+  cycle: yearly
+heating_kaustiras:
+  source: sensor.katanalosi_kaustira
+  cycle: yearly
 phase_l1_monthly:
   source: sensor.pzem_l1_energy
   name: "Φάση 1 Κατανάλωση"
