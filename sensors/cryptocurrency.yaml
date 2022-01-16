@@ -15,14 +15,14 @@
 - platform: command_line
   name: safemoon_owned
   command: !secret safemoon_owned_command
-  value_template: '{{ value_json.result |float / 1000000000 }}'
+  value_template: '{{ value_json.result |float(0) / 1000000000 }}'
   scan_interval: 60
   unit_of_measurement: 'SAFEMOON'
 
 - platform: command_line
   name: dogecola_owned
   command: !secret dogecola_owned_command
-  value_template: '{{ value_json.result |float / 1000000000 }}'
+  value_template: '{{ value_json.result |float(0) / 1000000000 }}'
   scan_interval: 60
   unit_of_measurement: 'DOGECOLA'
 
@@ -91,19 +91,19 @@
       friendly_name: 'SafeMoon'
       unit_of_measurement: '€'
       value_template: >-
-        {% if states('sensor.safemoon_owned')|float == 0 or states('sensor.safemoon_price')|float == 0 %}
+        {% if states('sensor.safemoon_owned')|float(0) == 0 or states('sensor.safemoon_price')|float(0) == 0 %}
           {{ states('sensor.safemoon_owned_eur') | float(0)}}
         {% else %}
-          {{ (states('sensor.safemoon_owned')|float * states('sensor.safemoon_price')|float) | round(2) | float(0)}}
+          {{ (states('sensor.safemoon_owned')|float(0) * states('sensor.safemoon_price')|float(0)) | round(2) | float(0)}}
         {% endif %}
     safemoon_rewarded:
       friendly_name: 'SafeMoon Rewarded'
       unit_of_measurement: 'SAFEMOON'
-      value_template: "{{ states('sensor.safemoon_owned') | float - 32428539.014249423 }}"
+      value_template: "{{ states('sensor.safemoon_owned') | float(0) - 32428539.014249423 }}"
     safemoon_rewarded_eur:
       friendly_name: 'SafeMoon Rewarded Price'
       unit_of_measurement: '€'
-      value_template: "{{ (states('sensor.safemoon_rewarded')| float * states('sensor.safemoon_price') | float) | round(10) }}"
+      value_template: "{{ (states('sensor.safemoon_rewarded')| float(0) * states('sensor.safemoon_price') | float(0)) | round(10) }}"
     ependusi:
       friendly_name: 'Επένδυση'
       value_template: "{{ (states('sensor.crypto_owned') |float(0) - states('input_number.ependese')|float(0))|round(2)}}"
