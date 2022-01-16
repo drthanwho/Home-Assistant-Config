@@ -11,36 +11,32 @@
 # Duration is a week from today to today minus 86400 minutes
 - platform: history_stats
   name: Petrelaio Makis
-  entity_id: binary_sensor.saloni_pir
+  entity_id: binary_sensor.petrleaio_makis
   state: 'on'
   type: time
-  end: '{{ now().replace(hour=0).replace(minute=0).replace(second=0) }}'
-  duration:
-    days: 7
+  start: "{{ as_timestamp( now().replace(hour=0, minute=0, second=0) ) - now().weekday() * 86400 }}"
+  end: "{{ now() }}"
 - platform: history_stats
   name: Petrelaio Leonidas
-  entity_id: binary_sensor.pir_kouzina
+  entity_id: binary_sensor.petelaio_leonidas
   state: 'on'
   type: time
-  end: '{{ now().replace(hour=0).replace(minute=0).replace(second=0) }}'
-  duration:
-    days: 7
+  start: "{{ as_timestamp( now().replace(hour=0, minute=0, second=0) ) - now().weekday() * 86400 }}"
+  end: "{{ now() }}"
 - platform: history_stats
   name: Petrelaio Sofita
-  entity_id: binary_sensor.pir_sensor
+  entity_id: binary_sensor.petrelaio_sofita
   state: 'on'
   type: time
-  end: '{{ now().replace(hour=0).replace(minute=0).replace(second=0) }}'
-  duration:
-    days: 7
+  start: "{{ as_timestamp( now().replace(hour=0, minute=0, second=0) ) - now().weekday() * 86400 }}"
+  end: "{{ now() }}"
 - platform: history_stats
   name: Katanalosi Kaustira
-  entity_id: binary_sensor.door_apothikaki
+  entity_id: binary_sensor.kaustiras
   state: 'on'
   type: time
-  end: '{{ now().replace(hour=0).replace(minute=0).replace(second=0) }}'
-  duration:
-    days: 7
+  start: "{{ as_timestamp( now().replace(hour=0, minute=0, second=0) ) - now().weekday() * 86400 }}"
+  end: "{{ now() }}"
 
 # - platform: history_stats
 #   name: Δουλειά Εβδομάδας
