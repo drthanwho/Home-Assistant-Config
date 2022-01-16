@@ -11,25 +11,16 @@ include:
     - media_player
     - automation
   entity_globs:
+    - sensor.cost*
     - sensor.pi_zero*
     - sensor.phase*
     - sensor.cryptoinfo_*
     - sensor.dogecola*
-    - sensor.eretria_*
-    - switch.eretria_*
-    - media_player.eretria_*
-    - binary_sensor.eretria_*
-    - light.eretria_*
-    - input_select.eretria_*
     - sensor.fridge_*
     - sensor.saloni*
     - switch.saloni_corner*
     - sensor.*battery_temperature
     - switch.ypogeio_*
-    - binary_sensor.eisods_*
-    - binary_sensor.kipos_*
-    - binary_sensor.kouzina_*
-    - binary_sensor.veranda_*
     - sensor.cpu*
     - sensor.eisodos_*
     - sensor.kipos_*
@@ -44,9 +35,8 @@ include:
     - sensor.dsl*
     - sensor.speedport*
     - sensor.red*
-    # - binary_sensor.red*
-    - sensor.odroid*
     - sensor.apc*
+    - sensor.smart_ups_rt_2000_xl*
     - sensor.temperature*
     - sensor.*_temperature
     - sensor.humidity*
@@ -69,7 +59,20 @@ include:
     - sensor.*_pressure_sensor
     - sensor.*_steps_sensor
     - sensor.*_storage_sensor
+    # - binary_sensor.*_status
     # - binary_sensor.*_pir
+    # - binary_sensor.*_button
+    # - binary_sensor.presence_*
+    # - sensor.eretria_*
+    # - switch.eretria_*
+    # - media_player.eretria_*
+    # - light.eretria_*
+    # - input_select.eretria_*
+    # - binary_sensor.eisods_*
+    # - binary_sensor.kipos_*
+    # - binary_sensor.kouzina_*
+    # - binary_sensor.veranda_*   
+    # - binary_sensor.red*
     - switch.levitostasio_*
     - sensor.presence_*
     - sensor.emvoliasmoi*
@@ -78,9 +81,7 @@ include:
     - sensor.*_cam_temp
     - switch.sonoff_*
     - sensor.*consumption
-    - binary_sensor.irrigation_unlimited_*
     - sensor.boiler*
-    # - binary_sensor.presence_*
     - sensor.pzem*
     - sensor.garden*
     - sensor.siemens*
@@ -90,7 +91,6 @@ include:
     - sensor.*_cost
     - sensor.*_power
     - sensor.power_*
-
   entities:
     - sensor.test_template_none
     - sensor.ultrasonic_sensor
@@ -107,13 +107,8 @@ include:
     - sensor.douleia_menas
     - sensor.detection_fps
     - sensor.test_vaccinations
-    # - binary_sensor.kouzina_pir
-    # - binary_sensor.saloni_pir
-    # - binary_sensor.dwmatio_thanasis_pir
-    # - binary_sensor.koudoni_ttgocam_pir
     - sensor.restart_time
     - sensor.motion_saloni
-    # - binary_sensor.saloni_zigbee_pir
     - sensor.zigbee_unavailable
     # - group.people_status
     # - binary_sensor.inside_button
@@ -150,13 +145,17 @@ include:
     - switch.provoleas_aristera
     - switch.provoleas_led
     - sensor.energy_l2_test
+    - sensor.odroidprocessor_use_percent
+    - sensor.odroidprocessor_temperature
+    - sensor.odroidmemory_use_percent
+    - sensor.odroidmemory_free
+    - sensor.odroidlast_boot
+    - sensor.odroiddisk_use
 exclude:
   domains:
     - switch
     - zone
     - camera
-    # - input_text
-    # - input_number
   entity_globs:
     - media_player.browser*
     - sensor.browser*
@@ -170,6 +169,9 @@ exclude:
     - switch.office_*
     - switch.home_echo_*
     - sensor.*wifi_signal_strength
+    - binary_sensor.eretria_*
+    - binary_sensor.irrigation_unlimited_*
+    - binary_sensor.*_motion
     # - sensor.upnp*
     # - sensor.this_device_next_*
     # - sensor.*_audio_sensor
