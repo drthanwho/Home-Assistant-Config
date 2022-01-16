@@ -11,7 +11,7 @@
       friendly_name: Aristera
 
 # - platform: mqtt
-#   command_topic: "esprfid"
+#   command_torootc: "esprfid"
 #   name: "Έξώπορτα"
 #   value_template: '{{ value_json.cmd }}'
 #   payload_on: '{"cmd":"opendoor", "doorip":"192.168.1.5"}'
@@ -19,62 +19,59 @@
 - platform: command_line
   switches:
     # provoleas_led_cmd:
-    #   command_on: "ssh -i /ssl/rpi_key -o StrictHostKeyChecking=no pi@192.168.1.249 'echo -n 11 | nc 192.168.1.100 6722'"
-    #   command_off: "ssh -i /ssl/rpi_key -o StrictHostKeyChecking=no pi@192.168.1.249 'echo -n 21 | nc 192.168.1.100 6722'" 
-    #   command_state: "ssh -i /ssl/rpi_key -o StrictHostKeyChecking=no pi@192.168.1.249 'echo -n 00 | nc 192.168.1.100 6722'"
+    #   command_on: "ssh -i /ssl/rroot_key -o StrictHostKeyChecking=no root@192.168.1.245 'echo -n 11 | nc 192.168.1.100 6722'"
+    #   command_off: "ssh -i /ssl/rroot_key -o StrictHostKeyChecking=no root@192.168.1.245 'echo -n 21 | nc 192.168.1.100 6722'" 
+    #   command_state: "ssh -i /ssl/rroot_key -o StrictHostKeyChecking=no root@192.168.1.245 'echo -n 00 | nc 192.168.1.100 6722'"
     #   value_template: '{{ value == "10000000" or value == "11000000" }}'
     #   friendly_name: Προβολέας LED
     # provoleas_aristera_cmd: 
-    #   command_on: "ssh -i /ssl/rpi_key -o StrictHostKeyChecking=no pi@192.168.1.249 'echo -n 12 | nc 192.168.1.100 6722'"
-    #   command_off: "ssh -i /ssl/rpi_key -o StrictHostKeyChecking=no pi@192.168.1.249 'echo -n 22 | nc 192.168.1.100 6722'"
-    #   command_state: "ssh -i /ssl/rpi_key -o StrictHostKeyChecking=no pi@192.168.1.249 'echo -n 00 | nc 192.168.1.100 6722'"
+    #   command_on: "ssh -i /ssl/rroot_key -o StrictHostKeyChecking=no root@192.168.1.245 'echo -n 12 | nc 192.168.1.100 6722'"
+    #   command_off: "ssh -i /ssl/rroot_key -o StrictHostKeyChecking=no root@192.168.1.245 'echo -n 22 | nc 192.168.1.100 6722'"
+    #   command_state: "ssh -i /ssl/rroot_key -o StrictHostKeyChecking=no root@192.168.1.245 'echo -n 00 | nc 192.168.1.100 6722'"
     #   value_template: '{{ value == "01000000" or value == "11000000" }}'
     #   friendly_name: Προβολέας Αλογόνου
     pdf2file_makis:
-      command_on: "ssh -i /ssl/rp3-media-server -o StrictHostKeyChecking=no pi@192.168.1.249 'bash /home/pi/scanner_scripts/PDF2file_makis.sh'"
+      command_on: "ssh -i /ssl/odroid -o StrictHostKeyChecking=no root@192.168.1.245 'bash /home/scanner_scripts/PDF2file_makis.sh'"
       friendly_name: PDF σε αρχείο
     pdf2file_pavlina:
-      command_on: "ssh -i /ssl/rp3-media-server -o StrictHostKeyChecking=no pi@192.168.1.249 'bash /home/pi/scanner_scripts/PDF2file_pavlina.sh'"
+      command_on: "ssh -i /ssl/odroid -o StrictHostKeyChecking=no root@192.168.1.245 'bash /home/scanner_scripts/PDF2file_pavlina.sh'"
       friendly_name: PDF σε αρχείο
     pdf2file_thanasis: 
-      command_on: "ssh -i /ssl/rp3-media-server -o StrictHostKeyChecking=no pi@192.168.1.249 'bash /home/pi/scanner_scripts/PDF2file_thanasis.sh'"
+      command_on: "ssh -i /ssl/odroid -o StrictHostKeyChecking=no root@192.168.1.245 'bash /home/scanner_scripts/PDF2file_thanasis.sh'"
       friendly_name: PDF σε αρχείο
     pdf2mail_makis:
-      command_on: "ssh -i /ssl/rp3-media-server -o StrictHostKeyChecking=no pi@192.168.1.249 'bash /home/pi/scanner_scripts/PDF2mail_makis.sh'"
+      command_on: "ssh -i /ssl/odroid -o StrictHostKeyChecking=no root@192.168.1.245 'bash /home/scanner_scripts/PDF2mail_makis.sh'"
       friendly_name: PDF στο email
     pdf2mail_pavlina:
-      command_on: "ssh -i /ssl/rp3-media-server -o StrictHostKeyChecking=no pi@192.168.1.249 'bash /home/pi/scanner_scripts/PDF2mail_pavlina.sh'"
+      command_on: "ssh -i /ssl/odroid -o StrictHostKeyChecking=no root@192.168.1.245 'bash /home/scanner_scripts/PDF2mail_pavlina.sh'"
       friendly_name: PDF στο email
     pdf2mail_thanasis:
-      command_on: "ssh -i /ssl/rp3-media-server -o StrictHostKeyChecking=no pi@192.168.1.249 'bash /home/pi/scanner_scripts/PDF2mail_thanasis.sh'"
+      command_on: "ssh -i /ssl/odroid -o StrictHostKeyChecking=no root@192.168.1.245 'bash /home/scanner_scripts/PDF2mail_thanasis.sh'"
       friendly_name: PDF στο email
     pdf2print_makis:
-      command_on: "ssh -i /ssl/rp3-media-server -o StrictHostKeyChecking=no pi@192.168.1.249 'bash /home/pi/scanner_scripts/PDF2print_makis.sh'"
+      command_on: "ssh -i /ssl/odroid -o StrictHostKeyChecking=no root@192.168.1.245 'bash /home/scanner_scripts/PDF2print_makis.sh'"
       friendly_name: PDF εκτύπωση
     pdf2print_pavlina:
-      command_on: "ssh -i /ssl/rp3-media-server -o StrictHostKeyChecking=no pi@192.168.1.249 'bash /home/pi/scanner_scripts/PDF2print_pavlina.sh'"
+      command_on: "ssh -i /ssl/odroid -o StrictHostKeyChecking=no root@192.168.1.245 'bash /home/scanner_scripts/PDF2print_pavlina.sh'"
       friendly_name: PDF εκτύπωση
     pdf2print_thanasis:
-      command_on: "ssh -i /ssl/rp3-media-server -o StrictHostKeyChecking=no pi@192.168.1.249 'bash /home/pi/scanner_scripts/PDF2print_thanasis.sh'"
+      command_on: "ssh -i /ssl/odroid -o StrictHostKeyChecking=no root@192.168.1.245 'bash /home/scanner_scripts/PDF2print_thanasis.sh'"
       friendly_name: pdf εκτύπωση
     jpeg2mail_makis:
-      command_on: "ssh -i /ssl/rp3-media-server -o StrictHostKeyChecking=no pi@192.168.1.249 'bash /home/pi/scanner_scripts/JPEG2mail_makis.sh'"
+      command_on: "ssh -i /ssl/odroid -o StrictHostKeyChecking=no root@192.168.1.245 'bash /home/scanner_scripts/JPEG2mail_makis.sh'"
       friendly_name: Φωτογραφία στο email
     jpeg2mail_pavlina:
-      command_on: "ssh -i /ssl/rp3-media-server -o StrictHostKeyChecking=no pi@192.168.1.249 'bash /home/pi/scanner_scripts/JPEG2mail_pavlina.sh'"
+      command_on: "ssh -i /ssl/odroid -o StrictHostKeyChecking=no root@192.168.1.245 'bash /home/scanner_scripts/JPEG2mail_pavlina.sh'"
       friendly_name: Φωτογραφία στο email
     jpeg2mail_thanasis:
-      command_on: "ssh -i /ssl/rp3-media-server -o StrictHostKeyChecking=no pi@192.168.1.249 'bash /home/pi/scanner_scripts/JPEG2mail_thanasis.sh'"
+      command_on: "ssh -i /ssl/odroid -o StrictHostKeyChecking=no root@192.168.1.245 'bash /home/scanner_scripts/JPEG2mail_thanasis.sh'"
       friendly_name: Φωτογραφία στο email
     jpeg2file_makis:
-      command_on: "ssh -i /ssl/rp3-media-server -o StrictHostKeyChecking=no pi@192.168.1.249 'bash /home/pi/scanner_scripts/JPEG2file_makis.sh'"
+      command_on: "ssh -i /ssl/odroid -o StrictHostKeyChecking=no root@192.168.1.245 'bash /home/scanner_scripts/JPEG2file_makis.sh'"
       friendly_name:  Φωτογραφία σε αρχείο
     jpeg2file_pavlina:
-      command_on: "ssh -i /ssl/rp3-media-server -o StrictHostKeyChecking=no pi@192.168.1.249 'bash /home/pi/scanner_scripts/JPEG2file_pavlina.sh'"
+      command_on: "ssh -i /ssl/odroid -o StrictHostKeyChecking=no root@192.168.1.245 'bash /home/scanner_scripts/JPEG2file_pavlina.sh'"
       friendly_name:  Φωτογραφία σε αρχείο
     jpeg2file_thanasis:
-      command_on: "ssh -i /ssl/rp3-media-server -o StrictHostKeyChecking=no pi@192.168.1.249 'bash /home/pi/scanner_scripts/JPEG2file_thanasis.sh'"
+      command_on: "ssh -i /ssl/odroid -o StrictHostKeyChecking=no root@192.168.1.245 'bash /home/scanner_scripts/JPEG2file_thanasis.sh'"
       friendly_name:  Φωτογραφία σε αρχείο
-
-- platform: switchbot
-  mac: "EF:30:26:47:68:ED"

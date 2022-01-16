@@ -1,5 +1,21 @@
-twilio_sms: "/config/helpers/send-sms '{{ recipient_number }}' '{{ body }}' 'twilio_number:{{twilio_number}}'"
+twilio_sms: "/config/helpers/send-sms '{{ recirootent_number }}' '{{ body }}' 'twilio_number:{{twilio_number}}'"
 
-twilio_phone: "/config/helpers/make-call '{{ recipient_number }}' '{{ twilio_flow }}' 'twilio_number:{{twilio_number}}'"
+twilio_phone: "/config/helpers/make-call '{{ recirootent_number }}' '{{ twilio_flow }}' 'twilio_number:{{twilio_number}}'"
 
 microsoft_tts: "/config/helpers/microsoft-speech '{{text}}'"
+
+pdf2mail_thanasis: "ssh -i /ssl/odroid -o StrictHostKeyChecking=no root@192.168.1.245 'bash /home/scanner_scripts/PDF2mail_thanasis.sh'" 
+pdf2file_makis: "ssh -i /ssl/odroid -o StrictHostKeyChecking=no root@192.168.1.245 'bash /home/scanner_scripts/PDF2file_makis.sh'"
+pdf2file_pavlina: "ssh -i /ssl/odroid -o StrictHostKeyChecking=no root@192.168.1.245 'bash /home/scanner_scripts/PDF2file_pavlina.sh'"
+pdf2file_thanasis: "ssh -i /ssl/odroid -o StrictHostKeyChecking=no root@192.168.1.245 'bash /home/scanner_scripts/PDF2file_thanasis.sh'"
+pdf2mail_makis: "ssh -i /ssl/odroid -o StrictHostKeyChecking=no root@192.168.1.245 'bash /home/scanner_scripts/PDF2mail_makis.sh'"
+pdf2mail_pavlina: "ssh -i /ssl/odroid -o StrictHostKeyChecking=no root@192.168.1.245 'bash /home/scanner_scripts/PDF2mail_pavlina.sh'"
+pdf2print_makis: "ssh -i /ssl/odroid -o StrictHostKeyChecking=no root@192.168.1.245 'bash /home/scanner_scripts/PDF2print_makis.sh'"
+pdf2print_pavlina: "ssh -i /ssl/odroid -o StrictHostKeyChecking=no root@192.168.1.245 'bash /home/scanner_scripts/PDF2print_pavlina.sh'"
+pdf2print_thanasis: "ssh -i /ssl/odroid -o StrictHostKeyChecking=no root@192.168.1.245 'bash /home/scanner_scripts/PDF2print_thanasis.sh'"
+jpeg2mail_makis: "ssh -i /ssl/odroid -o StrictHostKeyChecking=no root@192.168.1.245 'bash /home/scanner_scripts/JPEG2mail_makis.sh'"
+jpeg2mail_pavlina: "ssh -i /ssl/odroid -o StrictHostKeyChecking=no root@192.168.1.245 'bash /home/scanner_scripts/JPEG2mail_pavlina.sh'"
+jpeg2mail_thanasis: "ssh -i /ssl/odroid -o StrictHostKeyChecking=no root@192.168.1.245 'bash /home/scanner_scripts/JPEG2mail_thanasis.sh'"
+jpeg2file_makis: "ssh -i /ssl/odroid -o StrictHostKeyChecking=no root@192.168.1.245 'bash /home/scanner_scripts/JPEG2file_makis.sh'"
+jpeg2file_pavlina: "ssh -i /ssl/odroid -o StrictHostKeyChecking=no root@192.168.1.245 'bash /home/scanner_scripts/JPEG2file_pavlina.sh'"
+jpeg2file_thanasis: "ssh -i /ssl/odroid -o StrictHostKeyChecking=no root@192.168.1.245 'bash /home/scanner_scripts/JPEG2file_thanasis.sh'"
