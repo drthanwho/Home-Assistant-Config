@@ -184,36 +184,6 @@
         {% endif %}
   
         {{ as_timestamp(states('sensor.last_boot')) | timestamp_custom('%H:%M on %a') }} {{ date }} {{ as_timestamp(states('sensor.last_boot')) | timestamp_custom('%b %Y') }}
-    # xreosi_petrelaiou_emeis:
-    #   friendly_name: "Χρέωση Πετρελαίου Εμείς"
-    #   value_template: >-
-    #     {% set a = (states('sensor.petrelaio_makis') | float ) %}
-    #     {% set b = (states('sensor.petrelaio_leonidas') | float ) %}
-    #     {% set c = (states('sensor.petrelaio_sofita') | float ) %}
-    #     {% set K = (states('sensor.katanalosi_kaustira') | float ) %}
-    #     {% set i = (states('input_number.oriaia_katanalose_kaustera') | float ) %}
-    #     {% set P = (states('input_number.time_petrelaiou') | float ) %}
-    #     {{'%0.2f'|format(i*P*K*a/(a+b+c))}}
-    # xreosi_petrelaiou_leonidas:
-    #   friendly_name: "Χρέωση Πετρελαίου Λεωνίδας"
-    #   value_template: >-
-    #     {% set a = (states('sensor.petrelaio_makis') | float ) %}
-    #     {% set b = (states('sensor.petrelaio_leonidas') | float ) %}
-    #     {% set c = (states('sensor.petrelaio_sofita') | float ) %}
-    #     {% set K = (states('sensor.katanalosi_kaustira') | float ) %}
-    #     {% set i = (states('input_number.oriaia_katanalose_kaustera') | float ) %}
-    #     {% set P = (states('input_number.time_petrelaiou') | float ) %}
-    #     {{'%0.2f'|format(i*P*K*b/(a+b+c))}}
-    # xreosi_petrelaiou_sophita:
-    #   friendly_name: "Χρέωση Πετρελαίου Σοφίτα"
-    #   value_template: >-
-    #     {% set a = (states('sensor.petrelaio_makis') | float ) %}
-    #     {% set b = (states('sensor.petrelaio_leonidas') | float ) %}
-    #     {% set c = (states('sensor.petrelaio_sofita') | float ) %}
-    #     {% set K = (states('sensor.katanalosi_kaustira') | float ) %}
-    #     {% set i = (states('input_number.oriaia_katanalose_kaustera') | float ) %}
-    #     {% set P = (states('input_number.time_petrelaiou') | float ) %}
-    #     {{'%0.2f'|format(i*P*K*c/(a+b+c))}}
     # Sensor for Home Assistant difference between start and shutdown times.
     # restart_time:
     #   friendly_name: Restart Time
@@ -247,15 +217,6 @@
     # dehumi_state:
     #   friendly_name: "Λειτουργία Αφυγραντήρα"
     #   value_template: "{{ states.climate.midea_dehumi_18691697727728.state }}"
-    # xreosi_petrelaiou_emeis:
-    #   friendly_name: "Χρέωση Πετρελαίου Εμείς"
-    #   value_template: '{{ states.input_number.petrelaio_emeis.state | float * states.input_number.oriaia_katanalose_kaustera.state | round(2) | float * states.input_number.time_petrelaiou.state | float | round(1) }}'
-    # xreosi_petrelaiou_leonidas:
-    #   friendly_name: "Χρέωση Πετρελαίου Λεωνίδας"
-    #   value_template: '{{ states.input_number.petrelaio_leonidas.state | float * states.input_number.oriaia_katanalose_kaustera.state | round(2) | float * states.input_number.time_petrelaiou.state | float | round(1) }}'
-    # xreosi_petrelaiou_sophita:
-    #   friendly_name: "Χρέωση Πετρελαίου Σοφίτα"
-    #   value_template: '{{ states.input_number.petrelaio_sophita.state | float * states.input_number.oriaia_katanalose_kaustera.state | round(2) | float * states.input_number.time_petrelaiou.state | float | round(1) }}'
 
 #- platform: template
 #  sensors:
