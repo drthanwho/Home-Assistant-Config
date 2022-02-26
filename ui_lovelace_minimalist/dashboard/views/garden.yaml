@@ -1,0 +1,168 @@
+- title: Garden
+  icon: mdi:tree
+  path: garden
+  cards:
+#################################
+#                               #
+#    Button back to main menu   #
+#                               #
+#################################
+    - type: horizontal-stack
+      cards:
+        - type: custom:button-card
+          template: edge
+        - type: 'custom:button-card'
+          template: chip_back
+          variables:
+            ulm_chip_back_path: /ui-lovelace-minimalist/main
+        - type: 'custom:button-card'
+          template: chip_icon_state
+          variables:
+            ulm_chip_icon_state_icon: '🌞'
+            ulm_chip_icon_state_entity: sensor.lightlevel
+          label: |
+            [[[
+              var icon = "❔";
+              if (states[variables.ulm_chip_icon_state_entity].state >=100){
+                var icon = variables.ulm_chip_icon_state_icon;
+              }else {
+                var icon = '🌚';
+              }
+              var state = "";
+              if (states[variables.ulm_chip_icon_state_entity].state){
+                var state = states[variables.ulm_chip_icon_state_entity].state;
+                if (states[variables.ulm_chip_icon_state_entity].attributes.unit_of_measurement){
+                  state += states[variables.ulm_chip_icon_state_entity].attributes.unit_of_measurement;
+                }
+              }
+              return icon + " " + state;
+            ]]]
+        - type: 'custom:button-card'
+          template: chip_icon_state
+          variables:
+            ulm_chip_icon_state_icon: '🌡️'
+            ulm_chip_icon_state_entity: sensor.temperature_outside
+        - type: 'custom:button-card'
+          template: chip_icon_state
+          variables:
+            ulm_chip_icon_state_icon: '💧'
+            ulm_chip_icon_state_entity: sensor.humidity_outside
+#################################
+#                               #
+#      Προβολείς Κήπος          #
+#                               #
+################################# 
+    - type: 'custom:button-card'
+      template: card_title
+      name: Προβολείς
+    - type: horizontal-stack
+      cards:
+        - type: custom:button-card
+          template: edge
+        - entity: switch.provoleas_aristera
+          name: Αριστερά
+          template:
+            - icon_info_bg
+            - card_switch
+          type: custom:button-card
+          tap_action:
+            action: toggle
+        - entity: switch.provoleas_led
+          name: Δεξιά
+          template:
+            - icon_info_bg
+            - card_switch
+          type: custom:button-card
+          tap_action:
+            action: toggle
+        - type: custom:button-card
+          template: edge
+#################################
+#                               #
+#      Φώτα Βεράντας            #
+#                               #
+#################################
+    - type: 'custom:button-card'
+      template: card_title
+      name: Βεράντα
+    - type: horizontal-stack
+      cards:
+        - type: custom:button-card
+          template: edge
+        - type: "custom:button-card"
+          template: card_light
+          entity: light.trapezaria_mesaio
+          variables:
+            ulm_card_light_enable_slider: true
+            ulm_card_light_enable_color: true
+            ulm_card_light_force_background_color: true
+            ulm_card_light_enable_collapse: true
+            ulm_card_light_name: Τραπεζαρία
+        - type: "custom:button-card"
+          template: card_light
+          entity: light.veranda_mesaio
+          variables:
+            ulm_card_light_enable_slider: true
+            ulm_card_light_enable_color: true
+            ulm_card_light_force_background_color: true
+            ulm_card_light_enable_collapse: true
+            ulm_card_light_name: Σαλόνι
+        - type: custom:button-card
+          template: edge
+#################################
+#                               #
+#      Sonoff 4CH Φώτα          #
+#                               #
+#################################
+    - type: 'custom:button-card'
+      template: card_title
+      name: Φώτα Κήπου
+    - type: horizontal-stack
+      cards:
+        - type: custom:button-card
+          template: edge
+        - type: "custom:button-card"
+          template: card_light
+          entity: light.sonoff_ypogeio_1
+          variables:
+            ulm_card_light_enable_slider: true
+            ulm_card_light_enable_color: true
+            ulm_card_light_force_background_color: true
+            ulm_card_light_enable_collapse: true
+            ulm_card_light_name: Βορεινή Πλευρά
+        - type: "custom:button-card"
+          template: card_light
+          entity: light.sonoff_ypogeio_2
+          variables:
+            ulm_card_light_enable_slider: true
+            ulm_card_light_enable_color: true
+            ulm_card_light_force_background_color: true
+            ulm_card_light_enable_collapse: true
+            ulm_card_light_name: Εισόδου
+    - type: horizontal-stack
+      cards:
+        - type: custom:button-card
+          template: edge
+        - type: "custom:button-card"
+          template: card_light
+          entity: light.sonoff_ypogeio_3
+          variables:
+            ulm_card_light_enable_slider: true
+            ulm_card_light_enable_color: true
+            ulm_card_light_force_background_color: true
+            ulm_card_light_enable_collapse: true
+        - type: "custom:button-card"
+          template: card_light
+          entity: light.sonoff_ypogeio_4
+          variables:
+            ulm_card_light_enable_slider: true
+            ulm_card_light_enable_color: true
+            ulm_card_light_force_background_color: true
+            ulm_card_light_enable_collapse: true
+        - type: custom:button-card
+          template: edge
+
+    - type: 'custom:button-card'
+      template: chip_back
+      variables:
+        ulm_chip_back_path: /ui-lovelace-minimalist/main

@@ -1,0 +1,9 @@
+tuile_neutre:
+  tap_action:
+    action: more-info
+  show-name: false
+  styles:
+    card:
+      - border-radius: 10px
+      - box-shadow: var(--box-shadow)
+      - padding: 6px

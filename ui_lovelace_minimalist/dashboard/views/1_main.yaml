@@ -1,0 +1,145 @@
+- title: Main
+  path: main
+  icon: mdi:home
+  cards:
+    - type: horizontal-stack
+      cards:
+        - type: custom:button-card
+          template: edge
+        - type: 'custom:button-card'
+          template: custom_card_welcome_news
+          variables:
+            ulm_custom_card_paddy_welcome_time: sensor.time
+            ulm_custom_card_paddy_welcome_weather_provider: weather.dark_sky
+            ulm_custom_card_paddy_welcome_news_entities:
+              - entity: binary_sensor.eva_ii_tank_full
+                content_template: "{{display_name}} {{state}}"
+        - type: custom:button-card
+          template: edge
+    - type: horizontal-stack
+      cards:
+        - type: custom:button-card
+          template: edge
+        - type: custom:button-card
+          template: chip_temperature
+          variables:
+            ulm_chip_temperature_inside: sensor.temperature_inside
+            ulm_chip_temperature_outside: sensor.temperature_outside
+            ulm_chip_temperature_weather: weather.dark_sky
+        - type: 'custom:button-card'
+          template: chip_icon_state
+          variables:
+            ulm_chip_icon_state_icon: '🌡️'
+            ulm_chip_icon_state_entity: sensor.temperature_inside
+        - type: 'custom:button-card'
+          template: chip_icon_state
+          variables:
+            ulm_chip_icon_state_icon: '💧'
+            ulm_chip_icon_state_entity: sensor.humidity_inside
+        - type: custom:button-card
+          template: edge
+    - type: horizontal-stack
+      cards:
+        - type: custom:button-card
+          template: edge
+        - type: 'custom:button-card'
+          template: card_person
+          variables:
+            ulm_card_person_entity: person.makis
+            ulm_card_person_use_entity_picture: true
+        - type: 'custom:button-card'
+          template: card_person
+          variables:
+            ulm_card_person_entity: person.pavlina
+            ulm_card_person_use_entity_picture: true
+        - type: custom:button-card
+          template: edge
+    - type: horizontal-stack
+      cards:
+        - type: custom:button-card
+          template: edge
+        - type: 'custom:button-card'
+          template: card_person
+          variables:
+            ulm_card_person_entity: person.thanasis
+            ulm_card_person_use_entity_picture: true
+        - type: 'custom:button-card'
+          template: card_person
+          variables:
+            ulm_card_person_entity: person.sofia
+            ulm_card_person_use_entity_picture: true
+        - type: custom:button-card
+          template: edge
+    - type: horizontal-stack
+      cards:
+        - type: custom:button-card
+          template: edge
+        - type: custom:button-card
+          template: card_navigate
+          variables:
+            ulm_card_navigate_path: /ui-lovelace-minimalist/lights
+            ulm_card_navigate_title: Φώτα
+            ulm_card_navigate_icon: mdi:lamps
+        - type: custom:button-card
+          template: card_navigate
+          variables:
+            ulm_card_navigate_path: /ui-lovelace-minimalist/garden
+            ulm_card_navigate_title: Κήπος
+            ulm_card_navigate_icon: mdi:tree
+        - type: custom:button-card
+          template: edge
+    - type: horizontal-stack
+      cards:
+        - type: custom:button-card
+          template: edge
+        - type: custom:button-card
+          template: card_navigate
+          variables:
+            ulm_card_navigate_path: /ui-lovelace-minimalist/cctv
+            ulm_card_navigate_title: Κάμερες
+            ulm_card_navigate_icon: mdi:cctv
+        - type: custom:button-card
+          template: card_navigate
+          variables:
+            ulm_card_navigate_path: /ui-lovelace-minimalist/security
+            ulm_card_navigate_title: Ασφάλεια
+            ulm_card_navigate_icon: mdi:shield-lock-outline
+        - type: custom:button-card
+          template: edge
+    - type: horizontal-stack
+      cards:
+        - type: custom:button-card
+          template: edge
+        - type: custom:button-card
+          template: card_navigate
+          variables:
+            ulm_card_navigate_path: /ui-lovelace-minimalist/consumption
+            ulm_card_navigate_title: Κατανάλωση
+            ulm_card_navigate_icon: mdi:home-lightning-bolt
+        - type: custom:button-card
+          template: card_navigate
+          variables:
+            ulm_card_navigate_path: /ui-lovelace-minimalist/media
+            ulm_card_navigate_title: Μουσική
+            ulm_card_navigate_icon: mdi:music
+        - type: custom:button-card
+          template: edge
+    - type: horizontal-stack
+      cards:
+        - type: custom:button-card
+          template: edge
+        - type: 'custom:button-card'
+          template: card_dehumidifier
+          entity: humidifier.eva_ii        -
+        - type: custom:button-card
+          template: edge
+    - type: 'custom:button-card'
+      template: card_script
+      variables: 
+        ulm_card_script_title: Reload
+        ulm_card_script_icon: 'mdi:reload'
+      tap_action:
+        action: call-service
+        service: script.turn_on
+        service_data: 
+          entity_id: script.reload

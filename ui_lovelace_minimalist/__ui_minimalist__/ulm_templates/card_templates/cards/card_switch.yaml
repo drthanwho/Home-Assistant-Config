@@ -1,0 +1,11 @@
+card_switch:
+  tap_action:
+    action: more-info
+  label: |-
+    [[[ if (entity.state =='on')
+        var etat = "On";
+        else
+      var etat = "Off";
+    return etat ; ]]]
+  template:
+    - yellow

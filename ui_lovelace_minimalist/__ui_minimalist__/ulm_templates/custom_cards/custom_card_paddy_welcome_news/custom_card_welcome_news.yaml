@@ -1,0 +1,148 @@
+
+
+
+custom_card_welcome_news:
+  template:
+    - ulm_custom_card_paddy_welcome_language_variables
+  show_icon: false
+  show_name: false
+  show_label: false
+  styles:
+    grid:
+      - grid-template-areas: '''item1'' ''item2'' ''item3'''
+      - grid-template-columns: 1fr
+      - grid-template-rows: min-content min-content
+      - row-gap: 12px
+    card:
+      - border-radius: var(--border-radius)
+      - box-shadow: var(--box-shadow)
+      - padding: 12px
+  custom_fields:
+    item1:
+      card:
+        type: custom:button-card
+        show_icon: true
+        show_label: true
+        show_name: true
+        show_entity_picture: true
+        entity_picture: |
+          [[[ 
+              if (hass.user.name == 'Μάκης'){      
+                return 'https://than2031995.ddns.net/api/image/serve/3d1854f85368326ae00eb950fb97901b/512x512';
+              } else if (hass.user.name == 'Θανάση'){
+                return 'https://than2031995.ddns.net/api/image/serve/d1cd22ea909f153fb592573f4742214a/512x512';
+              } else if (hass.user.name == 'Παυλίνα'){
+                return 'https://than2031995.ddns.net/api/image/serve/acadbf4efd75b9b59f3721d68ef045e8/512x512';
+              } else if (hass.user.name == 'Σοφία'){
+                return 'https://than2031995.ddns.net/api/image/serve/ea99d8c96713002d402a2ee06f6fcdfd/512x512';
+              } else {
+                return 'https://www.home-assistant.io/images/home-assistant-logo.svg';
+              }
+            ]]]
+        name: |
+          [[[
+            let time = states[variables.ulm_custom_card_paddy_welcome_time].state;
+            let welcome = '';
+
+            if (time > '18:00'){
+              welcome = variables.ulm_custom_card_paddy_welcome_evening; 
+            } else if (time > '12:00'){
+              welcome = variables.ulm_custom_card_paddy_welcome_afternoon;
+            } else if (time > '05:00'){
+              welcome = variables.ulm_custom_card_paddy_welcome_morning;
+            } else {
+              welcome = variables.ulm_custom_card_paddy_welcome_hello;
+            }
+
+            return welcome + ', ' + user.name + '!';
+          ]]]
+        styles:
+          icon:
+            - color: rgba(var(--color-teal),1)
+            - width: 42px
+          label:
+            - justify-self: start
+            - align-self: start
+            - font-weight: bold
+            - font-size: 12px
+            - filter: opacity(40%)
+            - margin-left: 12px
+          name:
+            - align-self: start
+            - justify-self: start
+            - font-weight: bold
+            - font-size: 20px
+            - margin-left: 12px
+          img_cell:
+            - background-color: rgba(var(--color-teal),0.2)
+            - border-radius: 50%
+            - place-self: center
+            - width: 42px
+            - height: 42px
+          grid:
+            - grid-template-areas: '"i n"'
+            - grid-template-columns: min-content auto
+            - grid-template-rows: min-content min-content
+          card:
+            - box-shadow: none
+    item2:
+      card:
+        type: "weather-forecast"
+        entity: "[[[ return variables.ulm_custom_card_paddy_welcome_weather_provider; ]]]"
+        show_forecast: false
+        card_mod:
+        style: |
+          ha-card.type-weather-forecast {
+            border-radius: 14px;
+            box-shadow: none;
+          }
+          ha-card.type-weather-forecast .state {
+            text-align: left;
+            font-size: 14px;
+            font-weight: bolder;
+          }
+          ha-card.type-weather-forecast .name {
+            text-align: left;
+            font-size: 14px;
+          }
+          ha-card.type-weather-forecast .temp-attribute {
+            text-align: right;
+          }
+          ha-card.type-weather-forecast .temp {
+            text-align: right;
+            font-size: medium;
+            font-weight: bolder;
+            margin-right: 16px;
+          }
+          ha-card.type-weather-forecast .temp span {
+            text-align: right;
+            font-size: medium;
+            font-weight: bolder;
+          }
+          ha-card.type-weather-forecast .attribute {
+            text-align: right;
+            font-size: smaller;
+          } 
+    item3:
+      card:
+        type: custom:home-feed-card
+        card_id: main_feed
+        show_empty: false
+        more_info_on_tap: true
+        state_color: true
+        compact_mode: true
+        id_filter: ^home_feed_.*
+        max_item_count: 3
+        show_icons: true
+        entities: |
+          [[[
+            return variables.ulm_custom_card_paddy_welcome_news_entities;
+          ]]]
+        card_mod: null
+        style: |
+          ha-card {
+            border-radius: 14px;
+            box-shadow: none;
+            font-size: 12px;
+            text-align: left;
+          }

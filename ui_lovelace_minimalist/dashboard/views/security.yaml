@@ -1,0 +1,117 @@
+- title: Security
+  path: security
+  icon: mdi:shield-home
+  cards:
+    - type: 'custom:button-card'
+      template: chip_back
+      variables:
+        ulm_chip_back_path: /ui-lovelace-minimalist/main
+    - type: 'custom:button-card'
+      template: card_title
+      name: Πόρτες
+    - type: horizontal-stack
+      cards:
+        - type: custom:button-card
+          template: edge
+        - type: 'custom:button-card'
+          template: card_binary_sensor_alert
+          variables:
+            - ulm_card_binary_sensor_alert: true
+          entity: binary_sensor.eksoporta
+          show_last_changed: true
+        - type: 'custom:button-card'
+          template: card_binary_sensor_alert
+          variables:
+            - ulm_card_binary_sensor_alert: true
+          entity: binary_sensor.garage_door
+          show_last_changed: true
+    - type: horizontal-stack
+      cards:
+        - type: custom:button-card
+          template: edge
+        - type: 'custom:button-card'
+          template: card_binary_sensor_alert
+          variables:
+            - ulm_card_binary_sensor_alert: true
+          entity: binary_sensor.porta_spitiou
+          show_last_changed: true
+        - type: 'custom:button-card'
+          template: card_binary_sensor_alert
+          variables:
+            - ulm_card_binary_sensor_alert: true
+          entity: binary_sensor.kuria_eisodos
+          show_last_changed: true
+        - type: custom:button-card
+          template: edge
+    - type: horizontal-stack
+      cards:
+        - type: custom:button-card
+          template: edge
+        - type: 'custom:button-card'
+          template: card_binary_sensor_alert
+          variables:
+            - ulm_card_binary_sensor_alert: true
+          entity: binary_sensor.porta_apothikis
+          show_last_changed: true
+        - type: custom:button-card
+          template: edge
+
+    - type: 'custom:button-card'
+      template: card_title
+      name: Κίνηση
+    - type: horizontal-stack
+      cards:
+        - type: custom:button-card
+          template: edge
+        - type: 'custom:button-card'
+          template: card_binary_sensor_alert
+          variables:
+            - ulm_card_binary_sensor_alert: true
+          entity: binary_sensor.kouzina_pir
+          name: Κουζίνα
+          show_last_changed: true
+        - type: 'custom:button-card'
+          template: card_binary_sensor_alert
+          variables:
+            - ulm_card_binary_sensor_alert: true
+          entity: binary_sensor.dwmatio_thanasis_pir
+          name: Θανάσης
+          show_last_changed: true
+    - type: horizontal-stack
+      cards:
+        - type: custom:button-card
+          template: edge
+        - type: 'custom:button-card'
+          template: card_binary_sensor_alert
+          variables:
+            - ulm_card_binary_sensor_alert: true
+          entity: binary_sensor.saloni_pir
+          name: Σαλόνι
+          show_last_changed: true
+        - type: 'custom:button-card'
+          template: card_binary_sensor_alert
+          variables:
+            - ulm_card_binary_sensor_alert: true
+          entity: binary_sensor.presence_30
+          name: Σαλόνι Zigbee
+          show_last_changed: true
+        - type: custom:button-card
+          template: edge
+    - type: horizontal-stack
+      cards:
+        - type: custom:button-card
+          template: edge
+        - type: 'custom:button-card'
+          template: card_binary_sensor_alert
+          variables:
+            - ulm_card_binary_sensor_alert: true
+          entity: binary_sensor.koudoni_ttgocam_pir
+          name: Αποθήκη
+          show_last_changed: true
+        - type: custom:button-card
+          template: edge
+
+    - type: 'custom:button-card'
+      template: chip_back
+      variables:
+        ulm_chip_back_path: /ui-lovelace-minimalist/main

@@ -1,0 +1,296 @@
+card_dehumidifier:
+  triggers_update: "all"
+  state:
+    - operator: template
+      value: "[[[ return states['humidifier.eva_ii'].state ]]]"
+      styles:
+        custom_fields:
+          notification:
+            - border-radius: "50%"
+            - position: "absolute"
+            - left: "38px"
+            - top: "8px"
+            - height: "16px"
+            - width: "16px"
+            - border: "2px solid var(--card-background-color)"
+            - font-size: "12px"
+            - line-height: "14px"
+            - background-color: >
+                [[[
+                  return "rgba(var(--color-red),1)";
+                ]]]
+            - animation: blink 2s ease infinite
+  styles:
+    grid:
+      - grid-template-areas: '"item1" "item2" "item3"'
+      - grid-template-columns: 1fr
+      - grid-template-rows: 1fr min-content min-content
+      - row-gap: 12px
+    card:
+      - border-radius: var(--border-radius)
+      - box-shadow: var(--box-shadow)
+      - padding: 12px
+  custom_fields:
+    item1:
+      card:
+        type: 'custom:button-card'
+        template:
+          - ulm_language_variables
+        name: 'Αφυγραντήρας'
+        icon: mdi:air-humidifier-off
+        color: var(--google-grey)
+        show_icon: true
+        show_label: true
+        show_name: true
+        size: 26px
+        state:
+          - operator: template
+            value: "[[[ return states['humidifier.eva_ii'].state == 'on' ]]]"
+            icon: mdi:air-humidifier
+            styles:
+              icon:
+                - color: "rgba(var(--color-yellow),1)"
+              label:
+                - color: "rgba(var(--color-yellow-text),1)"
+              name:
+                - color: "rgba(var(--color-yellow-text),1)"
+              img_cell:
+                - background-color: "rgba(var(--color-yellow), 0.2)"
+              card:
+                - background-color: "rgba(var(--color-background-yellow),var(--opacity-bg))"
+        styles:
+          icon:
+            - color: "rgba(var(--color-blue),1)"
+          label:
+            - justify-self: start
+            - align-self: start
+            - font-weight: bolder
+            - font-size: 12px
+            - filter: opacity(40%)
+            - margin-left: 12px
+          name:
+            - align-self: start 
+            - justify-self: start
+            - font-weight: bold
+            - font-size: 14px
+            - margin-left: 14px
+            - position: relative
+            - top: 14px
+          state:
+            - justify-self: start
+            - align-self: start
+            - font-weight: bolder
+            - font-size: 12px
+            - filter: opacity(40%)
+            - margin-left: 12px
+          img_cell:
+            - background-color: "rgba(var(--color-blue),0.2)"
+            - border-radius: 50%
+            - place-self: center
+            - width: 42px
+            - height: 42px
+          grid:
+            - grid-template-areas: '"i n" "i l"'
+            - grid-template-columns: min-content auto
+            - grid-template-rows: min-content min-content
+          card:
+            - border-radius: 21px 8px 8px 21px 
+            - box-shadow: none
+            - padding: 0px
+        tap_action:
+          action: call-service
+          service: humidifier.toggle
+          service_data:
+            entity_id: humidifier.eva_ii
+
+    item2:
+      card:
+        type: 'custom:button-card'
+        template: list_items
+        styles:
+          grid:
+            - column-gap: "17px"
+        custom_fields:
+          item1:
+            card:
+              type: 'custom:button-card'
+              template: widget_icon
+              icon: mdi:fan-speed-1
+              tap_action:
+                action: call-service
+                service: fan.set_preset_mode
+                service_data:
+                  preset_mode: Low
+                  entity_id: fan.eva_ii_fan
+              state:
+              - operator: template
+                value: "[[[ return states['fan.eva_ii_fan'].attributes.preset_mode == 'Low' && states['humidifier.eva_ii'].state == 'on']]]"
+                icon: mdi:fan
+                styles:
+                  icon:
+                    - color: "rgba(var(--color-yellow),1)"
+                    - animation: rotating 1s linear infinite
+                  label:
+                    - color: "rgba(var(--color-yellow-text),1)"
+                  name:
+                    - color: "rgba(var(--color-yellow-text),1)"
+                  img_cell:
+                    - background-color: "rgba(var(--color-yellow), 0.2)"
+                  card:
+                    - background-color: "rgba(var(--color-background-yellow),var(--opacity-bg))"
+          item2:
+            card:
+              type: 'custom:button-card'
+              template: widget_icon
+              icon: mdi:fan-speed-2
+              tap_action:
+                action: call-service
+                service: fan.set_preset_mode
+                service_data:
+                  preset_mode: Medium
+                  entity_id: fan.eva_ii_fan
+              state:
+              - operator: template
+                value: "[[[ return states['fan.eva_ii_fan'].attributes.preset_mode == 'Medium' && states['humidifier.eva_ii'].state == 'on']]]"
+                icon: mdi:fan
+                styles:
+                  icon:
+                    - color: "rgba(var(--color-yellow),1)"
+                    - animation: rotating 1s linear infinite
+                  label:
+                    - color: "rgba(var(--color-yellow-text),1)"
+                  name:
+                    - color: "rgba(var(--color-yellow-text),1)"
+                  img_cell:
+                    - background-color: "rgba(var(--color-yellow), 0.2)"
+                  card:
+                    - background-color: "rgba(var(--color-background-yellow),var(--opacity-bg))"
+          item3:
+            card:
+              type: 'custom:button-card'
+              template: widget_icon
+              icon: mdi:fan-speed-3
+              tap_action:
+                action: call-service
+                service: fan.set_preset_mode
+                service_data:
+                  preset_mode: High
+                  entity_id: fan.eva_ii_fan
+              state:
+              - operator: template
+                value: "[[[ return states['fan.eva_ii_fan'].attributes.preset_mode == 'High' && states['humidifier.eva_ii'].state == 'on']]]"
+                icon: mdi:fan
+                styles:
+                  icon:
+                    - color: "rgba(var(--color-yellow),1)"
+                    - animation: rotating 1s linear infinite
+                  label:
+                    - color: "rgba(var(--color-yellow-text),1)"
+                  name:
+                    - color: "rgba(var(--color-yellow-text),1)"
+                  img_cell:
+                    - background-color: "rgba(var(--color-yellow), 0.2)"
+                  card:
+                    - background-color: "rgba(var(--color-background-yellow),var(--opacity-bg))"
+    
+    item3:
+      card:
+        type: 'custom:button-card'
+        template: list_items
+        styles:
+          grid:
+            - column-gap: "17px"
+        custom_fields:
+          item1:
+            card:
+              type: 'custom:button-card'
+              template: widget_icon
+              icon: mdi:auto-fix  
+              tap_action:
+                action: call-service
+                service: humidifier.set_mode
+                service_data:
+                  entity_id: humidifier.eva_ii
+                  mode: Smart
+              state:
+              - operator: template
+                value: "[[[ return states['humidifier.eva_ii'].attributes.mode == 'Smart' && states['humidifier.eva_ii'].state == 'on']]]"
+                styles:
+                  icon:
+                    - color: "rgba(var(--color-yellow),1)"
+                  label:
+                    - color: "rgba(var(--color-yellow-text),1)"
+                  name:
+                    - color: "rgba(var(--color-yellow-text),1)"
+                  img_cell:
+                    - background-color: "rgba(var(--color-yellow), 0.2)"
+                  card:
+                    - background-color: "rgba(var(--color-background-yellow),var(--opacity-bg))"
+          item2:
+            card:
+              type: 'custom:button-card'
+              template: widget_icon
+              icon: 'mdi:tshirt-crew'
+              tap_action:
+                action: call-service
+                service: humidifier.set_mode
+                service_data:
+                  entity_id: humidifier.eva_ii
+                  mode: Dry
+              state:
+              - operator: template
+                value: "[[[ return states['humidifier.eva_ii'].attributes.mode == 'Dry' && states['humidifier.eva_ii'].state == 'on']]]"
+                styles:
+                  icon:
+                    - color: "rgba(var(--color-yellow),1)"
+                  label:
+                    - color: "rgba(var(--color-yellow-text),1)"
+                  name:
+                    - color: "rgba(var(--color-yellow-text),1)"
+                  img_cell:
+                    - background-color: "rgba(var(--color-yellow), 0.2)"
+                  card:
+                    - background-color: "rgba(var(--color-background-yellow),var(--opacity-bg))"
+          item3:
+            card:
+              type: 'custom:button-card'
+              tap_action:
+                action: "more-info"
+              show_icon: false
+              show_label: true
+              show_name: true
+              show_state: false
+              styles:
+                card:
+                  - box-shadow: "none"
+                  - padding: "0px"
+                  - background-color: "rgba(var(--color-theme),0.05)"
+                  - border-radius: "14px"
+                  - place-self: "center"
+                  - height: "42px"
+                label:
+                  - font-size: "14px"
+                img_cell:
+                  - width: "26px"
+              triggers_update: "all"
+              name: |
+                [[[ return "💧" + " " + states['sensor.humidity_bathroom'].state + "%" ]]]
+              label: |
+                [[[
+                  return states['sensor.eva_ii_humidity'].state + "%"
+                ]]]    
+              # type: 'custom:button-card'
+              # template: widget_icon
+              # icon: 'mdi:numeric-3-box'
+              # tap_action:
+              #   action: call-service
+              #   service: humidifier.set_mode
+              #   service_data:
+              #     entity_id: humidifier.eva_ii
+              #     mode: Level3
+
+    notification: >
+      [[[ if (states['binary_sensor.eva_ii_tank_full'].state == "on"){
+          return `<ha-icon icon="mdi:exclamation" style="width: 12px; height: 12px; color: var(--primary-background-color);"></ha-icon>`
+        }
+      ]]]

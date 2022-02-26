@@ -1,0 +1,64 @@
+- title: Media
+  path: media
+  icon: mdi:music
+  cards:
+    - type: 'custom:button-card'
+      template: chip_back
+      variables:
+        ulm_chip_back_path: /ui-lovelace-minimalist/main
+    - type: 'custom:button-card'
+      template: card_script
+      variables: 
+        ulm_card_script_title: Reload
+        ulm_card_script_icon: 'mdi:reload'
+      tap_action:
+        action: call-service
+        service: script.turn_on
+        service_data: 
+          entity_id: script.reload  
+    # - type: 'custom:button-card'
+    #   template: 
+    #     - card_media_player_with_controls
+    #   variables:
+    #     ulm_card_media_player_with_controls_name: "Κουζίνα Hub"
+    #     ulm_card_media_player_with_controls_entity: media_player.kouzina_hub
+    # - type: 'custom:button-card'
+    #   template: 
+    #     - card_media_player_with_controls
+    #   variables:
+    #     ulm_card_media_player_with_controls_name: "Υπνοδωμάτιο Hub"
+    #     ulm_card_media_player_with_controls_entity: media_player.kouzina_display
+    # - type: 'custom:button-card'
+    #   template: 
+    #     - card_media_player_with_controls
+    #   variables:
+    #     ulm_card_media_player_with_controls_name: "COSMOTE TV"
+    #     ulm_card_media_player_with_controls_entity: media_player.android_tv_192_168_1_10
+    # - type: 'custom:button-card'
+    #   template: card_media_player_chromecast_with_controls
+    #   variables:
+    #     ulm_card_media_player_with_controls_name: "Σαλόνι TV"
+    #     ulm_card_media_player_with_controls_entity: media_player.tv
+    # - type: 'custom:button-card'
+    #   template: 
+    #     - card_media_player_with_controls
+    #   variables:
+    #     ulm_card_media_player_with_controls_name: "Office"
+    #     ulm_card_media_player_with_controls_entity: media_player.office
+    # - type: 'custom:button-card'
+    #   template: card_media_player_alexa
+    #   entity: media_player.office
+    #   name: Office
+    - type: "custom:button-card"
+      template:
+        - card_media_player
+        - popup_media_player
+      entity: media_player.office
+    # - type: 'custom:button-card'
+    #   template: card_media_player
+    #   entity: media_player.office
+    #   name: Office
+    - type: 'custom:button-card'
+      template: chip_back
+      variables:
+        ulm_chip_back_path: /ui-lovelace-minimalist/main

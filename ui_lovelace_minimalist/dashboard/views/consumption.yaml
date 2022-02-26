@@ -1,0 +1,153 @@
+- title: Consumption
+  path: consumption
+  icon: mdi:home-lightning-bolt-outline
+  cards:
+    - type: 'custom:button-card'
+      template: chip_back
+      variables:
+        ulm_chip_back_path: /ui-lovelace-minimalist/main
+    - type: horizontal-stack
+      cards:
+        - type: custom:button-card
+          template: edge
+        - type: 'custom:button-card'
+          template: card_graph
+          variables:
+            ulm_card_graph_color: "var(--google-blue)"
+            ulm_card_graph_name: L1 Current
+            ulm_card_graph_entity: sensor.pzem_l1_current
+            color_thresholds:
+              - color: '#36a2f5'
+                value: 18
+              - color: '#36f55c'
+                value: 20
+              - color: '#f5cf36'
+                value: 25
+              - color: '#f53c36'
+                value: 30
+        - type: 'custom:button-card'
+          template: card_graph
+          variables:
+            ulm_card_graph_color: "var(--google-blue)"
+            ulm_card_graph_points: 30
+            ulm_card_graph_name: L1 Voltage
+            ulm_card_graph_entity: sensor.pzem_l1_voltage
+        - type: custom:button-card
+          template: edge
+    - type: horizontal-stack
+      cards:
+        - type: custom:button-card
+          template: edge
+        - type: 'custom:button-card'
+          template: card_graph
+          variables:
+            ulm_card_graph_color: "var(--google-blue)"
+            ulm_card_graph_points: 30
+            ulm_card_graph_name: L1 Power
+            ulm_card_graph_entity: sensor.pzem_l1_power
+        - type: 'custom:button-card'
+          template: card_graph
+          variables:
+            ulm_card_graph_color: "var(--google-blue)"
+            ulm_card_graph_points: 30
+            ulm_card_graph_name: L1 Energy
+            ulm_card_graph_entity: sensor.l1_total_energy
+        - type: custom:button-card
+          template: edge
+
+
+
+    - type: vertical-stack
+      cards:
+        - cards:
+            - align_header: left
+              align_icon: left
+              group: true
+              color_thresholds:
+                - color: '#36a2f5'
+                  value: 18
+                - color: '#36f55c'
+                  value: 20
+                - color: '#f5cf36'
+                  value: 25
+                - color: '#f53c36'
+                  value: 30
+              entities:
+                - entity: sensor.pzem_l1_current
+                  extrema: true
+                  state_adaptive_color: true
+              font_size: 80
+              font_size_header: 12
+              height: 180
+              hours_to_show: 24
+              icon_adaptive_color: true
+              line_width: 5
+              points_per_hour: 30
+              show:
+                labels: true
+              type: custom:mini-graph-card
+            - align_header: left
+              align_icon: left
+              group: true
+              color_thresholds:
+                - color: '#17ff59'
+                  value: 240
+                - color: '#f5c825'
+                  value: 230
+                - color: '#f53c36'
+                  value: 220
+              entities:
+                - entity: sensor.pzem_l1_voltage
+                  state_adaptive_color: true
+              font_size: 80
+              font_size_header: 12
+              height: 180
+              hours_to_show: 24
+              line_width: 5
+              points_per_hour: 6
+              show:
+                labels: true
+              type: custom:mini-graph-card
+          type: horizontal-stack
+        - cards:
+            - align_header: left
+              align_icon: left
+              group: true
+              color_thresholds:
+                - color: '#17ff59'
+                  value: 100
+                - color: '#f5c825'
+                  value: 1000
+                - color: '#f53c36'
+                  value: 2000
+              entities:
+                - entity: sensor.pzem_l1_power
+                  state_adaptive_color: true
+              font_size: 80
+              font_size_header: 12
+              height: 180
+              hours_to_show: 24
+              icon_adaptive_color: true
+              line_width: 5
+              points_per_hour: 30
+              show:
+                labels: true
+              type: custom:mini-graph-card
+            - align_header: left
+              align_icon: left
+              entities:
+                - entity: sensor.l1_total_energy
+                  state_adaptive_color: true
+                  color: '#17ff59'
+              font_size: 80
+              font_size_header: 12
+              height: 180
+              hours_to_show: 24
+              icon_adaptive_color: true
+              line_width: 8
+              group: true
+              points_per_hour: 5
+              show:
+                labels: true
+              type: custom:mini-graph-card
+          type: horizontal-stack

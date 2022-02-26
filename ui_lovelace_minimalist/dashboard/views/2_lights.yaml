@@ -1,0 +1,118 @@
+- title: Lights
+  path: lights
+  icon: mdi:lamps
+  cards:
+    - type: 'custom:button-card'
+      template: card_title
+      name: Κουζίνα
+    - type: horizontal-stack
+      cards:
+        - type: custom:button-card
+          template: edge
+        - type: "custom:button-card"
+          template: card_light
+          entity: light.kouzina
+          variables:
+            ulm_card_light_enable_slider: true
+            ulm_card_light_enable_color: true
+            ulm_card_light_force_background_color: true
+            ulm_card_light_enable_collapse: true
+            ulm_card_light_name: Κεντρικό
+        - type: custom:button-card
+          entity: switch.sonoff_mini_kouzina_relay
+          name: Πάνω
+          template:
+            - icon_info_bg
+            - card_switch
+    
+    - type: 'custom:button-card'
+      template: card_title
+      name: Υπνοδωμάτια
+    - type: custom:button-card
+      template: edge
+    - type: horizontal-stack
+      cards:
+        - type: custom:button-card
+          template: edge
+        - type: "custom:button-card"
+          template: card_light
+          entity: light.thanasis_light
+          variables:
+            ulm_card_light_enable_slider: true
+            ulm_card_light_enable_color: true
+            ulm_card_light_force_background_color: true
+            ulm_card_light_enable_collapse: true
+            ulm_card_light_name: Θανάσης
+        - type: "custom:button-card"
+          template: card_light
+          entity: light.domatio_sofias
+          variables:
+            ulm_card_light_enable_slider: true
+            ulm_card_light_enable_color: true
+            ulm_card_light_force_background_color: true
+            ulm_card_light_enable_collapse: true
+            ulm_card_light_name: Σοφία
+    - type: horizontal-stack
+      cards:
+        - type: custom:button-card
+          template: edge
+        - type: "custom:button-card"
+          template: card_light
+          entity: light.krevatokamara
+          variables:
+            ulm_card_light_enable_slider: true
+            ulm_card_light_enable_color: true
+            ulm_card_light_force_background_color: true
+            ulm_card_light_enable_collapse: true
+            ulm_card_light_enable_popup: true
+            ulm_card_light_name: Κρεβατοκάμαρα
+        # - type: "custom:button-card"
+        #   template: card_light
+        #   entity: null
+        #   variables:
+        #     ulm_card_light_enable_slider: true
+        #     ulm_card_light_enable_color: true
+        #     ulm_card_light_force_background_color: true
+        #     ulm_card_light_enable_collapse: true
+        #     ulm_card_light_name: null 
+        - type: custom:button-card
+          template: edge
+
+    - type: 'custom:button-card'
+      template: card_title
+      name: Σαλόνι
+    - type: custom:button-card
+      template: edge
+    - type: horizontal-stack
+      cards:
+        - type: custom:button-card
+          template: edge
+        # - type: "custom:button-card"
+        #   template: card_light
+        #   entity: light.saloni
+        #   variables:
+        #     ulm_card_light_enable_slider: true
+        #     ulm_card_light_enable_color: true
+        #     ulm_card_light_force_background_color: true
+        #     ulm_card_light_enable_collapse: true
+        #     ulm_card_light_enable_popup: true
+        #     ulm_card_light_name: Φωτιστικό Δαπέδου
+        - type: "custom:button-card"
+          template: card_light
+          entity: light.saloni_portatif
+          variables:
+            ulm_card_light_enable_slider: true
+            ulm_card_light_enable_color: true
+            ulm_card_light_force_background_color: true
+            ulm_card_light_enable_collapse: true
+            ulm_card_light_enable_popup: true
+            ulm_card_light_name: Πορτατίφ
+        - type: custom:button-card
+          template: edge
+
+    - type: 'custom:button-card'
+      template: chip_back
+      variables:
+        ulm_chip_back_path: /ui-lovelace-minimalist/main
+# group.couch_blue
+# light.portas_spitiou

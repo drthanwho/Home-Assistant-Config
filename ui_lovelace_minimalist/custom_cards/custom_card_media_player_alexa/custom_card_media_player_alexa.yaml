@@ -1,0 +1,16 @@
+---
+### Card Media Player With Control ###
+card_media_player_alexa:
+  template:
+    - "card_alexa"
+  styles:
+    label:
+      - opacity: "0.8"
+    icon:
+      - color: "rgba(var(--color-theme),0.8)"
+    img_cell:
+      - background-color: "rgba(var(--color-theme),0.2)"
+    card:
+      - background-blend-mode: "multiply"
+      - background: "[[[ return states[entity.entity_id].attributes.entity_picture != null ? 'center / cover url(' + states[entity.entity_id].attributes.entity_picture\
+          \ + ') rgba(0, 0, 0, 0.5)' : '' ]]]"

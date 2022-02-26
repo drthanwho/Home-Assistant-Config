@@ -1,0 +1,39 @@
+- title: CCTV Inside
+  path: cctv_inside
+  icon: mdi:cctv
+  cards:
+    - type: horizontal-stack
+      cards:
+        - type: custom:button-card
+          template: edge
+        - type: 'custom:button-card'
+          template: chip_back
+          variables:
+            ulm_chip_back_path: /ui-lovelace-minimalist/main
+        - type: "custom:button-card"
+          template: chip_navigate
+          variables:
+            ulm_chip_navigate_path: /ui-lovelace-minimalist/cctv
+            ulm_chip_navigate_title: Εξωτερικές
+            ulm_chip_navigate_icon: 'mdi:cctv'
+        - type: "custom:button-card"
+          template: chip_navigate
+          variables:
+            ulm_chip_navigate_path: /ui-lovelace-minimalist/nest
+            ulm_chip_navigate_title: Nest
+            ulm_chip_navigate_icon: 'mdi:cctv'
+    - type: custom:button-card
+      entity: camera.saloni
+      template:
+        - camera_live
+        - tuile_neutre
+    - type: custom:button-card
+      entity: camera.thanasis
+      template:
+        - camera_live
+        - tuile_neutre
+    - type: custom:button-card
+      entity: camera.koudoni_ttgocam_camera
+      template:
+        - camera_live
+        - tuile_neutre
