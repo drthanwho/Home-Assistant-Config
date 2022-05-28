@@ -1,0 +1,8 @@
+exclude:
+  entity_globs:
+    - automation.hasp*
+    - sensor.*uptime
+  entities:
+    - sensor.uptime
+    - sensor.time
+    - sensor.worldclock_sensor
