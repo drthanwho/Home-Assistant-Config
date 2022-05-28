@@ -23,7 +23,9 @@ deps
 /node-red/*
 /helpers/microsoft-speech
 /zigbee2mqtt/*
-/sensors/snmp.yaml
+/addons_config/
+/mosquitto/
+
 # Ensure these YAML files are ignored, otherwise your secret data/credentials will leak.
 ip_bans.yaml
 scripts.yaml
@@ -34,6 +36,7 @@ known_devices.yaml
 /secrets.yaml
 /esphome/secrets.yaml
 /esphome/includes/secrets.yaml
+/sensors/snmp.yaml
 /glances
 /double-take
 /custom_components
