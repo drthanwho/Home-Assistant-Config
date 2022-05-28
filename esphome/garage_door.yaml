@@ -32,20 +32,27 @@ logger:
 #       - lambda: |-
 #           return (( 0.25-( 0.000244140625 * x ))/(0.0048828125-x));
 
-sensor:
-  - platform: adc
-    pin: GPIO32
-    name: "Makis Petrelaio"
-    update_interval: 30s
-  - platform: adc
-    pin: GPIO33 
-    name: "Makis Petrelaio"
-    update_interval: 30s
-  - platform: adc
-    pin: GPIO35
-    name: "Makis Petrelaio"
-    update_interval: 30s
-    attenuation: 11db
+
+binary_sensor:
+  - platform: gpio
+    pin: GPIO04
+    name: "PIR Sensor"
+    device_class: motion
+    
+# sensor:
+#   - platform: adc
+#     pin: GPIO32
+#     name: "Makis Petrelaio"
+#     update_interval: 30s
+#   - platform: adc
+#     pin: GPIO33 
+#     name: "Makis Petrelaio"
+#     update_interval: 30s
+#   - platform: adc
+#     pin: GPIO35
+#     name: "Makis Petrelaio"
+#     update_interval: 30s
+#     attenuation: 11db
     # filters:
     #   - lambda: |-
     #       return (( 0.25-( 0.000244140625 * x ))/(0.0048828125-x));

@@ -4,16 +4,19 @@ substitutions:
 
 esphome:
   name: $devicename
-  platform: ESP32
+
+  # on_loop:
+  #   then:
+  #     - lambda: delay(5);
+
+esp32:
   board: esp-wrover-kit
-  on_loop:
-    then:
-      - lambda: delay(5);
+  framework:
+    type: arduino
 
 packages:
   wifi: !include common_substitutions/wifi.yaml
   device_base: !include common_substitutions/device_base.yaml
-
 
 esp32_ble_tracker:
 
@@ -38,11 +41,6 @@ sensor:
 
 status_led:
   pin: GPIO2
-
-# Sync time with Home Assistant.
-time:
-  - platform: homeassistant
-    id: homeassistant_time
 
 binary_sensor:
   - platform: gpio

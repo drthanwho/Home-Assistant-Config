@@ -4,12 +4,12 @@ substitutions:
 
 esphome:
   name: $devicename
-  platform: ESP32
-  board: esp-wrover-kit
   comment: "Motion sensor for the living room" 
-  on_loop:
-    then:
-      - lambda: delay(5);
+
+esp32:
+  board: esp-wrover-kit
+  framework:
+    type: arduino
 
 packages:
   wifi: !include common_substitutions/wifi.yaml
@@ -67,7 +67,6 @@ remote_transmitter:
 status_led:
   pin: GPIO2
 
-      
 api:
   services:
     - service: transmit_raw

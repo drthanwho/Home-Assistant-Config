@@ -23,14 +23,3 @@ binary_sensor:
     pin: GPIO13
     name: "$upper_devicename PIR"
     device_class: motion
-    # on_press:
-    #   then:
-    #     - homeassistant.service:
-    #         service: light.turn_on
-    #         data:
-    #           entity_id: light.ypnodomatio
-    #     - delay: 10min
-    #     - homeassistant.service:
-    #         service: light.turn_off
-    #         data:
-    #           entity_id: light.ypnodomatio
