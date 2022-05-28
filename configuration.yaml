@@ -38,7 +38,8 @@ default_config:
 http:
   use_x_forwarded_for: true
   trusted_proxies:
-    - 172.30.33.0/24
+    - 192.168.1.250
+    # - 172.30.33.0/24
     # - 127.0.0.1
   # ssl_certificate: /ssl/fullchain.pem
   # ssl_key: /ssl/privkey.pem
@@ -92,20 +93,20 @@ twilio:
   account_sid: !secret twilio_sid
   auth_token: !secret twilio_token
 
-spotify:
-  client_id: !secret spotify_client_id
-  client_secret: !secret spotify_client_secret
+# spotify:
+#   client_id: !secret spotify_client_id
+#   client_secret: !secret spotify_client_secret
 
 #Partially working custom integration for EVA II Dehumidifier ~ major logging
-midea_dehumidifier:
-  username: !secret midea_dehumi_username
-  password: !secret midea_dehumi_pwd
+# midea_dehumidifier:
+#   username: !secret midea_dehumi_username
+#   password: !secret midea_dehumi_pwd
 
 input_text:
   alexa_actionable_notification:
     name: Alexa Actionable Notification Holder
     max: 255
-    initial: '{"text": "This is a test of the alexa actions custom skill. Did it work?", "event": "actionable.skill.test"}'
+    initial: "{'text': 'This is a test of the alexa actions custom skill. Did it work?', 'event': 'actionable.skill.test'}"
 
 api:
 
@@ -126,16 +127,18 @@ conversation:
 # Enables support for tracking state changes over time
 logger:
   default: warn
-  # default: info
+  # default: critical
   logs:
     # homeassistant.loader: error
     # custom_components.healthchecksio: debug
-    # homeassistant.loader: error
-    custom_components.midea_dehumidifier.humidifier: critical
-    custom_components.midea_dehumidifier: critical
-    custom_components.humidifier.midea_dehumidifier: critical
-    homeassistant.components.generic.camera: critical
-    # homeassistant.components.camera: debug
+    custom_components.midea_dehumidifier_lan.appliance_coordinator: critical
+    midea_beautiful.lan: critical
+    custom_components.midea_dehumidifier_lan.hub: critical
+    homeassistant.components.command_line: debug
+    # homeassistant.components.stream.worker: critical
+    # homeassistant.components.stream: critical
+    # homeassistant.components.camera: critical
+    # homeassistant.components.generic.camera: critical
     # homeassistant.components.esphome: error
     # homeassistant.components.nest: critical
     # homeassistant.components.nest.camera_sdm: critical
@@ -146,18 +149,17 @@ logger:
     # google_nest_sdm.event: critical
     # google.cloud.pubsub_v1: critical
     # google.cloud.pubsub_v1.subscriber._protocol.streaming_pull_manager: critical
-    homeassistant.components.stream.worker: critical
-    homeassistant.components.stream: critical
     # libav.rtsp: critical 
     # libav.tls: critical
     # homeassistant.components.webhook: error
     # homeassistant.components.generic.camera: critical
     # custom_components.remote_homeassistant: critical
-    homeassistant.components.camera: critical
+    # custom_components.remote_homeassistant: critical
     # aioesphomeapi.reconnect_logic: critical
     # homeassistant.components.tts: debug
     # pycsspeechtts.pycsspeechtts: debug
     # homeassistant.components.deconz: debug
+    # homeassistant.components.alexa.state_report: critical
 ## for v 1.0.0
     # custom_components.alexa_media: debug  
 ## for API debugging (verbose and intended for service debugging)
@@ -169,15 +171,17 @@ logger:
     # homeassistant.components.sensor: fatal
     # homeassistant.components.http.ban: debug
   filters:
+    homeassistant.helpers.template:
+      - "^Template warning: 'int' got invalid input 'unavailable'*"
     # homeassistant.components.websocket_api.http.connection:
     #   - "^Error handling message: Unknown error.*"
-    root:
-      - "^MideaClient::send_api_request:.*"
-      - "^MideaClient:.*"
-    homeassistant.helpers.entity:
-      - "^Update for humidifier.midea_dehumidifier_18691697727728 fails.*"
-    homeassistant.helpers.frame:
-      - "^Detected integration that accessed*"
+    # root:
+    #   - "^MideaClient::send_api_request:.*"
+    #   - "^MideaClient:.*"
+    # homeassistant.helpers.entity:
+    #   - "^Update for humidifier.midea_dehumidifier_18691697727728 fails.*"
+    # homeassistant.helpers.frame:
+    #   - "^Detected integration that accessed*"
 
 #DarkSky
 weather:
@@ -203,9 +207,9 @@ tts:
 #     port: 502
 #     sensors: !include_dir_merge_list Siemens_Sentron_PAC3200/
 
-eufy:
-  username: !secret thanasis_email
-  password: !secret eufy_password
+# eufy:
+#   username: !secret thanasis_email
+#   password: !secret eufy_password
 
 # irrigation_unlimited:!include irrigation_unlimited.yaml
 
@@ -218,17 +222,16 @@ panel_custom:
     module_url: /local/panel-redirect.js
     config:
       # Where you want to redirect to
-      target: /config/server_control
-  - name: panel-redirect
-    # url_path needs to be unique for each panel_custom config
-    url_path: redirect-supervisor
-    sidebar_title: Supervisor
-    sidebar_icon: mdi:home-assistant
-    module_url: /local/panel-redirect.js
-    config:
-      # Where you want to redirect to
-      target: /hassio/dashboard
-
+      target: /developer-tools/yaml
+  # - name: panel-redirect
+  #   # url_path needs to be unique for each panel_custom config
+  #   url_path: redirect-supervisor
+  #   sidebar_title: Supervisor
+  #   sidebar_icon: mdi:home-assistant
+  #   module_url: /local/panel-redirect.js
+  #   config:
+  #     # Where you want to redirect to
+  #     target: /hassio/dashboard
 smartir:
 
 climate:
@@ -239,6 +242,13 @@ climate:
     controller_data: bw_rc1_send_raw_command
     temperature_sensor: sensor.temperature_inside
     humidity_sensor: sensor.humidity_inside
+
+feedreader:
+  urls: 
+    # - https://www.greeknamedays.gr/tools/eortologiorssfeed/index.php?langid=gr&daydisplay=2
+    - https://www.giortes.gr/rss/si_av_me_el.xml
+  scan_interval:
+    minutes: 5
 
 sonoff:
  username: !secret sonoff_username
@@ -251,6 +261,10 @@ nest:
   project_id: !secret nest_project_id
   subscriber_id: !secret nest_subscriber_id
 
+# google:
+#   client_id: !secret google_calendar_client_id
+#   client_secret: !secret google_calendar_client_secret
+
 group: !include groups.yaml
 automation: !include automations.yaml
 script: !include scripts.yaml
@@ -259,6 +273,7 @@ input_select: !include input-select.yaml
 sensor: !include_dir_merge_list sensors/
 binary_sensor: !include binary_sensor.yaml
 recorder: !include recorder.yaml
+logbook: !include logbook.yaml
 utility_meter: !include utility_meter.yaml
 scene: !include scenes.yaml
 shell_command: !include shell_command.yaml
@@ -271,3 +286,8 @@ template: !include_dir_merge_list templates/
 multiscrape: !include_dir_merge_list multiscrape/
 # automations: !include automations.yaml
 # automations manual: !include awesome_automations.yaml
+
+mqtt:
+  sensor: !include_dir_merge_list mqtt/sensors/
+  binary_sensor: !include_dir_merge_list mqtt/binary_sensors/
+  switch: !include_dir_merge_list mqtt/switches/
