@@ -1,8 +1,0 @@
-esphome:
-  name: bite-me
-  platform: ESP32
-  board: esp32dev
-
-packages:
-  wifi: !include common_substitutions/wifi.yaml
-  device_base: !include common_substitutions/device_base.yaml
