@@ -14,11 +14,11 @@
 #     - status
 #   days: 2
 
-- platform: command_line
-  name: HassIO CPU Temperature
-  command: "cat /sys/class/thermal/thermal_zone0/temp"
-  unit_of_measurement: "°C"
-  value_template: '{{ value | multiply(0.001) | round(1) }}'
+# - platform: command_line
+#   name: HassIO CPU Temperature
+#   command: "cat /sys/class/thermal/thermal_zone0/temp"
+#   unit_of_measurement: "°C"
+#   value_template: '{{ value | multiply(0.001) | round(1) }}'
 
 # - platform: cups
 #   host: 192.168.1.249
@@ -98,20 +98,20 @@
 
 - platform: template
   sensors:
-    dehumi_tank:
-      friendly_name: 'Δεξαμενή Αφυγραντήρα'
-      value_template: >-
-          {% if is_state('humidifier.midea_dehumidifier_18691697727728', 'tank_show'), 'False' %}
-            Empty
-          {% else %}
-            Full
-          {% endif %}
-      icon_template: >-
-          {% if is_state('humidifier.midea_dehumidifier_18691697727728', 'tank_show'), 'False' %}
-            mdi:tray
-          {% else %}
-            mdi:tray-full
-          {% endif %}
+    # dehumi_tank:
+    #   friendly_name: 'Δεξαμενή Αφυγραντήρα'
+    #   value_template: >-
+    #       {% if is_state('humidifier.midea_dehumidifier_18691697727728', 'tank_show'), 'False' %}
+    #         Empty
+    #       {% else %}
+    #         Full
+    #       {% endif %}
+    #   icon_template: >-
+    #       {% if is_state('humidifier.midea_dehumidifier_18691697727728', 'tank_show'), 'False' %}
+    #         mdi:tray
+    #       {% else %}
+    #         mdi:tray-full
+    #       {% endif %}
     motion_saloni:
       friendly_name: 'Motion Saloni Zigbee'
       value_template: >-
@@ -194,9 +194,51 @@
     #   value_template: "{{ (states('sensor.start_timestamp')|float - states('sensor.shutdown_timestamp')|float) | round(0) }}"
     dark_sky_temperature:
       friendly_name: Temperature Dark Sky
-      unique_id: a1033504-b409-476b-84f3-516d91cf6d5c
       icon_template: mdi:thermometer
       value_template: "{{state_attr('weather.dark_sky', 'temperature')}}"
+    #=== Irrigaton Weather Outlook
+    #=== Creates a two line wether outlook with approprite icon 
+    # irrigation_weather_outlook:
+    #   value_template: >
+    #     {% set current_conditions = states(states('input_text.weather_sensor_forecast_conditions')) | title%}
+    #     {% set current_conditions = current_conditions.replace('Partlycloudy', 'Partly Cloudy') %}
+
+    #     {% set max_high_temp = states(states('input_text.weather_sensor_forecast_high_temperature')) | round(1) %}
+    #     {% set will_rain_today = states(states('input_text.weather_sensor_will_it_rain_today')) %}
+    #     {% set will_rain_tomorrow = states(states('input_text.weather_sensor_will_it_rain_tomorrow')) %}
+    #     {% set total_rain_today = states(states('input_text.weather_sensor_forecast_total_rain_today')) %}
+    #     {% set total_rain_tomorrow = states(states('input_text.weather_sensor_forecast_total_rain_tomorrow')) %}
+    #     {% set chance_of_rain_today = states(states('input_text.weather_sensor_forecast_chance_of_rain_today')) %}
+    #     {% set chance_of_rain_tomorrow = states(states('input_text.weather_sensor_forecast_chance_of_rain_tomorrow')) %}
+
+    #     {% set rain_today = total_rain_today ~ 'mm / ' ~ chance_of_rain_today ~ '%' %}
+    #     {% set rain_tomorrow = total_rain_tomorrow ~ 'mm / ' ~ chance_of_rain_tomorrow ~ '%' %}
+
+    #     {% set outlook = 'Outlook: ' ~ current_conditions ~ ', High Temp ' ~ max_high_temp ~ '°C<br>' %}
+
+    #     {% if will_rain_today == '1' and will_rain_tomorrow == '1' %}
+    #       {% set outlook = outlook ~ 'Rain Today (' ~ rain_today ~ ') & Tomorrow (' ~ rain_tomorrow ~ ')' %}
+    #     {% elif will_rain_today == '1' %}
+    #       {% set outlook = outlook ~ 'Rain Today (' ~ rain_today ~ '), none tomorrow' %}
+    #     {% elif will_rain_tomorrow == '1' %}
+    #       {% set outlook = outlook ~ 'Rain Tomorrow (' ~ rain_tomorrow ~ ')' %}
+    #     {% else %}
+    #       {% set outlook = outlook ~ 'No rain forecast today or tomorrow.' %}
+    #     {% endif %}
+
+    #     {{ outlook }}
+    #   entity_picture_template: >
+    #     {% set current = state_attr('sensor.weather_api_current', 'current') %}
+    #     {% set icon = current.condition.icon %}
+    #     {% set icon = icon.split('/')[-1] %}
+    #     {% set icon = icon.split('.')[0] %}
+    #     {% set is_day = true if states('sensor.elevation') | int > 0 else false %}
+        
+    #     {% if is_day %}
+    #       {{ '/local/icons/weather_icons/weather_api_day/' ~ icon ~ '.png' }}
+    #     {% else %}
+    #       {{ '/local/icons/weather_icons/weather_api_night/' ~ icon ~ '.png' }}
+    #     {% endif %}
 
     # midea_current_humidity:
     #   friendly_name: "midea_current_humidity"
@@ -231,4 +273,9 @@
   source: sensor.pzem_l2_power
   name: energy_l2_test
   unit_prefix: k
+  round: 2
+
+- platform: integration
+  source: input_number.fake_power
+  name: fake_consumption
   round: 2
