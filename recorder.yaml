@@ -1,5 +1,5 @@
 db_url: !secret mariadb_url
-purge_keep_days: 15
+purge_keep_days: 10
 include:
   domains:
     - light
@@ -11,6 +11,7 @@ include:
     - media_player
     - automation
   entity_globs:
+    - sensor.proxmox*
     - sensor.cost*
     - sensor.pi_zero*
     - sensor.phase*
@@ -92,6 +93,16 @@ include:
     - sensor.*_power
     - sensor.power_*
   entities:
+    - sensor.current_version
+    - switch.sprinkler_system_relay_1
+    - switch.sprinkler_system_relay_2
+    - switch.sprinkler_system_relay_3
+    - switch.sprinkler_system_relay_4
+    - switch.sprinkler_system_relay_5
+    - switch.sprinkler_system_relay_6
+    - switch.sprinkler_system_relay_7
+    - switch.sprinkler_system_relay_8
+    - sensor.fake_consumption
     - sensor.test_template_none
     - sensor.ultrasonic_sensor
     - switch.basement_light
@@ -125,8 +136,7 @@ include:
     # - binary_sensor.sonoff_mini_switch_2
     # - binary_sensor.eksoporta
     # - binary_sensor.door_apothikaki
-    - humidifier.midea_dehumidifier_18691697727728
-    - switch.tp_link
+    - humidifier.eva_ii
     - switch.provoleas_aristera
     - switch.provoleas_led
     - sensor.maria_db_size
@@ -157,6 +167,7 @@ exclude:
     - zone
     - camera
   entity_globs:
+    - sensor.*uptime_human_readable
     - media_player.browser*
     - sensor.browser*
     - light.browser*
