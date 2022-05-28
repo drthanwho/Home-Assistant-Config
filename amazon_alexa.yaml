@@ -10,7 +10,7 @@ smart_home:
         - binary_sensor.pir_sensor
         - binary_sensor.porta_spitiou
         - binary_sensor.eksoporta
-        - humidifier.midea_dehumidifier_18691697727728
+        - humidifier.eva_ii
         - input_boolean.restart_home_assistant
       include_entity_globs:
         - sensor.temperature*
@@ -18,4 +18,7 @@ smart_home:
         - light
       exclude_entity_globs:
         - light.browser_*
+        - light.plate01_*
+        - light.odroid*
+        - light.kausteras_*
         
