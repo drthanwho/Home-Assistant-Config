@@ -3,7 +3,7 @@
     humidifier_state:
       friendly_name: "Humidifier State"
       value_template: >-
-        {{states('humidifier.midea_dehumidifier_18691697727728')}}
+        {{states('humidifier.eva_ii')}}
 
 - platform: ping
   host: !secret health_check_io
@@ -11,27 +11,9 @@
   count: 5
   scan_interval: 300
 
-- platform: sun2
-  monitored_conditions:
-    - elevation
-
-# - platform: mqtt
-#   name: BH PZEM Connection
-#   unique_id: 107dc94b-6e60-45ff-9057-49cdb7b94b79
-#   device_class: connectivity
-#   icon: mdi:connection
-#   payload_available: 'online'
-#   state_topic: "mqtt/7737033/available"
-  # availability:
-  #   - topic: "mqtt/7737033/available"
-
-# - platform: mqtt
-#   name: "doorstatus"
-#   state_topic: "esprfid/send"
-#   value_template: "{{value_json.desc}}"
-#   payload_on: "Door Open"
-#   payload_off: "Door Closed"
-#   device_class: door
+# - platform: sun2
+#   monitored_conditions:
+#     - elevation
 
 # - platform: template
 #   sensors:
@@ -40,12 +22,3 @@
 #         {{ is_state('binary_sensor.doorstatus', 'off') }}
 #       friendly_name: Κατάσταση
 #       device_class: door
-
-# - platform: mqtt
-#   unique_id: "rfid_door_unlock"
-#   state_topic: "esprfid"
-#   value_template: "{{value_json.cmd}}"
-#   payload_on: "opendoor"
-#   payload_off: "OFF"
-#   device_class: lock
-#   name: 'Κλειδαριά'
