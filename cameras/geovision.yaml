@@ -21,38 +21,38 @@
   #   name: Veranta_rtsp
   #   input: !secret extra_url
 
-#MJPEG streams
-  - platform: generic
-    name: Kouzina_mjpeg
-    still_image_url: !secret still_image_url_kouzina
-    # stream_source: !secret stream_source_kouzina
-  - platform: generic
-    name: Kipos_mjpeg
-    still_image_url: !secret still_image_url_kipos
-    verify_ssl: false
-    # stream_source: !secret stream_source_kipos
-  - platform: generic
-    name: Eisodos_HD_mjpeg
-    still_image_url: !secret still_image_url_eisodos_HD
-    verify_ssl: false
-    # stream_source: !secret stream_source_eisodos_HD
-  - platform: generic
-    name: Veranta_HD_mjpeg
-    still_image_url: !secret still_image_url_veranta_HD
-    verify_ssl: false
-    # stream_source: !secret stream_source_veranta_HD
-  - platform: generic
-    name: Extra_HD_mjpeg
-    still_image_url: !secret still_image_url_extra_HD
-    verify_ssl: false
-  - platform: generic
-    name: Saloni_mjpeg
-    still_image_url: !secret still_image_url_saloni_HD
-    verify_ssl: false
-  - platform: generic
-    name: Thanasis_HD_mjpeg
-    still_image_url: !secret still_image_url_thanasis_HD
-    verify_ssl: false
+# #MJPEG streams
+#   - platform: generic
+#     name: Kouzina_mjpeg
+#     still_image_url: !secret still_image_url_kouzina
+#     # stream_source: !secret stream_source_kouzina
+#   - platform: generic
+#     name: Kipos_mjpeg
+#     still_image_url: !secret still_image_url_kipos
+#     verify_ssl: false
+#     # stream_source: !secret stream_source_kipos
+#   - platform: generic
+#     name: Eisodos_HD_mjpeg
+#     still_image_url: !secret still_image_url_eisodos_HD
+#     verify_ssl: false
+#     # stream_source: !secret stream_source_eisodos_HD
+#   - platform: generic
+#     name: Veranta_HD_mjpeg
+#     still_image_url: !secret still_image_url_veranta_HD
+#     verify_ssl: false
+#     # stream_source: !secret stream_source_veranta_HD
+#   - platform: generic
+#     name: Extra_HD_mjpeg
+#     still_image_url: !secret still_image_url_extra_HD
+#     verify_ssl: false
+#   - platform: generic
+#     name: Saloni_mjpeg
+#     still_image_url: !secret still_image_url_saloni_HD
+#     verify_ssl: false
+#   - platform: generic
+#     name: Thanasis_HD_mjpeg
+#     still_image_url: !secret still_image_url_thanasis_HD
+#     verify_ssl: false
 
 
 
