@@ -17,7 +17,7 @@ source "$credentials_file"
 recipient_number=$1
 message_body=$2
 
-exec curl -X POST -d "Body=$message_body" \
+exec curl -s -X POST -d "Body=$message_body" \
    -d "From=${TWILIO_NUMBER}" -d "To=${recipient_number}" \
    "https://api.twilio.com/2010-04-01/Accounts/${TWILIO_ACCOUNT_SID}/Messages" \
    -u "${TWILIO_ACCOUNT_SID}:${TWILIO_AUTH_TOKEN}"

@@ -17,7 +17,7 @@ source "$credentials_file"
 recipient_number=$1
 twilio_flow=$2
 
-exec curl -X POST https://studio.twilio.com/v1/Flows/${twilio_flow}/Executions \
+exec curl -s -X POST https://studio.twilio.com/v1/Flows/${twilio_flow}/Executions \
     --data-urlencode "To=${recipient_number}" \
     --data-urlencode "From=${TWILIO_NUMBER}" \
     --data-urlencode "Parameters={\"audio\":\"http://192.168.1.250:8123/local/audio/$time.mp3\"}" \
