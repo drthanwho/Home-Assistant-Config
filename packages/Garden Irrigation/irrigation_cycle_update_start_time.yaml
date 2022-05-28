@@ -14,7 +14,11 @@ automation:
   #===================
   - alias: Irrigation Cycle1 Start Time Sunrise Offset
     id: irrigation_cycle1_start_time_sunrise_offset
-    trigger: 
+    trigger:
+      - platform: state
+        entity_id: sun.sun
+        attribute: next_rising
+
       - platform: state
         entity_id: input_select.irrigation_cycle1_start_time_type
         to: Sunrise Offset
@@ -49,6 +53,10 @@ automation:
     id: irrigation_cycle1_start_time_sunset_offset
     trigger: 
       - platform: state
+        entity_id: sun.sun
+        attribute: next_setting
+
+      - platform: state
         entity_id: input_select.irrigation_cycle1_start_time_type
         to: Sunset Offset
 
@@ -81,6 +89,10 @@ automation:
   - alias: Irrigation Cycle2 Start Time Sunrise Offset
     id: irrigation_cycle2_start_time_sunrise_offset
     trigger: 
+      - platform: state
+        entity_id: sun.sun
+        attribute: next_rising
+
       - platform: state
         entity_id: input_select.irrigation_cycle2_start_time_type
         to: Sunrise Offset
@@ -115,6 +127,10 @@ automation:
     id: irrigation_cycle2_start_time_sunset_offset
     trigger: 
       - platform: state
+        entity_id: sun.sun
+        attribute: next_setting
+
+      - platform: state
         entity_id: input_select.irrigation_cycle2_start_time_type
         to: Sunset Offset
 
@@ -139,5 +155,4 @@ automation:
             {% set offset_secs = states('input_number.irrigation_cycle2_start_time_sunset_offset') | int * 60 %}
             {% set start_time = as_timestamp(state_attr('sun.sun', 'next_setting')) | int + offset_secs %}
             {{ start_time | timestamp_custom('%H:%M:%S') }}
-
 
