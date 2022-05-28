@@ -6,24 +6,23 @@
 - platform: command_line
   name: safemoon_price
   command: !secret safemoon_price_command
-  value_template: "{{ value_json['data']['SAFEMOON']['quote']['EUR']['price'] }}"
-  scan_interval: 300
+  # value_template: "{{ value_json['data']['SFM']['quote']['EUR']['price'] }}"
+  value_template: "{{ value_json[0].current_price }}"
+  scan_interval: 120
   unit_of_measurement: '€'
-  json_attributes:
-    - data
 
 - platform: command_line
   name: safemoon_owned
   command: !secret safemoon_owned_command
   value_template: '{{ value_json.result |float(0) / 1000000000 }}'
-  scan_interval: 60
-  unit_of_measurement: 'SAFEMOON'
+  scan_interval: 150 
+  unit_of_measurement: 'SFM'
 
 - platform: command_line
   name: dogecola_owned
   command: !secret dogecola_owned_command
   value_template: '{{ value_json.result |float(0) / 1000000000 }}'
-  scan_interval: 60
+  scan_interval: 90
   unit_of_measurement: 'DOGECOLA'
 
 - platform: cryptoinfo
@@ -83,10 +82,10 @@
         {% set f= (states('sensor.cryptoinfo_numeraire_numeraire_eur') | float(0) ) %}
         {{ '%0.2f'|format(a+b+c+d+e+f)| float(0) }}
       availability_template: "{{ states('sensor.cryptoinfo_bitcoin_bitcoin_eur') not in ['unknown', 'unavailable'] and states('sensor.cryptoinfo_ripple_ripple_eur') not in ['unknown', 'unavailable'] and states('sensor.cryptoinfo_ethereum_ethereum_eur') not in ['unknown', 'unavailable'] and states('sensor.cryptoinfo_stellar_stellar_eur') not in ['unknown', 'unavailable'] and states('sensor.cryptoinfo_polkadot_polkadot_eur') not in ['unknown', 'unavailable'] and states('sensor.cryptoinfo_numeraire_numeraire_eur') not in ['unknown', 'unavailable'] }}"
-    safemoon_price:
-      friendly_name: 'SafeMoon Price'
-      unit_of_measurement: '€'
-      value_template: "{{ state_attr('sensor.safemoon_price_2', 'data')['SAFEMOON']['quote']['EUR']['price'] }}"
+    # safemoon_price:
+    #   friendly_name: 'SafeMoon Price'
+    #   unit_of_measurement: '€'
+    #   value_template: "{{ state_attr('sensor.safemoon_price', 'data')['SFM']['quote']['EUR']['price'] }}"
     safemoon_owned_eur:
       friendly_name: 'SafeMoon'
       unit_of_measurement: '€'
@@ -98,8 +97,8 @@
         {% endif %}
     safemoon_rewarded:
       friendly_name: 'SafeMoon Rewarded'
-      unit_of_measurement: 'SAFEMOON'
-      value_template: "{{ states('sensor.safemoon_owned') | float(0) - 32428539.014249423 }}"
+      unit_of_measurement: 'SFM'
+      value_template: "{{ states('sensor.safemoon_owned') | float(0) - 32428.539014249423 }}"
     safemoon_rewarded_eur:
       friendly_name: 'SafeMoon Rewarded Price'
       unit_of_measurement: '€'
