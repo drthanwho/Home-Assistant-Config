@@ -10,49 +10,22 @@ light.saloni:
   icon: mdi:floor-lamp
 light.ypnodomatio:
   icon: mdi:ceiling-light
-sensor.load_15m:
-  icon: mdi:gauge
-sensor.load_5m:
-  icon: mdi:gauge
-sensor.processor_use:
-  icon: mdi:cpu-32-bit
+# sensor.load_15m:
+#   icon: mdi:gauge
+# sensor.load_5m:
+#   icon: mdi:gauge
+# sensor.processor_use:
+#   icon: mdi:cpu-32-bit
 switch.sonoff_10004c3386_1:
   icon: mdi:coach-lamp
 switch.sonoff_10004c3386_2:
   icon: mdi:coach-lamp
-sensor.pavlina_status:
-  entity_picture: /local/pavlina.jpg
-sensor.makis_status:
-  entity_picture: /local/makis.jpg
-sensor.sofia_status:
-  entity_picture: /local/sofia.jpg
-sensor.thanasis_status:
-  entity_picture: /local/thanasis.jpg
 binary_sensor.pir_sensor_2:
   device_class: motion
 binary_sensor.saloni_pirr:
   device_class: motion
-switch.tp_link:
-  icon: mdi:wall-sconce-flat
-device_tracker.rne_l21_2:
-  entity_picture: /local/thanasis.jpg
-person.thanasis:
-  entity_picture: /local/thanasis.jpg
-person.pavlina:
-  entity_picture: /local/pavlina.jpg
-person.sofia:
-  entity_picture: /local/sofia.jpg
-device_tracker.bv4000pro_4:
-  entity_picture: /local/makis.jpg
-device_tracker.mi_8_lite:
-  entity_picture: /local/sofia.jpg
-device_tracker.sm_g389f:
-  entity_picture: /local/makis.jpg
-device_tracker.sm_a500fu:
-  entity_picture: /local/pavlina.jpg
-person.makis:
-  entity_picture: /local/makis_2.jpg
-device_tracker.7c_fd_6b_09_7a_a6:
-  entity_picture: /local/makis_2.jpg
 sensor.eisodos_cam_temp:
   friendly_name: Είσοδος Κάμερα Θερμοκρασία
+sensor.fake_consumption:
+  device_class: energy
+  
