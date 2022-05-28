@@ -1,9 +1,16 @@
 wifi:
-  networks:
-  - ssid: "Tardis"
-    password: !secret wifi_password
-  - ssid: "HOME"
-    password: !secret wifi_password
+  ssid: HOME
+  password: !secret wifi_password
+  # networks:
+  # - ssid: HOME
+  #   password: !secret wifi_password
+  #   bssid: 00:5F:67:7E:AB:BC
+  # - ssid: HOME
+  #   password: !secret wifi_password
+  #   bssid: 5C:A6:E6:68:49:13
+  # - ssid: HOME
+  #   password: !secret wifi_password
+  #   bssid: B0:4E:26:FB:C5:A8
   # Enable fallback hotspot (captive portal) in case wifi connection fails
   ap:
     ssid: ${upper_devicename} Hotspot
