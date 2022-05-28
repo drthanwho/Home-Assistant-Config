@@ -57,7 +57,7 @@ entity_config:
     expose: true
     name: Φως Κρεβατοκάμαρας
     room: Κρεβατοκάμαρα
-  humidifier.midea_dehumidifier_18691697727728:
+  humidifier.eva_ii:
     expose: true
     name: Αφυγραντήρας EVA II
     room: Σπίτι
