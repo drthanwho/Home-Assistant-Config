@@ -1,0 +1,26 @@
+# - platform: mqtt
+#   unique_id: "rfid_door_unlock"
+#   state_topic: "esprfid"
+#   value_template: "{{value_json.cmd}}"
+#   payload_on: "opendoor"
+#   payload_off: "OFF"
+#   device_class: lock
+#   name: 'Κλειδαριά'
+
+# - platform: mqtt
+#   name: BH PZEM Connection
+#   unique_id: 107dc94b-6e60-45ff-9057-49cdb7b94b79
+#   device_class: connectivity
+#   icon: mdi:connection
+#   payload_available: 'online'
+#   state_topic: "mqtt/7737033/available"
+  # availability:
+  #   - topic: "mqtt/7737033/available"
+
+# - platform: mqtt
+#   name: "doorstatus"
+#   state_topic: "esprfid/send"
+#   value_template: "{{value_json.desc}}"
+#   payload_on: "Door Open"
+#   payload_off: "Door Closed"
+#   device_class: door

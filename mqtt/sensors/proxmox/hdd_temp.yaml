@@ -1,0 +1,36 @@
+- name: "Proxmox Boot Drive Temperature"
+  state_topic: "telegraf/proxmox/hddtemp"
+  device_class: temperature
+  state_class: measurement
+  unit_of_measurement: "°C"
+  device:
+    identifiers: 
+      - "proxmox"
+    name: "Proxmox Server"
+    model: "Promox 7"
+    manufacturer: "HP"
+    sw_version: "1.0"
+  value_template: >
+    {% if value_json is defined and value_json.tags.device == 'sda' %}
+      {{ value_json.fields.temperature }}
+    {% else %}
+      {{ states('sensor.proxmox_boot_drive_temperature') }}
+    {% endif %}
+- name: "Proxmox SDB Temperature"
+  state_topic: "telegraf/proxmox/hddtemp"
+  device_class: temperature
+  state_class: measurement
+  unit_of_measurement: "°C"
+  device:
+    identifiers: 
+      - "proxmox"
+    name: "Proxmox Server"
+    model: "Promox 7"
+    manufacturer: "HP"
+    sw_version: "1.0"
+  value_template: >
+    {% if value_json is defined and value_json.tags.device == 'sdb' %}
+      {{ value_json.fields.temperature }}
+    {% else %}
+      {{ states('sensor.proxomox_sdb_temperature') }}
+    {% endif %}

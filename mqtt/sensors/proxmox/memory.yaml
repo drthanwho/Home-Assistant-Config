@@ -1,0 +1,22 @@
+- name: "Memory Used"
+  state_topic: "telegraf/proxmox/mem"
+  unit_of_measurement: "%"
+  value_template: "{{ value_json.fields.used_percent | round(2) }}"
+  device:
+    identifiers: 
+      - "proxmox"
+    name: "Proxmox Server"
+    model: "Promox 7"
+    manufacturer: "HP"
+    sw_version: "1.0"
+- name: "Memory Available"
+  state_topic: "telegraf/proxmox/mem"
+  unit_of_measurement: "%"
+  value_template: "{{ value_json.fields.available_percent }}"
+  device:
+    identifiers: 
+      - "proxmox"
+    name: "Proxmox Server"
+    model: "Promox 7"
+    manufacturer: "HP"
+    sw_version: "1.0"

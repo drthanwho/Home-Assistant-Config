@@ -1,0 +1,5 @@
+# - platform: mqtt
+#   command_torootc: "esprfid"
+#   name: "Έξώπορτα"
+#   value_template: '{{ value_json.cmd }}'
+#   payload_on: '{"cmd":"opendoor", "doorip":"192.168.1.5"}'

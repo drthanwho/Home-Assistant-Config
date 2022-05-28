@@ -1,0 +1,90 @@
+- name: "Proxmox Temperature"
+  state_topic: "telegraf/proxmox/sensors"
+  unit_of_measurement: "°C"
+  device_class: temperature
+  unique_id: proxmox_temperature
+  device:
+    identifiers: 
+      - "proxmox"
+    name: "Proxmox Server"
+    model: "Proxmox 7"
+    manufacturer: "HP"
+    sw_version: "1.0"
+  value_template: >
+    {% if value_json.tags.feature == 'package_id_0' %}
+      {{ value_json.fields.temp_input }}
+    {% else %}
+      {{ states('sensor.proxmox_temperature') }}
+    {% endif %}
+- name: "Proxmox Temperature Core 1"
+  state_topic: "telegraf/proxmox/sensors"
+  unit_of_measurement: "°C"
+  device_class: temperature
+  unique_id: proxmox_temperature_core_one
+  device:
+    identifiers: 
+      - "proxmox" 
+    name: "Proxmox Server"
+    model: "Proxmox 7"
+    manufacturer: "HP"
+    sw_version: "1.0"
+  value_template: >
+    {% if value_json.tags.feature == 'core_0' %}
+      {{ value_json.fields.temp_input }}
+    {% else %}
+      {{ states('sensor.proxmox_core_1_temperature') }}
+    {% endif %}
+- name: "Proxmox Temperature Core 2"
+  state_topic: "telegraf/proxmox/sensors"
+  unit_of_measurement: "°C"
+  device_class: temperature
+  unique_id: proxmox_temperature_core_two
+  device:
+    identifiers: 
+      - "proxmox"
+    name: "Proxmox Server"
+    model: "Proxmox 7"
+    manufacturer: "HP"
+    sw_version: "1.0"
+  value_template: >
+    {% if value_json.tags.feature == 'core_1' %}
+      {{ value_json.fields.temp_input }}
+    {% else %}
+      {{ states('sensor.proxmox_core_2_temperature') }}
+    {% endif %}
+- name: "Proxmox Temperature Core 3"
+  state_topic: "telegraf/proxmox/sensors"
+  unit_of_measurement: "°C"
+  device_class: temperature
+  unique_id: proxmox_temperature_core_three
+  device:
+    identifiers: 
+      - "proxmox"
+    name: "Proxmox Server"
+    model: "Proxmox 7"
+    manufacturer: "HP"
+    sw_version: "1.0"
+  value_template: >
+    {% if value_json.tags.feature == 'core_2' %}
+      {{ value_json.fields.temp_input }}
+    {% else %}
+      {{ states('sensor.proxmox_core_3_temperature') }}
+    {% endif %}
+- name: "Proxmox Temperature Core 4"
+  state_topic: "telegraf/proxmox/sensors"
+  unit_of_measurement: "°C"
+  device_class: temperature
+  unique_id: proxmox_temperature_core_four
+  device:
+    identifiers: 
+      - "proxmox"
+    name: "Proxmox Server"
+    model: "Proxmox 7"
+    manufacturer: "HP"
+    sw_version: "1.0"
+  value_template: >
+    {% if value_json.tags.feature == 'core_3' %}
+      {{ value_json.fields.temp_input }}
+    {% else %}
+      {{ states('sensor.proxmox_core_4_temperature') }}
+    {% endif %}
