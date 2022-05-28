@@ -530,7 +530,7 @@
   condition:
   - after: 00:01:00
     condition: time
-    before: 06:30:00
+    before: 06:00:00
   action:
   - data:
       brightness_pct: 2
@@ -607,10 +607,6 @@
       - light.saloni
       mode: breathe
     service: lifx.effect_pulse
-  - entity_id: switch.tp_link
-    service: switch.toggle
-  - entity_id: switch.tp_link
-    service: switch.toggle
   - data:
       media_content_id: amzn_sfx_doorbell_chime_02
       media_content_type: sound
@@ -735,11 +731,11 @@
       entity_id: group.couch_blue
   mode: single
 - id: '1578773460358'
-  alias: Humidity below 60%
-  description: 'Turn dehumidifier off if humidity is below 60% for more than 10mins '
+  alias: Humidity below 62%
+  description: 'Turn dehumidifier off if humidity is below 62% for more than 10mins '
   trigger:
-  - below: '60'
-    entity_id: sensor.humidity_veranda
+  - below: '62'
+    entity_id: sensor.humidity_bathroom
     for: 00:10:00
     platform: numeric_state
   condition: []
@@ -747,40 +743,48 @@
   - choose:
     - conditions:
       - condition: state
-        entity_id: humidifier.midea_dehumidifier_18691697727728
-        state: Dryer
+        entity_id: humidifier.eva_ii
+        state: Dry
         attribute: mode
       sequence:
       - delay: 01:00:00
-      - service: midea_dehumidifier.set_mode
+      - service: humidifier.set_mode
+        target:
+          entity_id: humidifier.eva_ii
         data:
           mode: Smart
-        entity_id: humidifier.midea_dehumidifier_18691697727728
       - service: humidifier.turn_off
         data: {}
-        entity_id: humidifier.midea_dehumidifier_18691697727728
+        target:
+          entity_id: humidifier.eva_ii
     default:
     - service: humidifier.turn_off
       data: {}
-      entity_id: humidifier.midea_dehumidifier_18691697727728
+      target:
+        entity_id: humidifier.eva_ii
   mode: single
 - id: '1578393488643'
   alias: Humidity above 75%
   description: Turn on dehumidifier if humidity is above 75% for more than 5 mins
   trigger:
-  - entity_id: sensor.humidity_veranda
+  - entity_id: sensor.humidity_bathroom
     for: 00:05:00
     platform: numeric_state
     above: '75'
+  - platform: numeric_state
+    entity_id: sensor.humidity_bathroom
+    above: '85'
   condition: []
   action:
   - service: humidifier.turn_on
     data: {}
-    entity_id: humidifier.midea_dehumidifier_18691697727728
-  - service: midea_dehumidifier.set_mode
+    target:
+      entity_id: humidifier.eva_ii
+  - service: humidifier.set_mode
+    target:
+      entity_id: humidifier.eva_ii
     data:
       mode: Smart
-      entity_id: humidifier.midea_dehumidifier_18691697727728
   mode: single
 - id: telegram-start
   alias: Telegram Start Command
@@ -877,9 +881,6 @@
   - service: homeassistant.turn_off
     data:
       entity_id: group.all_lights
-  - service: switch.turn_off
-    data:
-      entity_id: switch.tp_link
   id: 345ea3ae8de3460683de441ea13f5057
 - id: 107881d50a7f42228a0f0d4263b42df1
   alias: Telegram - All Lights ON
@@ -899,9 +900,6 @@
       - light.kouzina
       - light.saloni
     service: light.turn_on
-  - data:
-      entity_id: switch.tp_link
-    service: switch.turn_on
 - id: '1579290114579'
   alias: Thanasis Bedroom Light ON
   description: ''
@@ -1002,9 +1000,6 @@
   - condition: state
     entity_id: light.saloni
     state: 'on'
-  - condition: state
-    entity_id: switch.tp_link
-    state: 'off'
   action:
   - device_id: 0bd51ed97c8b4c2fb7507a0d6dd62d09
     domain: switch
@@ -1328,29 +1323,9 @@
       minutes: 0
       seconds: 0
   - below: 20
-    device_id: e4be0ba8ff994733857e6854e86c1370
-    domain: sensor
-    entity_id: sensor.openclose_11_battery_level
-    platform: device
-    type: battery_level
-    for:
-      hours: 1
-      minutes: 0
-      seconds: 0
-  - below: 20
     device_id: 91b241e6a78f4ff0a6d4ee61854f3bd4
     domain: sensor
     entity_id: sensor.light_sensor_battery_level
-    platform: device
-    type: battery_level
-    for:
-      hours: 1
-      minutes: 0
-      seconds: 0
-  - below: 20
-    device_id: 23d922ed8ec04d97bfa864610eee6dec
-    domain: sensor
-    entity_id: sensor.garage_door_battery_level
     platform: device
     type: battery_level
     for:
@@ -1406,10 +1381,6 @@
     platform: state
     to: unavailable
   - entity_id: sensor.apothiki_ip
-    for: 00:02:00
-    platform: state
-    to: unavailable
-  - entity_id: switch.tp_link
     for: 00:02:00
     platform: state
     to: unavailable
@@ -1525,6 +1496,11 @@
     entity_id: binary_sensor.kuria_eisodos
     platform: device
     type: opened
+  - type: opened
+    platform: device
+    device_id: 81c541cd5def41758eaf49be76d6fa50
+    entity_id: binary_sensor.porta_apothikis
+    domain: binary_sensor
   condition:
   - condition: and
     conditions:
@@ -1892,7 +1868,6 @@
       volume_level: 0.6
     target:
       entity_id:
-      - media_player.saloni_speaker
       - media_player.kouzina_hub
       - media_player.kouzina_display
   - service: media_player.play_media
@@ -2001,7 +1976,7 @@
   description: ''
   trigger:
   - platform: time
-    at: 00:00:00
+    at: 00:00
   condition: []
   action:
   - type: flash
@@ -2009,13 +1984,13 @@
     entity_id: light.kouzina
     domain: light
   - type: flash
-    device_id: 693e32ea49154feab61a6a4df67f5332
-    entity_id: light.krevatokamara
-    domain: light
-  - type: flash
     device_id: 7fb24f3e36664ac8b916aa4f631d012e
     entity_id: light.portas_spitiou
     domain: light
+  - device_id: 7157d079c57dc0fcef2ee7dcd39f7feb
+    domain: light
+    entity_id: light.trapezaria_mesaio
+    type: flash
   - service: lifx.effect_pulse
     data:
       brightness: 100
@@ -2023,6 +1998,10 @@
       entity_id:
       - light.saloni
       mode: breathe
+  - device_id: 334cd8e45af24c85a7ecf73b50fa47f4
+    domain: light
+    entity_id: light.veranda_mesaio
+    type: flash
   mode: single
 - id: '1611702191670'
   alias: DrZzs Streaming
@@ -2172,14 +2151,7 @@
     path: Savjee/deconz-xiaomi-mijia-wireless-switch.yaml
     input:
       remote: c8a875ad54f5457294a7332f4eacd107
-      button_press_in:
-      - type: toggle
-        device_id: 333b79774fe544778453de2b7c3e8874
-        entity_id: light.saloni
-        domain: light
-      - service: automation.toggle
-        data:
-          entity_id: group.couch_blue
+      button_press_in: []
       button_double_press:
       - service: automation.toggle
         data:
@@ -2190,6 +2162,10 @@
           entity_id: light.saloni
           cycles: 1
           mode: breathe
+      - type: toggle
+        device_id: 07a91ec6da0d6988ca5e96b30da2576a
+        entity_id: light.saloni
+        domain: light
 - id: '1614201790116'
   alias: Twilio Call
   description: ''
@@ -2238,8 +2214,11 @@
   trigger:
   - platform: numeric_state
     entity_id: sensor.memory_use_percent
-    above: '75'
-    for: 00:03:00
+    above: '88'
+    for:
+      hours: 0
+      minutes: 5
+      seconds: 0
   condition: []
   action:
   - service: notify.alexa_media_office
@@ -2251,6 +2230,7 @@
         levels at {{states('sensor.memory_use_percent')}}%!</amazon:emotion> Home
         Assistant will now restart!
   - service: homeassistant.restart
+    data: {}
   mode: single
 - id: '1615070890445'
   alias: Test
@@ -2687,14 +2667,23 @@
     device_id: 334cd8e45af24c85a7ecf73b50fa47f4
     entity_id: light.veranda_mesaio
     domain: light
+  - platform: device
+    type: turned_on
+    device_id: 7157d079c57dc0fcef2ee7dcd39f7feb
+    entity_id: light.trapezaria_mesaio
+    domain: light
   condition:
-  - above: '1500'
+  - above: '700'
     condition: numeric_state
     entity_id: sensor.lightlevel
   action:
   - type: turn_off
     device_id: 334cd8e45af24c85a7ecf73b50fa47f4
     entity_id: light.veranda_mesaio
+    domain: light
+  - type: turn_off
+    device_id: 7157d079c57dc0fcef2ee7dcd39f7feb
+    entity_id: light.trapezaria_mesaio
     domain: light
   mode: single
 - id: '1625333308185'
@@ -2754,7 +2743,7 @@
     input:
       page3font_select: 6 - Noto Sans 32
       haspdevice: bdd6e03da8a3fd055a5af8097cccf7cf
-      reset_hasp: false
+      reset_hasp: true
       page3text: MUSIC
       page1font_select: 6 - Noto Sans 32
       page_scroll: false
@@ -2762,15 +2751,19 @@
       page2page: 6
       page2text: A/C
       page3page: 8
-- id: '1625439882350'
-  alias: 'HASP p[x].b[y] displays a clock with a clock icon - DESK '
-  description: ''
-  use_blueprint:
-    path: HASwitchPlate/hasp_Display_Clock_with_Icon.yaml
-    input:
-      haspdevice: bdd6e03da8a3fd055a5af8097cccf7cf
-      hour24: true
-      haspbutton: 4
+      page_names:
+        page0: Page 0
+        page1: Page 1
+        page2: Page 2
+        page3: Page 3
+        page4: Page 4
+        page5: Page 5
+        page6: Page 6
+        page7: Page 7
+        page8: Page 8
+        page9: Page 9
+        page10: Page 10
+        page11: Page 11
 - id: '1625440085802'
   alias: HASP p[6].b[all] Page 6 displays Heatpump controls -DESK
   description: ''
@@ -2789,23 +2782,6 @@
     input:
       haspdevice: bdd6e03da8a3fd055a5af8097cccf7cf
       mediaplayer: media_player.home_echo
-- id: '1625921421276'
-  alias: HASP Kouzina  Temperature Outside
-  description: ''
-  use_blueprint:
-    path: HASwitchPlate/hasp_Display_Temperature_with_Icon_and_Colors.yaml
-    input:
-      suffix_select: °C
-      haspdevice: bdd6e03da8a3fd055a5af8097cccf7cf
-      temperature_sensor: sensor.temperature_outside
-      weather_provider: weather.dark_sky
-      roundtemp: false
-      colortemp: true
-      haspbutton: 7
-      thermometer_half_threshold: 20
-      thermometer_three_quarter_threshold: 25
-      thermometer_full_threshold: 30
-      thermometer_quarter_threshold: 15
 - id: '1625955868371'
   alias: HASP dimming
   description: ''
@@ -2860,7 +2836,8 @@
       message: Print is ready! Turning off printer
   - service: switch.turn_off
     target:
-      entity_id: switch.3d_printer
+      entity_id:
+      - switch.3d_printer
   mode: single
 - id: '1626950127256'
   alias: Water Leak in the garage
@@ -2898,6 +2875,7 @@
     type: notify
     title: Διαρροή Νερού
     message: Ανιχνεύθηκε νερό στην αποθήκη κοντά στην γκαραζόπορτα!
+  - service: script.tts_to_all_phones_for_water_leak
   mode: single
 - id: '1627821124629'
   alias: Alarm trigger
@@ -2979,17 +2957,23 @@
   trigger:
   - platform: time
     at: '23:00'
+    variables:
+      tariff: nixterino
   - platform: time
     at: 07:00
+    variables:
+      tariff: kanoniko
   condition: []
   action:
-  - service: utility_meter.next_tariff
+  - service: select.select_option
     target:
       entity_id:
-      - utility_meter.phase_all_monthly
-      - utility_meter.phase_l1_monthly
-      - utility_meter.phase_l2_monthly
-      - utility_meter.phase_l3_monthly
+      - select.phase_all_monthly
+      - select.phase_l1_monthly
+      - select.phase_l2_monthly
+      - select.phase_l3_monthly
+    data:
+      option: '{{ tariff }}'
   mode: single
 - id: '1628957873151'
   alias: Stream Camera when Frigate sees Person on Kouzina Display
@@ -3017,6 +3001,13 @@
     domain: binary_sensor
   condition: []
   action:
+  - service: media_player.volume_set
+    target:
+      entity_id:
+      - media_player.kouzina_display
+      - media_player.kouzina_hub
+    data:
+      volume_level: 0.2
   - service: camera.play_stream
     data:
       media_player: media_player.kouzina_display
@@ -3117,28 +3108,19 @@
   description: ''
   trigger:
   - platform: state
-    entity_id: sensor.hp_laserjet_cp_1025
+    entity_id: sensor.hp_laserjet_cp_1025nw_hpcups_3_20_3_requires_proprietary_plugin
     attribute: state_message
     to: Waiting for printer to become available.
     for:
       hours: 0
       minutes: 0
       seconds: 2
-      milliseconds: 0
-  - platform: state
-    entity_id: sensor.hp_laserjet_cp1025_hpcups_3_18_12_requires_proprietary_plugin
-    attribute: state_message
-    to: Waiting for printer to become available.
-    for:
-      hours: 0
-      minutes: 0
-      seconds: 2
-      milliseconds: 0
   condition: []
   action:
   - service: switch.turn_on
+    data: {}
     target:
-      entity_id: switch.switchbot_2
+      entity_id: switch.printer
   mode: single
 - id: '1630092681728'
   alias: Turn ON TV if COSMOTE turns ON
@@ -3189,47 +3171,49 @@
       - 887
   mode: single
 - id: '1630872376815'
-  alias: Basement Light ON
-  description: Turns ON basement light when garage door opens
+  alias: Toggle Basement Light based on Garage door status
+  description: ''
   trigger:
   - type: opened
     platform: device
     device_id: 1bbb0efcba7c4986b118bd8b802030dc
-    entity_id: binary_sensor.openclose_18
+    entity_id: binary_sensor.garage_door
     domain: binary_sensor
+    id: garage_open
     for:
       hours: 0
       minutes: 0
-      seconds: 30
-      milliseconds: 0
-  condition: []
-  action:
-  - type: turn_on
-    device_id: 0292d690632b5d343b52b6d3080dc460
-    entity_id: switch.basement_light
-    domain: switch
-  mode: single
-- id: '1630872554125'
-  alias: Basement Light OFF
-  description: Turns OFF basement light of garage door has been closed for more than
-    5mins
-  trigger:
+      seconds: 10
   - type: not_opened
     platform: device
     device_id: 1bbb0efcba7c4986b118bd8b802030dc
-    entity_id: binary_sensor.openclose_18
+    entity_id: binary_sensor.garage_door
     domain: binary_sensor
+    id: garage_closed
     for:
       hours: 0
-      minutes: 5
+      minutes: 1
       seconds: 0
-      milliseconds: 0
   condition: []
   action:
-  - type: turn_off
-    device_id: 0292d690632b5d343b52b6d3080dc460
-    entity_id: switch.basement_light
-    domain: switch
+  - choose:
+    - conditions:
+      - condition: trigger
+        id: garage_open
+      sequence:
+      - type: turn_on
+        device_id: 0292d690632b5d343b52b6d3080dc460
+        entity_id: switch.basement_light
+        domain: switch
+    - conditions:
+      - condition: trigger
+        id: garage_closed
+      sequence:
+      - type: turn_off
+        device_id: 0292d690632b5d343b52b6d3080dc460
+        entity_id: switch.basement_light
+        domain: switch
+    default: []
   mode: single
 - id: '1631874810062'
   alias: Trapezaria Mesaio Auto Turn Off
@@ -3279,7 +3263,7 @@
       value: 0.07896
   mode: single
 - id: '1633784079012'
-  alias: New Automation
+  alias: Sprinkler System Timer
   description: ''
   trigger:
   - platform: device
@@ -3287,18 +3271,83 @@
     device_id: 693b52e1f9b9680dfdc0922be65952e5
     entity_id: switch.sprinkler_system_relay_1
     domain: switch
+    id: guro
+  - platform: device
+    type: turned_on
+    device_id: 693b52e1f9b9680dfdc0922be65952e5
+    entity_id: switch.sprinkler_system_relay_3
+    domain: switch
+    id: deksia
+  - platform: device
+    type: turned_on
+    device_id: 693b52e1f9b9680dfdc0922be65952e5
+    entity_id: switch.sprinkler_system_relay_5
+    domain: switch
+    id: aristera
+  - platform: device
+    type: turned_on
+    device_id: 693b52e1f9b9680dfdc0922be65952e5
+    entity_id: switch.sprinkler_system_relay_4
+    domain: switch
+    id: kentro
+  - platform: device
+    type: turned_on
+    device_id: 693b52e1f9b9680dfdc0922be65952e5
+    entity_id: switch.sprinkler_system_relay_2
+    domain: switch
+    id: stagones
   condition: []
   action:
   - service: timer.start
     data:
-      duration: 00:{{states('input_number.test_2')|int}}:00
+      duration: 00:{{states('input_number.sprinkler_time')|int}}:00
     target:
-      entity_id: timer.test
+      entity_id: timer.sprinkler
   - delay:
-      minutes: '{{states(''input_number.test_2'')|int}}'
-  - service: switch.turn_off
-    target:
-      entity_id: switch.sprinkler_system_relay_1
+      minutes: '{{states(''input_number.sprinkler_time'')|int}}'
+    enabled: true
+  - choose:
+    - conditions:
+      - condition: trigger
+        id: guro
+      sequence:
+      - type: turn_off
+        device_id: 693b52e1f9b9680dfdc0922be65952e5
+        entity_id: switch.sprinkler_system_relay_1
+        domain: switch
+    - conditions:
+      - condition: trigger
+        id: aristera
+      sequence:
+      - type: turn_off
+        device_id: 693b52e1f9b9680dfdc0922be65952e5
+        entity_id: switch.sprinkler_system_relay_5
+        domain: switch
+    - conditions:
+      - condition: trigger
+        id: kentro
+      sequence:
+      - type: turn_off
+        device_id: 693b52e1f9b9680dfdc0922be65952e5
+        entity_id: switch.sprinkler_system_relay_4
+        domain: switch
+    - conditions:
+      - condition: trigger
+        id: deksia
+      sequence:
+      - type: turn_off
+        device_id: 693b52e1f9b9680dfdc0922be65952e5
+        entity_id: switch.sprinkler_system_relay_3
+        domain: switch
+    - conditions:
+      - condition: trigger
+        id: stagones
+      sequence:
+      - type: turn_off
+        device_id: 693b52e1f9b9680dfdc0922be65952e5
+        entity_id: switch.sprinkler_system_relay_2
+        domain: switch
+    default: []
   mode: single
 - id: '1634071734888'
   alias: Double Take
@@ -3446,33 +3495,15 @@
   - device_id: c8a875ad54f5457294a7332f4eacd107
     domain: deconz
     platform: device
-    type: remote_button_long_press
+    type: remote_button_short_press
     subtype: turn_on
   condition: []
   action:
-  - type: turn_on
+  - type: toggle
     device_id: b0002942d8aaedeb87108ea518dfbf52
-    entity_id: light.color_temperature_light_15
+    entity_id: light.saloni_portatif
     domain: light
-    brightness_pct: 100
   mode: single
-- id: '1640298771940'
-  alias: HASP Boiler Temperature
-  description: ''
-  use_blueprint:
-    path: HASwitchPlate/hasp_Display_Temperature_with_Icon_and_Colors.yaml
-    input:
-      suffix_select: °C
-      haspdevice: bdd6e03da8a3fd055a5af8097cccf7cf
-      haspbutton: 6
-      temperature_sensor: sensor.boiler_temperature_1
-      thermometer_quarter_threshold: 30
-      thermometer_half_threshold: 40
-      thermometer_three_quarter_threshold: 50
-      thermometer_full_threshold: 60
-      colortemp: true
-      roundtemp: false
-      weather_provider: weather.dark_sky
 - id: '1640355111524'
   alias: Turning on lights when home
   description: ''
@@ -3502,22 +3533,6 @@
     device_id: 408b594af83d0c41f302e374778a19fb
     entity_id: switch.saloni_corner
     domain: switch
-  - service: media_player.media_play
-    target:
-      entity_id: media_player.saloni_speaker
-  mode: single
-- id: '1640458593304'
-  alias: Toggle Xmas Lights
-  description: ''
-  trigger:
-  - platform: state
-    entity_id: switch.smart_plug_8
-  condition: []
-  action:
-  - type: toggle
-    device_id: b81bfd4a7fd12232bb517cd32d9c59e4
-    entity_id: switch.smart_plug_1
-    domain: switch
   mode: single
 - id: '1640651778141'
   alias: Toggle Thanasis Light
@@ -3542,13 +3557,551 @@
   - platform: state
     entity_id: sensor.pzem_l1_current
     to: unknown
-  condition:
-  - condition: state
+    for:
+      hours: 0
+      minutes: 1
+      seconds: 0
+  - platform: state
     entity_id: sensor.pzem_l2_current
-    state: unknown
+    to: unknown
+    for:
+      hours: 0
+      minutes: 1
+      seconds: 0
+  - platform: state
+    entity_id: sensor.pzem_l3_current
+    to: unknown
+    for:
+      hours: 0
+      minutes: 1
+      seconds: 0
+  condition: []
   action:
   - type: turn_on
     device_id: 3a3c00f9913557b4b4216caca2a855fe
     entity_id: switch.restart_pzem
     domain: switch
+  mode: single
+- id: '1641157585596'
+  alias: 'Telegram Bot: Restart'
+  description: ''
+  use_blueprint:
+    path: marc-romu/telegram-bot-respond-to-telegram-command-by-executing-an-action.yaml
+    input:
+      telegram_command: /restart
+      sequence:
+      - type: toggle
+        device_id: a2ea28211e53425a88267276ba3fcfb1
+        entity_id: light.thanasis_light
+        domain: light
+- id: '1641157610210'
+  alias: 'Telegram Bot: Keyboard'
+  description: ''
+  use_blueprint:
+    path: marc-romu/telegram-bot-respond-to-telegram-command-with-a-telegram-text-message.yaml
+    input:
+      delay: 0
+      telegram_command: /play
+      message: Τι θα θέλατε;
+      inline_keyboard_1: Restart:/restart, Πορτατίφ:/portatif
+      title: '*Δούλος*'
+- id: '1641158306781'
+  alias: 'Telegram Bot: Πορτατίφ'
+  description: ''
+  use_blueprint:
+    path: marc-romu/telegram-bot-respond-to-telegram-command-by-executing-an-action.yaml
+    input:
+      telegram_command: /Πορτατίφ
+      sequence:
+      - type: toggle
+        device_id: b0002942d8aaedeb87108ea518dfbf52
+        entity_id: light.saloni_portatif
+        domain: light
+- id: '1641660146851'
+  alias: Turn Lights OFF after power comes back
+  description: ''
+  trigger:
+  - platform: device
+    type: turned_on
+    device_id: 7157d079c57dc0fcef2ee7dcd39f7feb
+    entity_id: light.trapezaria_mesaio
+    domain: light
+  - platform: device
+    type: turned_on
+    device_id: 334cd8e45af24c85a7ecf73b50fa47f4
+    entity_id: light.veranda_mesaio
+    domain: light
+  - platform: device
+    type: turned_on
+    device_id: b0002942d8aaedeb87108ea518dfbf52
+    entity_id: light.saloni_portatif
+    domain: light
+  - platform: device
+    type: turned_on
+    device_id: 270563f49c8e4495ac344958479f3da6
+    entity_id: light.kouzina
+    domain: light
+  - platform: device
+    type: turned_on
+    device_id: 7fb24f3e36664ac8b916aa4f631d012e
+    entity_id: light.portas_spitiou
+    domain: light
+  - platform: device
+    type: turned_on
+    device_id: a2ea28211e53425a88267276ba3fcfb1
+    entity_id: light.thanasis_light
+    domain: light
+  condition:
+  - condition: state
+    entity_id: sensor.apc_rs_1000_status_data
+    state: OB DISCHRG
+  action: []
+  mode: single
+- id: '1641849120061'
+  alias: Turn off Portatif in the morning
+  description: ''
+  trigger:
+  - type: motion
+    platform: device
+    device_id: 47fbca00f00c0224ab33c14d3aa9dbf0
+    entity_id: binary_sensor.presence_30
+    domain: binary_sensor
+  condition:
+  - condition: time
+    after: 05:00
+    before: 07:30
+  - condition: device
+    type: is_on
+    device_id: b0002942d8aaedeb87108ea518dfbf52
+    entity_id: light.saloni_portatif
+    domain: light
+  action:
+  - service: light.turn_off
+    target:
+      entity_id: light.saloni_portatif
+    data:
+      transition: 20
+  mode: single
+- id: '1643743014716'
+  alias: New Automation
+  description: ''
+  trigger:
+  - platform: template
+    value_template: '{{ is_state(''entity_id1'', ''state'') and is_state(''entity_id2'',
+      ''state'') }}'
+  condition: []
+  action: []
+  mode: single
+- id: '1644830271011'
+  alias: NUT Restart
+  description: ''
+  trigger:
+  - platform: event
+    event_type: nut.ups_event
+    event_data:
+      notify_msg: UPS myups@localhost is unavailable
+  condition: []
+  action:
+  - service: hassio.addon_restart
+    data: {}
+  - service: notify.persistent_notification
+    data:
+      title: NUT Server Alert
+      message: UPS data stale! Server will restart.
+  mode: single
+- id: '1646143109752'
+  alias: Frigate Notification (0.10.0)
+  description: ''
+  use_blueprint:
+    path: hunterjm/frigate_0.10_notification.yaml
+    input:
+      camera: eisodos
+      notify_device: db09068695e85ab8aac8bc388ce28b9e
+      update_thumbnail: true
+      cooldown: 10
+- id: '1647446008734'
+  alias: Motion Kouzina Test
+  description: ''
+  trigger:
+  - type: motion
+    platform: device
+    device_id: 3aa093b0cdf229276fd592425a7492d4
+    entity_id: binary_sensor.kouzina_pir
+    domain: binary_sensor
+    id: kouzina_motion_on
+  - type: no_motion
+    platform: device
+    device_id: 3aa093b0cdf229276fd592425a7492d4
+    entity_id: binary_sensor.kouzina_pir
+    domain: binary_sensor
+    for:
+      hours: 0
+      minutes: 2
+      seconds: 0
+    id: kouzina_motion_off
+  condition: []
+  action:
+  - choose:
+    - conditions:
+      - condition: trigger
+        id: kouzina_motion_on
+      sequence:
+      - type: turn_on
+        device_id: 270563f49c8e4495ac344958479f3da6
+        entity_id: light.kouzina
+        domain: light
+        brightness_pct: 100
+    - conditions:
+      - condition: trigger
+        id: kouzina_motion_off
+      sequence:
+      - type: turn_off
+        device_id: 270563f49c8e4495ac344958479f3da6
+        entity_id: light.kouzina
+        domain: light
+    default: []
+  mode: single
+- id: '1647624382040'
+  alias: DogeCola above bought price
+  description: ''
+  trigger:
+  - platform: numeric_state
+    entity_id: sensor.dogecola_owned_eur
+    above: '18'
+  condition: []
+  action:
+  - service: notify.thanasis_tel
+    data:
+      message: DogeCola is at €{{ states('sensor.dogecola_owned_eur')}}
+  mode: single
+- id: '1647701614580'
+  alias: Mobile App TTS
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: input_button.mobile_app_tts
+  condition: []
+  action:
+  - choose:
+    - conditions:
+      - condition: state
+        entity_id: input_select.mobile_device
+        state: Thanasis
+      sequence:
+      - service: notify.mobile_app_thanasis
+        data:
+          message: TTS
+          title: '{{states.input_text.mobile_app_tts.state}}'
+    - conditions:
+      - condition: state
+        entity_id: input_select.mobile_device
+        state: ZTE
+      sequence:
+      - service: notify.mobile_app_zte_blade_10_vita
+        data:
+          message: TTS
+          title: '{{states.input_text.mobile_app_tts.state}}'
+    - conditions:
+      - condition: state
+        entity_id: input_select.mobile_device
+        state: Redmi 9 Pro
+      sequence:
+      - service: notify.mobile_app_redmi_note_9_pro
+        data:
+          message: TTS
+          title: '{{states.input_text.mobile_app_tts.state}}'
+    - conditions:
+      - condition: state
+        entity_id: input_select.mobile_device
+        state: Redmi 9
+      sequence:
+      - service: notify.mobile_app_redmi9
+        data:
+          message: TTS
+          title: '{{states.input_text.mobile_app_tts.state}}'
+    - conditions:
+      - condition: state
+        entity_id: input_select.mobile_device
+        state: Mi 8 Lite
+      sequence:
+      - service: notify.mobile_app_mi_8_lite
+        data:
+          message: TTS
+          title: '{{states.input_text.mobile_app_tts.state}}'
+    default: []
+  mode: single
+- id: '1647801880324'
+  alias: Scanner
+  description: ''
+  trigger:
+  - device_id: a895d11696d7cb6aebba404cb26abc71
+    domain: deconz
+    platform: device
+    type: remote_button_short_press
+    subtype: turn_on
+    id: single
+  - device_id: a895d11696d7cb6aebba404cb26abc71
+    domain: deconz
+    platform: device
+    type: remote_button_double_press
+    subtype: turn_on
+    id: double
+  condition: []
+  action:
+  - choose:
+    - conditions:
+      - condition: trigger
+        id: single
+      sequence:
+      - service: switch.turn_on
+        data: {}
+        target:
+          entity_id: switch.jpeg2mail_makis
+      - service: switch.turn_off
+        data: {}
+        target:
+          entity_id: switch.jpeg2file_makis
+    - conditions:
+      - condition: trigger
+        id: double
+      sequence:
+      - service: switch.turn_on
+        data: {}
+        target:
+          entity_id: switch.jpeg2file_pavlina
+      - service: switch.turn_off
+        data: {}
+        target:
+          entity_id: switch.jpeg2file_pavlina
+    default: []
+  mode: single
+- id: '1648996480984'
+  alias: Fade Office Volume
+  description: ''
+  trigger: []
+  condition: []
+  action:
+  - service: script.fade_volume
+    data:
+      target_player: media_player.office
+      target_volume: 0.25
+      duration: 30
+      curve: logarithmic
+  mode: single
+- id: '1650733407627'
+  alias: Control WLED on Thanasis Bedroom
+  description: ''
+  trigger:
+  - device_id: 647bb46f8880e387b59822c3545d9735
+    domain: deconz
+    platform: device
+    type: remote_button_short_press
+    subtype: turn_on
+    id: single
+  - device_id: 647bb46f8880e387b59822c3545d9735
+    domain: deconz
+    platform: device
+    type: remote_button_double_press
+    subtype: turn_on
+    id: double
+  condition: []
+  action:
+  - choose:
+    - conditions:
+      - condition: trigger
+        id: single
+      sequence:
+      - type: toggle
+        device_id: a8406e6a758ad45dbe066d6f253b6998
+        entity_id: light.domatio_thanasis_krevati
+        domain: light
+        metadata:
+          secondary: false
+    - conditions:
+      - condition: trigger
+        id: double
+      sequence:
+      - type: toggle
+        device_id: a8406e6a758ad45dbe066d6f253b6998
+        entity_id: light.domatio_thanasis_rafia
+        domain: light
+        metadata:
+          secondary: false
+    default:
+    - type: toggle
+      device_id: a8406e6a758ad45dbe066d6f253b6998
+      entity_id: light.domatio_thanasis_master
+      domain: light
+      metadata:
+        secondary: false
+  mode: single
+- id: '1650733797905'
+  alias: Toggle WLED Power Supply
+  description: ''
+  trigger:
+  - platform: template
+    value_template: '{{ is_state(''light.domatio_thanasis_rafia'', ''on'') or is_state(''light.domatio_thanasis_krevati'',
+      ''on'') }}'
+    id: 'on'
+  - platform: template
+    value_template: '{{ is_state(''light.domatio_thanasis_rafia'', ''off'') and is_state(''light.domatio_thanasis_krevati'',
+      ''off'') }}'
+    id: 'off'
+  condition: []
+  action:
+  - choose:
+    - conditions:
+      - condition: trigger
+        id: 'on'
+      sequence:
+      - type: turn_on
+        device_id: a8406e6a758ad45dbe066d6f253b6998
+        entity_id: light.domatio_thanasis_master
+        domain: light
+        metadata:
+          secondary: false
+    - conditions:
+      - condition: trigger
+        id: 'off'
+      sequence:
+      - type: turn_off
+        device_id: a8406e6a758ad45dbe066d6f253b6998
+        entity_id: light.domatio_thanasis_master
+        domain: light
+        metadata:
+          secondary: false
+    default: []
+  mode: single
+- id: '1651165420165'
+  alias: Eretria
+  description: ''
+  trigger:
+  - platform: numeric_state
+    entity_id: sensor.lightlevel
+    below: '100'
+    id: sunset
+  - platform: numeric_state
+    entity_id: sensor.lightlevel
+    id: sunrise
+    above: '300'
+  condition: []
+  action:
+  - choose:
+    - conditions:
+      - condition: trigger
+        id: sunset
+      sequence:
+      - service: light.turn_on
+        data:
+          transition: 300
+          brightness_pct: 50
+        target:
+          entity_id:
+          - light.eretria_veranda_lights
+          - light.eretria_saloni_lamp
+    - conditions:
+      - condition: trigger
+        id: sunrise
+      sequence:
+      - service: light.turn_off
+        data: {}
+        target:
+          entity_id:
+          - light.eretria_veranda_lights
+          - light.eretria_saloni_lamp
+    default: []
+  mode: single
+- id: '1651829355209'
+  alias: FeedReader to Telegram
+  description: ''
+  trigger:
+  - platform: event
+    event_type: feedreader
+  condition: []
+  action:
+  - service: persistent_notification.create
+    data:
+      title: '{{ trigger.event.data.title }}'
+      message: '{{ trigger.event.data.summary }}'
+      notification_id: '{{ trigger.event.data.title }}'
+  mode: single
+- id: '1652094849042'
+  alias: Clean Up Browser Mod Devices
+  description: ''
+  trigger:
+  - platform: time
+    at: '13:00:00'
+  condition: []
+  action:
+  - service: browser_mod.clean_devices
+    data: {}
+  mode: single
+- id: '1653392898901'
+  alias: HASP p[x].b[y] displays a clock with a clock icon - Kitchen
+  description: ''
+  use_blueprint:
+    path: HASwitchPlate/hasp_Display_Clock_with_Icon.yaml
+    input:
+      haspdevice: bdd6e03da8a3fd055a5af8097cccf7cf
+      hour24: true
+- id: '1653393669310'
+  alias: HASPone Kouzina Temperature Outside
+  description: ''
+  use_blueprint:
+    path: HASwitchPlate/hasp_Display_Value_with_Icon_and_Colors.yaml
+    input:
+      font_select: 10 - Noto Sans Bold 80
+      haspdevice: bdd6e03da8a3fd055a5af8097cccf7cf
+      haspbutton: 7
+      source_entity: sensor.temperature_outside
+      value_5of5_icon: 
+      value_2of5_threshold: 10
+      value_3of5_threshold: 20
+      value_4of5_threshold: 25
+      value_5of5_threshold: 30
+      colortext: true
+- id: '1653393763599'
+  alias: HASPone Kouzina Temperature Inside
+  description: ''
+  use_blueprint:
+    path: HASwitchPlate/hasp_Display_Value_with_Icon_and_Colors.yaml
+    input:
+      font_select: 10 - Noto Sans Bold 80
+      haspdevice: bdd6e03da8a3fd055a5af8097cccf7cf
+      haspbutton: 5
+      source_entity: sensor.temperature_inside
+      value_5of5_icon: 
+      value_2of5_threshold: 10
+      value_3of5_threshold: 20
+      value_4of5_threshold: 25
+      value_5of5_threshold: 30
+      colortext: true
+- id: '1653393875960'
+  alias: HASPone Kouzina Temperature Boiler
+  description: ''
+  use_blueprint:
+    path: HASwitchPlate/hasp_Display_Value_with_Icon_and_Colors.yaml
+    input:
+      font_select: 10 - Noto Sans Bold 80
+      haspdevice: bdd6e03da8a3fd055a5af8097cccf7cf
+      haspbutton: 6
+      source_entity: sensor.boiler_temperature_1
+      value_5of5_icon: 
+      value_2of5_threshold: 30
+      value_3of5_threshold: 40
+      value_4of5_threshold: 50
+      value_5of5_threshold: 60
+      colortext: true
+- id: '1653673390622'
+  alias: New Automation
+  description: ''
+  trigger:
+  - platform: mqtt
+    topic: test
+    payload: test
+  condition: []
+  action:
+  - service: telegram_bot.send_message
+    data:
+      message: 'Jim''s Alarm is disarmed. Cause: {{trigger.id}}'
   mode: single
