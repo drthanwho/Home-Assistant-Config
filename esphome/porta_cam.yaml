@@ -22,7 +22,6 @@ binary_sensor:
   - platform: gpio
     pin:
       number: GPIO34
-      mode: INPUT_PULLUP
       inverted: True
     name: $friendly_name Button
 
@@ -44,7 +43,14 @@ sensor:
     entity_id: sensor.humidity_outside
     internal: true
 
+esp32_camera_web_server:
+  - port: 8080
+    mode: stream
+  - port: 8081
+    mode: snapshot
+
 esp32_camera:
+  internal: true
   name: $friendly_name Camera
   external_clock:
     pin: GPIO32
