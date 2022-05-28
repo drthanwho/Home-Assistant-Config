@@ -1,0 +1,92 @@
+- title: Weather
+  path: weather
+  icon: mdi:weather-sunset
+  cards:
+    - type: horizontal-stack
+      cards:
+        - type: custom:button-card
+          template: edge
+        - type: custom:mushroom-chips-card
+          chips:
+            - type: entity
+              entity: sun.sun
+            - type: template
+              content: >-
+                Sunrise  {% if states.sun.sun %} {{
+                (as_timestamp(states.sun.sun.attributes.next_rising)) |
+                timestamp_custom(('%H:%M') )}} {% endif %}
+              icon: mdi:weather-sunset-up
+            - type: template
+              content: >-
+                Sunset  {% if states.sun.sun %} {{
+                (as_timestamp(states.sun.sun.attributes.next_setting)) |
+                timestamp_custom(('%H:%M') )}} {% endif %}
+              icon: mdi:weather-sunset-down
+            - type: entity
+              entity: sensor.moon
+            - type: custom:button-card
+              template: edge
+
+    - type: horizontal-stack
+      cards:
+        - type: custom:button-card
+          template: edge
+        - type: weather-forecast
+          entity: weather.openweathermap
+          secondary_info_attribute: humidity
+          show_current: true
+          show_forecast: true
+        - type: custom:button-card
+          template: edge
+
+    - type: horizontal-stack
+      cards:
+        - type: custom:button-card
+          template: edge
+        - type: vertical-stack
+          cards:
+            - type: "custom:button-card"
+              template: "card_title"
+              name: "Temperature"
+            - type: horizontal-stack
+              cards:
+                - type: iframe
+                  url: >-
+                    https://embed.windy.com/embed2.html?lat=37.946&lon=23.656&detailLat=37.946&detailLon=23.656&width=650&height=450&zoom=11&level=surface&overlay=temp&product=ecmwf&menu=&message=&marker=&calendar=now&pressure=&type=map&location=coordinates&detail=&metricWind=default&metricTemp=default&radarRange=-1
+                  aspect_ratio: 80%
+
+    - type: horizontal-stack
+      cards:
+        - type: custom:button-card
+          template: edge
+        - type: vertical-stack
+          cards:
+            - type: "custom:button-card"
+              template: "card_title"
+              name: "Rain - Storm - Snow"
+            - type: vertical-stack
+              cards:
+                - type: iframe
+                  url: >-
+                    https://embed.windy.com/embed2.html?lat=37.946&lon=23.656&detailLat=37.946&detailLon=23.656&width=650&height=450&zoom=11&level=surface&overlay=rain&product=ecmwf&menu=&message=&marker=&calendar=now&pressure=&type=map&location=coordinates&detail=&metricWind=default&metricTemp=default&radarRange=-1
+                  aspect_ratio: 80%
+            - type: custom:button-card
+              template: edge
+
+    - type: horizontal-stack
+      cards:
+        - type: custom:button-card
+          template: edge
+        - type: vertical-stack
+          cards:
+            - type: "custom:button-card"
+              template: "card_title"
+              name: "Wind"
+            - type: vertical-stack
+              cards:
+                - type: iframe
+                  url: >-
+                    https://embed.windy.com/embed2.html?lat=38.003&lon=23.726&detailLat=37.946&detailLon=23.656&width=650&height=450&zoom=10&level=surface&overlay=wind&product=ecmwf&menu=&message=&marker=&calendar=now&pressure=&type=map&location=coordinates&detail=&metricWind=default&metricTemp=default&radarRange=-1
+                  aspect_ratio: 80%
+            - type: custom:button-card
+              template: edge

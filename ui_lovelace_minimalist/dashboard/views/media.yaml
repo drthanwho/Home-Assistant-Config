@@ -33,7 +33,7 @@
     #     - card_media_player_with_controls
     #   variables:
     #     ulm_card_media_player_with_controls_name: "COSMOTE TV"
-    #     ulm_card_media_player_with_controls_entity: media_player.android_tv_192_168_1_10
+    #     ulm_card_media_player_with_controls_entity: media_player.android_tv
     # - type: 'custom:button-card'
     #   template: card_media_player_chromecast_with_controls
     #   variables:
@@ -45,20 +45,30 @@
     #   variables:
     #     ulm_card_media_player_with_controls_name: "Office"
     #     ulm_card_media_player_with_controls_entity: media_player.office
-    # - type: 'custom:button-card'
-    #   template: card_media_player_alexa
-    #   entity: media_player.office
-    #   name: Office
+    - type: 'custom:button-card'
+      template: card_media_player_alexa_artwork
+      variables:
+        ulm_card_media_player_with_controls_name: Office
+        # ulm_card_media_player_with_controls_name: media_player.office
+      entity: media_player.office
+      name: Office
     - type: "custom:button-card"
       template:
         - card_media_player
         - popup_media_player
       entity: media_player.office
-    # - type: 'custom:button-card'
-    #   template: card_media_player
-    #   entity: media_player.office
-    #   name: Office
+    - type: 'custom:button-card'
+      template: 
+        - card_media_player_controls
+      variables:
+        ulm_card_media_player_controls_name: "Οffice"
+        ulm_card_media_player_controls_entity: media_player.office
     - type: 'custom:button-card'
       template: chip_back
       variables:
         ulm_chip_back_path: /ui-lovelace-minimalist/main
+    - type: 'custom:button-card'
+      template: card_media_player_sonos_control
+      variables:
+        ulm_card_media_player_with_controls_name: Office
+        ulm_card_media_player_with_controls_entity: media_player.office

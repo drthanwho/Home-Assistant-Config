@@ -143,3 +143,25 @@
         service: script.turn_on
         service_data: 
           entity_id: script.reload
+    - type: "custom:button-card"
+      template: card_weather
+      entity: weather.dark_sky
+      variables:
+        ulm_card_weather_name: " "
+        ulm_card_weather_primary_info:
+          - extrema
+        ulm_card_weather_secondary_info:
+          - precipitation_probability
+        ulm_card_weather_backdrop:
+          fade: true
+    - type: horizontal-stack
+      cards:
+        - type: custom:button-card
+          template: edge
+        - type: iframe
+          url: >-
+            https://embed.windy.com/embed2.html?lat=38.180&lon=23.560&detailLat=38.220&detailLon=23.320&width=650&height=450&zoom=9&level=surface&overlay=rain&product=ecmwf&menu=&message=true&marker=&calendar=now&pressure=&type=map&location=coordinates&detail=&metricWind=bft&metricTemp=%C2%B0C&radarRange=-1
+          aspect_ratio: 100%
+        - type: custom:button-card
+          template: edge
+    

@@ -1,35 +1,9 @@
 ---
-card_media_player_sonos:
-  size: "20px"
-  show_icon: true
-  show_entity_picture: false
-  show_state: false
-  show_name: true
-  template:
-    - "green_playing"
-    - "icon_info_bg"
+### Card Media Player With Control ###
+card_media_player_alexa_artwork:
+  template: 
+    - "icon_alexa"
     - "ulm_language_variables"
-  label: |
-    [[[
-        if (entity.state == 'idle'){
-          return variables.ulm_off;
-        }
-        if (entity.state == 'paused'){
-          return variables.ulm_paused;
-        }
-        if (entity.state == 'unavailable'){
-          return variables.ulm_unavailable;
-        } else {
-        return (entity.attributes.source ? entity.attributes.source : variables.ulm_playing)
-            + ' • ' +  ( Math.round(entity.attributes.volume_level / 0.01)) + '%' ;
-        }
-    ]]]
-
-card_media_player_sonos_with_controls:
-  variables:
-    ulm_card_media_player_with_controls_name: "No name set"
-  triggers_update:
-    - "[[[ ulm_card_media_player_with_controls_entity ]]]"
   styles:
     grid:
       - grid-template-areas: "'item1' 'item2'"
@@ -39,47 +13,80 @@ card_media_player_sonos_with_controls:
     card:
       - border-radius: "var(--border-radius)"
       - box-shadow: "var(--box-shadow)"
+      - height: 200px
       - padding: "12px"
+      - background-blend-mode: "multiply"
+      - background: "[[[ return states[entity.entity_id].attributes.entity_picture != null ? 'center / cover url(' + states[entity.entity_id].attributes.entity_picture\
+          \ + ') rgba(0, 0, 0, 0.5)' : '' ]]]"
+    label:
+      - opacity: "0.8"
+    icon:
+      - color: "rgba(var(--color-theme),0.8)"
+    img_cell:
+      - background-color: "rgba(var(--color-theme),0.2)"
   custom_fields:
     item1:
       card:
         type: "custom:button-card"
         template:
           - "ulm_language_variables"
-          - "card_media_player_sonos"
+          - "icon_info_bg"
         tap_action:
           action: "more-info"
-        entity: "[[[ return variables.ulm_card_media_player_with_controls_entity ]]]"
+        entity: "[[[ return entity.entity_id ]]]"
         name: "[[[ return variables.ulm_card_media_player_with_controls_name ]]]"
         styles:
           card:
             - box-shadow: "none"
             - padding: "0px"
+        # icon: |
+        #   [[[ return icon = "mdi:speaker" ]]]
+        label: |
+          [[[
+              if (states[entity.entity_id].state == "off"){
+                return variables.ulm_off;
+              } else {
+                return variables.ulm_on;
+              }
+          ]]]
+        state:
+          - operator: "template"
+            value: "[[[ return states[entity.entity_id].state != 'off' ]]]"
+            name: "[[[ return states[entity.entity_id].attributes.media_title; ]]]"
+            label: |
+              [[[
+                var label = variables.ulm_on;
+                if(states[entity.entity_id].attributes.media_album_name){
+                  var label = states[entity.entity_id].attributes.media_album_name;
+                }
+                return label;
+              ]]]
+
     item2:
       card:
         type: "custom:button-card"
-        template: "list_items"
+        template: "list_3_items"
         custom_fields:
           item1:
             card:
               type: "custom:button-card"
-              template: "widget_icon"
+              template: "alexa_widget"
               tap_action:
                 action: "call-service"
-                service: "media_player.volume_down"
+                service: "media_player.media_previous_track"
                 service_data:
-                  entity_id: "[[[ return variables.ulm_card_media_player_with_controls_entity ]]]"
-              icon: "mdi:volume-minus"
+                  entity_id: "[[[ return entity.entity_id ]]]"
+              icon: "mdi:skip-previous"
           item2:
             card:
               type: "custom:button-card"
-              template: "widget_icon"
-              entity: "[[[ return variables.ulm_card_media_player_with_controls_entity ]]]"
+              template: "alexa_widget"
+              entity: "[[[ return entity.entity_id ]]]"
               tap_action:
                 action: "call-service"
                 service: "media_player.media_play_pause"
                 service_data:
-                  entity_id: "[[[ return variables.ulm_card_media_player_with_controls_entity ]]]"
+                  entity_id: "[[[ return entity.entity_id ]]]"
               icon: "mdi:pause"
               state:
                 - value: "paused"
@@ -89,15 +96,22 @@ card_media_player_sonos_with_controls:
           item3:
             card:
               type: "custom:button-card"
-              template: "widget_icon"
+              template: "alexa_widget"
               tap_action:
                 action: "call-service"
-                service: "media_player.volume_up"
+                service: "media_player.media_next_track"
                 service_data:
-                  entity_id: "[[[ return variables.ulm_card_media_player_with_controls_entity ]]]"
-              icon: "mdi:volume-plus"
+                  entity_id: "[[[ return entity.entity_id ]]]"
+              icon: "mdi:skip-next"
 
-icon_info_bg_sonos:
+
+
+
+
+
+
+
+icon_alexa:
   color: "var(--google-grey)"
   show_icon: true
   show_label: true
@@ -109,10 +123,11 @@ icon_info_bg_sonos:
           notification:
             - border-radius: "50%"
             - position: "absolute"
-            - left: "3px"
+            - left: "38px"
             - top: "8px"
-            - height: "18px"
-            - width: "18px"
+            - height: "16px"
+            - width: "16px"
+            - border: "2px solid var(--card-background-color)"
             - font-size: "12px"
             - line-height: "14px"
             - background-color: >
@@ -146,6 +161,8 @@ icon_info_bg_sonos:
       - background-color: "rgba(var(--color-theme),0.05)"
       - border-radius: "50%"
       - place-self: "center"
+      - width: "42px"
+      - height: "42px"
     grid:
       - grid-template-areas: "'i n' 'i l'"
       - grid-template-columns: "min-content auto"
@@ -154,13 +171,32 @@ icon_info_bg_sonos:
       - border-radius: "var(--border-radius)"
       - box-shadow: "var(--box-shadow)"
       - padding: "12px"
+  custom_fields:
+    notification: >
+      [[[
+        if (variables.ulm_card_media_player_with_controls_entity =="unavailable"){
+          return `<ha-icon icon="mdi:exclamation" style="width: 12px; height: 12px; color: var(--primary-background-color);"></ha-icon>`
+        }
+      ]]]
   size: "20px"
 
-green_playing:
-  state:
-    - styles:
-        icon:
-          - color: "rgba(var(--color-green),1)"
-        img_cell:
-          - background-color: "rgba(var(--color-green), 0.2)"
-      value: "playing"
+
+alexa_widget:
+  tap_action:
+    action: "toggle"
+  show_icon: true
+  show_name: false
+  styles:
+    grid:
+      - grid-template-areas: "'i'"
+    card:
+      - box-shadow: var(--disabled-text-color)
+      - padding: "0px"
+      # - background-color: "rgba(var(--color-theme),0.05)"
+      - border-radius: "14px"
+      - place-self: "center"
+      - height: "42px"
+    icon:
+      - color: none"
+  size: "20px"
+  color: var(--disabled-text-color)
