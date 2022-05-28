@@ -1,0 +1,85 @@
+substitutions:
+  devicename: battery_voltage
+  friendlyname: Bike Battery
+
+esphome:
+  name: ${devicename}
+  platform: ESP8266
+  board: d1_mini
+  on_boot:
+    priority: 500
+    then:
+      - delay: 60s
+      - deep_sleep.enter: battery_deep_sleep
+
+status_led:
+  pin: GPIO2
+
+wifi:
+  networks:
+    - ssid: HOME
+      password: ''
+      hidden: true
+  fast_connect: true
+  ap:
+    ssid: "${friendlyname} Fallback Hotspot"
+    password: "Thanasis"
+  # manual_ip:
+  #   static_ip: 192.168.1.240
+  #   gateway: 192.168.2.1
+  #   subnet: 255.255.255.0
+
+captive_portal:
+
+logger:
+
+ota:
+
+deep_sleep:
+  run_duration: 20s
+  sleep_duration: 3h
+  id: battery_deep_sleep
+
+mqtt:
+  broker: 192.168.1.250
+  username: ''
+  password: ''
+  will_message:
+    topic:  ${devicename}/binary_sensor/bike_battery_network_status/state
+    payload: "OFF"
+  shutdown_message:
+    topic:  ${devicename}/binary_sensor/bike_battery_network_status/state
+    payload: "OFF"
+
+sensor:
+  - platform: adc
+    pin: A0
+    name: ${friendlyname} Voltage
+    update_interval: 10s
+    filters:
+      - multiply: 14.5583
+  - platform: wifi_signal
+    name: ${friendlyname} WiFi Signal
+    update_interval: 60s
+  
+switch:
+  - platform: restart
+    name: ${friendlyname} Restart
+    id: restart_${devicename} 
+
+text_sensor:
+  - platform: wifi_info
+    ip_address:
+      name: ${friendlyname} IP Address
+    ssid:
+      name: ${friendlyname} Connected SSID 
+
+binary_sensor:
+  - platform: gpio
+    id: network_status_${devicename}
+    pin:
+      number: D2
+      mode: INPUT_PULLUP
+    name: ${friendlyname} Network Status
+    device_class: connectivity
+    icon: mdi:check-network-outline

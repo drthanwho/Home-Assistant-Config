@@ -1,0 +1,87 @@
+wifi:
+  networks:
+  - bssid: 54:22:F8:20:03:AC
+    password: ''
+    hidden: true
+    ssid: 'HOME'
+  - ssid: 'HOME'
+    password: ''
+  ap:
+    ssid: "Car Fallback Hotspot"
+    password: "Thanasis"
+
+status_led:
+  pin: GPIO2
+
+substitutions:
+  devicename: car
+  devicename_friendly: Car
+
+esphome:
+  name: ${devicename}
+  platform: ESP8266
+  board: d1_mini
+
+captive_portal:    
+
+logger:
+  baud_rate: 0
+  level: VERBOSE
+
+ota:
+
+deep_sleep:
+  run_duration: 20s
+  sleep_duration: 60min
+  id: battery_deep_sleep
+
+# mqtt:
+#   broker: 192.168.1.XXX
+#   username: !secret mqtt_username
+#   password: !secret mqtt_password
+#   on_message:
+#     - topic: deep_sleep/ota_mode
+#       payload: 'ON'
+#       then:
+#         - deep_sleep.prevent: battery_deep_sleep
+#     - topic: deep_sleep/ota_mode
+#       payload: 'OFF'
+#       then:
+#         - deep_sleep.enter: battery_deep_sleep
+
+binary_sensor:
+  - platform: status
+    name: ${devicename} network status
+    id: ${devicename}_network_status
+
+sensor:
+  - platform: adc
+    pin: A0
+    name: "Voltage"
+    update_interval: 10s
+    filters:
+      - multiply: 14.5583
+  - platform: wifi_signal
+    name: ${devicename} WiFi Signal
+    update_interval: 60s
+  - platform: uptime
+    name: ${devicename} Uptime
+    unit_of_measurement: h
+    filters:
+      - lambda: return int((x + 1800.0) / 3600.0);
+  
+switch:
+  - platform: restart
+    name: ${devicename} Restart
+    id: restart_${devicename} 
+
+text_sensor:
+  - platform: version
+    name: ${devicename} ESPHome version
+  - platform: wifi_info
+    ip_address:
+      name: ${devicename} IP Address
+    ssid:
+      name: ${devicename} Connected SSID 
+    bssid:
+      name: ${devicename} BSSID
