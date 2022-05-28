@@ -4,13 +4,26 @@ substitutions:
 
 esphome:
   name: $devicename
-  platform: ESP32
+  
+esp32:
   board: esp-wrover-kit
+  framework:
+    type: arduino
 
 packages:
-  wifi: !include common_substitutions/wifi.yaml
+# wifi: !include common_substitutions/wifi.yaml
   device_base: !include common_substitutions/device_base.yaml
-  
+
+wifi:
+  networks:
+  - ssid: HOME
+    password: !secret wifi_password
+    channel: 11
+
+  ap:
+    ssid: ${upper_devicename} Hotspot
+    password: !secret wifi_password
+
 status_led:
   pin: GPIO2
 
@@ -21,32 +34,28 @@ binary_sensor:
       inverted: true
     name: Kaustiras
     filters:
-      - delayed_on: 50ms
-      - delayed_on: 200ms
+      - delayed_off: 1s
   - platform: gpio
     pin:
       number: GPIO27
       inverted: true
     name: Petrleaio Makis
     filters:
-      - delayed_on: 50ms
-      - delayed_on: 200ms
+      - delayed_off: 1s
   - platform: gpio
     pin:
       number: GPIO26
       inverted: true
     name: Petelaio Leonidas
     filters:
-      - delayed_on: 50ms
-      - delayed_on: 200ms
+      - delayed_off: 1s
   - platform: gpio
     pin:
       number: GPIO14
       inverted: true
     name: Petrelaio Sofita
     filters:
-      - delayed_on: 50ms
-      - delayed_on: 200ms
+      - delayed_off: 1s
 # sensor:
 #   - platform: ultrasonic
 #     trigger_pin: GPIO1
