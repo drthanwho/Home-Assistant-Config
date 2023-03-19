@@ -19,7 +19,6 @@ sensor:
           send_first_at: 15
 
   - platform: uptime
-    name: $upper_devicename Uptime Sensor
     id: sensor_uptime
 
   - platform: template
